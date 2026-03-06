@@ -1,0 +1,481 @@
+/* ===================================================
+   EcoTrack AI – Calculator Page Styles
+   =================================================== */
+
+.calculator-wrapper {
+    padding: 1.5rem 2rem;
+}
+
+/* Tabs */
+.calc-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.calc-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.calc-tab:hover {
+    border-color: var(--green);
+    color: var(--text-primary);
+}
+
+.calc-tab.active {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.4);
+    color: var(--green);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+}
+
+/* Progress bar */
+.calc-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.calc-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.calc-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.calc-progress-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* Panels */
+.calc-panels {
+    margin-bottom: 1.5rem;
+}
+
+.calc-panel {
+    display: none;
+}
+
+.calc-panel.active {
+    display: block;
+    animation: panelIn 0.3s ease;
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.panel-header {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.panel-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.panel-header p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.input-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+
+.section-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    margin-top: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-label:first-child {
+    margin-top: 0;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.input-group label {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Appliances */
+.appliances-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.appliance-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.appliance-item span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.appliance-item input {
+    padding: 0.45rem !important;
+    font-size: 0.85rem !important;
+}
+
+/* Diet Selector */
+.diet-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.diet-option {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.diet-option:hover {
+    border-color: var(--green);
+    background: var(--green-glow);
+}
+
+.diet-option.selected {
+    border-color: var(--green);
+    background: rgba(34, 197, 94, 0.12);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+}
+
+.diet-icon {
+    font-size: 1.8rem;
+}
+
+.diet-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.diet-co2 {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Result Box */
+.calc-result-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(6, 182, 212, 0.05));
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.result-icon {
+    font-size: 2rem;
+}
+
+.result-content {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.result-val {
+    font-size: 2.5rem;
+    font-weight: 900;
+    font-family: 'Space Grotesk', sans-serif;
+    background: linear-gradient(135deg, var(--green), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.result-unit {
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+.result-equiv {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    max-width: 200px;
+    text-align: right;
+}
+
+/* Summary Bar */
+.calc-summary-bar {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: sticky;
+    bottom: 1rem;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+}
+
+.summary-totals {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.summary-cat {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.sumcat-icon {
+    font-size: 0.9rem;
+}
+
+.sumcat-val {
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text-primary);
+}
+
+.sumcat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.sum-plus,
+.sum-equals {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.summary-total-box {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(6, 182, 212, 0.1));
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.total-label {
+    font-size: 0.7rem;
+    color: var(--green);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.total-val {
+    font-size: 1.4rem;
+    font-weight: 900;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--green);
+}
+
+.total-unit {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.summary-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btn-nav-calc {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.65rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-nav-calc:hover {
+    border-color: var(--green);
+    color: var(--green);
+}
+
+.btn-next-calc {
+    background: linear-gradient(135deg, var(--green), var(--cyan));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.25);
+}
+
+.btn-next-calc:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(34, 197, 94, 0.35);
+    color: #fff;
+}
+
+/* Success Toast */
+.success-toast {
+    position: fixed;
+    bottom: 5rem;
+    right: 2rem;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(6, 182, 212, 0.1));
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 9998;
+    animation: slideInRight 0.4s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    max-width: 350px;
+}
+
+.success-toast strong {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.success-toast p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.success-toast button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-left: auto;
+    font-size: 1rem;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.calc-date-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.calc-date-label strong {
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .calculator-wrapper {
+        padding: 1rem;
+    }
+
+    .input-row {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-totals {
+        justify-content: center;
+    }
+
+    .calc-summary-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

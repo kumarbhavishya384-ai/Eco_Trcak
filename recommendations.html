@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Insights – EcoTrack AI</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+
+<body class="app-body">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span><span
+                    class="nav-label">Dashboard</span></a>
+            <a href="report.html" class="nav-item" id="nav-report">
+                <span class="nav-icon">📜</span><span class="nav-label">Report Dashboard</span>
+            </a>
+
+            <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span
+                    class="nav-label">Calculator</span></a>
+            <a href="history.html" class="nav-item"><span class="nav-icon">📅</span><span
+                    class="nav-label">History</span></a>
+            <a href="recommendations.html" class="nav-item active"><span class="nav-icon">💡</span><span
+                    class="nav-label">AI Insights</span></a>
+            <a href="leaderboard.html" class="nav-item"><span class="nav-icon">🏆</span><span
+                    class="nav-label">Leaderboard</span></a>
+            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label">Offset
+                    Tools</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-mini-profile">
+                <div class="user-avatar" id="sidebarAvatar">A</div>
+                <div class="user-info">
+                    <div class="user-name" id="sidebarName">Loading...</div>
+                    <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title">🤖 AI Insights & Predictions</h1>
+            </div>
+        </header>
+
+        <div class="recs-page-wrapper">
+
+            <!-- NEW: Real AI Coach Section -->
+            <div class="card ai-coach-card full-width"
+                style="border-left: 5px solid var(--primary); margin-bottom: 2rem;">
+                <div class="card-header" style="justify-content: flex-start; gap: 1rem;">
+                    <span style="font-size: 2rem;">🤖</span>
+                    <div>
+                        <h3 style="font-family: 'Space Grotesk'; font-size: 1.4rem;">EcoCoach AI Analysis</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">GPT-Powered Personalized Guidance
+                        </p>
+                    </div>
+                </div>
+                <div class="ai-coach-content" id="aiCoachContent"
+                    style="padding: 1rem; line-height: 1.6; color: var(--text-primary);">
+                    <div class="loading-spinner"></div>
+                    <p style="color: var(--text-muted)">EcoCoach is analyzing your footprint...</p>
+                </div>
+            </div>
+
+            <!-- AI Prediction Summary -->
+            <div class="card ai-prediction-card full-width">
+                <div class="ai-header-stripe">
+                    <div class="ai-brain-icon">🧠</div>
+                    <div class="ai-header-text">
+                        <h2>Your AI Carbon Analysis</h2>
+                        <p>Based on your activity patterns, our ML model predicts your future emissions</p>
+                    </div>
+                    <div class="ai-confidence-badge">97% Accuracy</div>
+                </div>
+                <div class="ai-prediction-grid">
+                    <div class="prediction-block">
+                        <div class="pred-label">Current Month (est.)</div>
+                        <div class="pred-val" id="predCurrentMonth">Loading...</div>
+                        <div class="pred-unit">kg CO₂</div>
+                    </div>
+                    <div class="prediction-block highlight">
+                        <div class="pred-label">🤖 AI Prediction (Next Month)</div>
+                        <div class="pred-val" id="predNextMonth">Loading...</div>
+                        <div class="pred-unit">kg CO₂</div>
+                    </div>
+                    <div class="prediction-block success">
+                        <div class="pred-label">Potential Savings</div>
+                        <div class="pred-val" id="predSavings">Loading...</div>
+                        <div class="pred-unit">kg CO₂ if you follow tips</div>
+                    </div>
+                </div>
+                <div class="chart-wrapper" style="height:200px; margin-top:1.5rem">
+                    <canvas id="predictionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Smart Recommendations -->
+            <div class="recs-section">
+                <div class="section-header-inline">
+                    <h2>💡 Smart Recommendations</h2>
+                    <span class="rec-count" id="recCount">Loading...</span>
+                </div>
+
+                <div class="rec-filters">
+                    <button class="rec-filter-btn active" onclick="filterRecs('all', this)">All</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('transport', this)">🚗 Transport</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('electricity', this)">⚡ Electricity</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('food', this)">🍽️ Food</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('high-impact', this)">🔥 High Impact</button>
+                </div>
+
+                <div class="recs-full-grid" id="recsFullGrid"></div>
+            </div>
+
+            <!-- Behavioral Patterns -->
+            <div class="card patterns-card full-width">
+                <div class="card-header">
+                    <h3>📈 Behavioral Pattern Analysis</h3>
+                </div>
+                <div class="patterns-grid" id="patternsGrid"></div>
+            </div>
+
+            <!-- Challenge Section -->
+            <div class="card challenges-card full-width">
+                <div class="card-header">
+                    <h3>🎯 Eco Challenges</h3>
+                    <span class="badge-new">NEW</span>
+                </div>
+                <div class="challenges-grid" id="challengesGrid"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Floating Scroll FAB -->
+    <div class="scroll-fab" id="scrollFab">
+        <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
+            title="Scroll to top">&#8679;</button>
+        <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
+            title="Scroll down">&#8681;</button>
+    </div>
+    <script src="js/app.js"></script>
+    <script src="js/recommendations.js"></script>
+</body>
+
+</html>

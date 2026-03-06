@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>History – EcoTrack AI</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+
+<body class="app-body">
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span><span
+                    class="nav-label">Dashboard</span></a>
+            <a href="report.html" class="nav-item" id="nav-report">
+                <span class="nav-icon">📜</span><span class="nav-label">Report Dashboard</span>
+            </a>
+
+            <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span
+                    class="nav-label">Calculator</span></a>
+            <a href="history.html" class="nav-item active"><span class="nav-icon">📅</span><span
+                    class="nav-label">History</span></a>
+            <a href="recommendations.html" class="nav-item"><span class="nav-icon">💡</span><span class="nav-label">AI
+                    Insights</span></a>
+            <a href="leaderboard.html" class="nav-item"><span class="nav-icon">🏆</span><span
+                    class="nav-label">Leaderboard</span></a>
+            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label">Offset
+                    Tools</span></a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-mini-profile">
+                <div class="user-avatar" id="sidebarAvatar">A</div>
+                <div class="user-info">
+                    <div class="user-name" id="sidebarName">Loading...</div>
+                    <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title">📅 Emission History</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-export" onclick="exportHistory()">⬇ Export CSV</button>
+            </div>
+        </header>
+
+        <div class="history-wrapper">
+
+            <!-- Summary Stats Row -->
+            <div class="history-stats-row">
+                <div class="card hist-stat-card">
+                    <div class="hist-stat-icon">📈</div>
+                    <div class="hist-stat-val" id="hst-total">0</div>
+                    <div class="hist-stat-label">Total Entries</div>
+                </div>
+                <div class="card hist-stat-card">
+                    <div class="hist-stat-icon">🌍</div>
+                    <div class="hist-stat-val" id="hst-co2">0</div>
+                    <div class="hist-stat-label">Total kg CO₂</div>
+                </div>
+                <div class="card hist-stat-card">
+                    <div class="hist-stat-icon">📉</div>
+                    <div class="hist-stat-val" id="hst-best">--</div>
+                    <div class="hist-stat-label">Best Day</div>
+                </div>
+                <div class="card hist-stat-card">
+                    <div class="hist-stat-icon">🔥</div>
+                    <div class="hist-stat-val" id="hst-streak">0</div>
+                    <div class="hist-stat-label">Logging Streak</div>
+                </div>
+            </div>
+
+            <!-- History Chart -->
+            <div class="card full-width">
+                <div class="card-header">
+                    <h3>Emission Timeline</h3>
+                    <select class="period-select" id="histPeriod" onchange="updateHistoryChart()">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30" selected>Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                    </select>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- History Table -->
+            <div class="card full-width history-table-card">
+                <div class="card-header">
+                    <h3>All Entries</h3>
+                    <div class="history-search-wrap">
+                        <input type="text" class="history-search" id="historySearch" placeholder="🔍 Search by date..."
+                            oninput="filterHistory()" />
+                        <select class="period-select" id="histCategoryFilter" onchange="filterHistory()">
+                            <option value="all">All Categories</option>
+                            <option value="transport">Transport</option>
+                            <option value="electricity">Electricity</option>
+                            <option value="food">Food</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="history-table-wrapper">
+                    <table class="history-table" id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>🚗 Transport</th>
+                                <th>⚡ Electricity</th>
+                                <th>🍽️ Food</th>
+                                <th>Total CO₂</th>
+                                <th>EcoScore</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="8" class="empty-row">No history yet. <a href="calculator.html">Start
+                                        logging!</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Floating Scroll FAB -->
+    <div class="scroll-fab" id="scrollFab">
+        <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
+            title="Scroll to top">&#8679;</button>
+        <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
+            title="Scroll down">&#8681;</button>
+    </div>
+    <script src="js/app.js"></script>
+    <script src="js/history.js"></script>
+</body>
+
+</html>

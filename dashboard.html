@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard – EcoTrack AI</title>
+    <meta name="description"
+        content="Your personal carbon footprint dashboard. Track emissions, view EcoScore, and get AI-powered recommendations." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;900&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#22c55e">
+</head>
+
+<body class="app-body">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <span style="filter: drop-shadow(0 0 8px var(--primary));">🌿</span>
+            <span class="logo-text">EcoTrack <b>AI</b></span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item active" id="nav-dashboard">
+                <span class="nav-icon">📊</span><span class="nav-label" data-i18n="dashboard">Dashboard</span>
+            </a>
+            <a href="report.html" class="nav-item" id="nav-report">
+                <span class="nav-icon">📜</span><span class="nav-label">Reports</span>
+            </a>
+            <a href="calculator.html" class="nav-item" id="nav-calculator">
+                <span class="nav-icon">🧮</span><span class="nav-label">Calculator</span>
+            </a>
+            <a href="history.html" class="nav-item" id="nav-history">
+                <span class="nav-icon">📅</span><span class="nav-label">History</span>
+            </a>
+            <a href="recommendations.html" class="nav-item" id="nav-recommendations">
+                <span class="nav-icon">💡</span><span class="nav-label">AI Insights</span>
+            </a>
+            <a href="leaderboard.html" class="nav-item" id="nav-leaderboard">
+                <span class="nav-icon">🏆</span><span class="nav-label">Leaderboard</span>
+            </a>
+            <a href="offset.html" class="nav-item" id="nav-offset">
+                <span class="nav-icon">🌲</span><span class="nav-label">Offset Tools</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-mini-profile" id="userMiniProfile">
+                <div class="user-avatar" id="sidebarAvatar">A</div>
+                <div class="user-info">
+                    <div class="user-name" id="sidebarName">Loading...</div>
+                    <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
+                </div>
+            </div>
+            <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; gap: 0.5rem;">
+                <button onclick="switchLanguage('en')"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer;">EN</button>
+                <button onclick="switchLanguage('hi')"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer;">HI</button>
+            </div>
+            <button class="logout-btn" onclick="logout()" data-i18n="logout">⬡ Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title">Dashboard</h1>
+                <div class="live-indicator" style="margin-left: 1.5rem;">
+                    <span class="live-dot"></span> REAL-TIME
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="current-date" id="currentDate"></div>
+                <button class="btn-icon" id="enableNotificationsBtn" title="Enable Daily Reminders"
+                    style="display:none; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1); padding:0.6rem; color:#fff; cursor:pointer; font-size:1.1rem; align-items:center; justify-content:center; margin-right:10px; transition:0.3s">🔔</button>
+                <button class="btn-ghost" onclick="logout()"
+                    style="padding:0.4rem 0.8rem; font-size:0.8rem; margin-right:8px; border-color:rgba(239, 68, 68, 0.2); color:rgba(239, 68, 68, 0.7); height:36px; display:inline-flex; align-items:center">Logout</button>
+                <button class="btn-add-data" onclick="window.location.href='calculator.html'">
+                    <span>+</span> Log Data
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-grid">
+
+            <!-- EcoScore Card (Large) -->
+            <div class="card ecoscore-card reveal">
+                <div class="card-header">
+                    <h3>Your EcoScore</h3>
+                    <div class="score-level-badge" style="background: rgba(0, 212, 170, 0.1); color: var(--primary);">
+                        <span>⭐</span> Elite
+                    </div>
+                </div>
+                <div class="ecoscore-display">
+                    <div class="score-ring-container">
+                        <svg class="score-ring" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.04)"
+                                stroke-width="8" />
+                            <circle cx="60" cy="60" r="54" fill="none" stroke="url(#scoreGrad)" stroke-width="10"
+                                stroke-dasharray="339" stroke-dashoffset="339" stroke-linecap="round"
+                                transform="rotate(-90 60 60)" id="scoreCircle" class="score-arc" />
+                            <defs>
+                                <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color: #EF4444" />
+                                    <stop offset="50%" style="stop-color: #FBBF24" />
+                                    <stop offset="100%" style="stop-color: #00D4AA" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="score-inner">
+                            <div class="score-number" id="ecoScoreDisplay">--</div>
+                            <div class="score-label">POINTS</div>
+                        </div>
+                    </div>
+                    <div class="score-info" style="flex: 1;">
+                        <div class="score-tier-badge" id="scoreTierBadge">Analyzing...</div>
+                        <p class="score-desc" id="scoreDesc">Optimizing your environmental impact benchmarks.</p>
+
+                        <div class="score-progress-bar">
+                            <div class="score-fill" id="scoreFill" style="width: 0%"></div>
+                        </div>
+
+                        <!-- Streak Widget -->
+                        <div class="streak-widget">
+                            <div class="streak-icon">🔥</div>
+                            <div class="streak-info">
+                                <div class="streak-label">DAILY STREAK</div>
+                                <div class="streak-bar">
+                                    <div class="streak-fill" style="width: 65%;"></div>
+                                </div>
+                            </div>
+                            <div class="streak-count">12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Emissions Card -->
+            <div class="card emissions-summary-card reveal">
+                <div class="card-header">
+                    <h3>Impact Breakdown</h3>
+                    <select class="period-select" id="emissionPeriod" onchange="updateEmissionDisplay()">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                    </select>
+                </div>
+                <div class="emissions-total" id="emissionsTotal">
+                    <span class="emission-value" id="emissionValue">0.0</span>
+                    <span class="emission-unit">KG CO₂E</span>
+                </div>
+                <div class="emission-breakdown" id="emissionBreakdown">
+                    <div class="breakdown-item" data-cat="transport">
+                        <span class="breakdown-icon">🚗</span>
+                        <div class="breakdown-bar-wrap">
+                            <span class="breakdown-label">TRANSPORTATION</span>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill transport-fill" id="transportFill" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <span class="breakdown-val" id="transportVal">0 kg</span>
+                    </div>
+                    <div class="breakdown-item" data-cat="electricity">
+                        <span class="breakdown-icon">⚡</span>
+                        <div class="breakdown-bar-wrap">
+                            <span class="breakdown-label">ELECTRICITY</span>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill electricity-fill" id="electricFill" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <span class="breakdown-val" id="electricVal">0 kg</span>
+                    </div>
+                    <div class="breakdown-item" data-cat="food">
+                        <span class="breakdown-icon">🍽️</span>
+                        <div class="breakdown-bar-wrap">
+                            <span class="breakdown-label">DIET & MEALS</span>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-fill food-fill" id="foodFill" style="width:0%"></div>
+                            </div>
+                        </div>
+                        <span class="breakdown-val" id="foodVal">0 kg</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trend Chart -->
+            <div class="card chart-card full-width reveal">
+                <div class="activity-table-header"
+                    style="padding: 1rem 0 1.5rem 0; display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="font-family:'Space Grotesk'; font-size:1.1rem;">📈 Emission Analytics</h3>
+                    <div class="chart-controls">
+                        <button class="chart-btn active" onclick="updateChart('week', this)">7D</button>
+                        <button class="chart-btn" onclick="updateChart('month', this)">30D</button>
+                        <button class="chart-btn" onclick="updateChart('year', this)">1Y</button>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Category Donut Chart -->
+            <div class="card donut-card reveal">
+                <div class="card-header">
+                    <h3>Emissions Split</h3>
+                </div>
+                <div class="chart-wrapper-small">
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <div class="donut-legend" id="donutLegend" style="margin-top: 1rem;"></div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card quick-stats-card reveal">
+                <div class="card-header">
+                    <h3>Performance</h3>
+                </div>
+                <div class="quick-stats-grid">
+                    <div class="qstat">
+                        <span class="qstat-icon">🌲</span>
+                        <div class="qstat-val" id="treesNeeded">--</div>
+                        <div class="qstat-label">TREES NEEDED</div>
+                    </div>
+                    <div class="qstat">
+                        <span class="qstat-icon">☀️</span>
+                        <div class="qstat-val" id="solarSavings">--</div>
+                        <div class="qstat-label">SOLAR GAIN</div>
+                    </div>
+                    <div class="qstat">
+                        <span class="qstat-icon">🏆</span>
+                        <div class="qstat-val" id="userRank">#--</div>
+                        <div class="qstat-label">CAMPUS RANK</div>
+                    </div>
+                    <div class="qstat">
+                        <span class="qstat-icon">📉</span>
+                        <div class="qstat-val" id="reductionPct">--</div>
+                        <div class="qstat-label">REDUCTION</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Recommendations Preview -->
+            <div class="card recommendations-preview-card full-width reveal">
+                <div class="card-header">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <span style="font-size:1.5rem;">🤖</span>
+                        <h3>AI Recommendations</h3>
+                    </div>
+                    <a href="recommendations.html" class="view-all-link">Full Report →</a>
+                </div>
+                <div class="recs-grid" id="dashboardRecs"></div>
+            </div>
+
+            <!-- Active Challenges -->
+            <div class="card challenges-card full-width reveal">
+                <div class="card-header">
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <span style="font-size:1.5rem;">🔥</span>
+                        <h3>Active Challenges</h3>
+                    </div>
+                </div>
+                <div class="challenges-grid" id="dashboardChallenges">
+                    <div class="challenge-item joined">
+                        <div class="challenge-icon">🥗</div>
+                        <div class="challenge-info">
+                            <h4>No-Meat Monday</h4>
+                            <p>Eat plant-based all day Monday. 50pts.</p>
+                            <div class="challenge-progress-mini">
+                                <div class="fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <button class="btn-ghost" disabled>✅ Completed</button>
+                    </div>
+                    <div class="challenge-item">
+                        <div class="challenge-icon">🚲</div>
+                        <div class="challenge-info">
+                            <h4>Cycle to Campus</h4>
+                            <p>Cycle or walk to college for 5 days. 100pts.</p>
+                            <div class="challenge-progress-mini">
+                                <div class="fill" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="joinChallenge(this)">Join</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Table-style -->
+            <div class="card activity-card full-width reveal">
+                <div class="card-header">
+                    <h3>Recent Global Activities</h3>
+                    <div class="badge-live">LIVE FEED</div>
+                </div>
+                <div class="activity-list" id="activityList">
+                    <div class="empty-state">Securely fetching your environmental logs...</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Floating Scroll FAB -->
+    <div class="scroll-fab" id="scrollFab">
+        <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
+            title="Scroll to top">&#8679;</button>
+        <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
+            title="Scroll down">&#8681;</button>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/autolog.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+    <script>
+        // Inline observer for dashboard reveal
+        const dashObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    dashObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => dashObserver.observe(el));
+    </script>
+</body>
+
+</html>

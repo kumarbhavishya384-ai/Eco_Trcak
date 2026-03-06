@@ -1,0 +1,12 @@
+flask
+flask-cors
+pymongo[srv]
+python-dotenv
+pyjwt
+bcrypt
+google-generativeai
+twilio
+scikit-learn
+pandas
+numpy
+requests

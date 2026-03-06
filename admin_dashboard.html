@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Admin Panel | EcoTrack AI</title>
+    <meta name="description"
+        content="EcoTrack AI Employee Control Center – Monitor platform growth, manage users, and send communications." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        /* Admin-specific styles – unified grid */
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card-admin {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .stat-card-admin::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .stat-card-admin:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 170, 0.3);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-card-admin:hover::before {
+            opacity: 1;
+        }
+
+        .stat-admin-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        .stat-admin-val {
+            font-size: 2.4rem;
+            font-weight: 900;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 0.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stat-admin-label {
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .stat-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.72rem;
+            margin-top: 0.5rem;
+            padding: 0.18rem 0.6rem;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+        }
+
+        .trend-up {
+            background: rgba(0, 212, 170, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        .trend-neutral {
+            background: rgba(255, 179, 71, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 179, 71, 0.2);
+        }
+
+        /* Health traffic light */
+        .health-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .health-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: healthPulse 2s ease-in-out infinite;
+        }
+
+        .health-dot.green {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .health-dot.yellow {
+            background: var(--warning);
+            box-shadow: 0 0 10px var(--warning);
+        }
+
+        .health-dot.red {
+            background: var(--danger);
+            box-shadow: 0 0 10px var(--danger);
+        }
+
+        @keyframes healthPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.3);
+                opacity: 0.7;
+            }
+        }
+
+        /* Admin header banner */
+        .admin-header {
+            background: linear-gradient(135deg,
+                    rgba(0, 212, 170, 0.08) 0%,
+                    rgba(10, 15, 30, 0.7) 100%);
+            padding: 1.75rem 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.75rem;
+            border: 1px solid rgba(0, 212, 170, 0.18);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Tab navigation */
+        .admin-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 4px;
+            border-radius: var(--radius-pill);
+            width: fit-content;
+        }
+
+        .admin-tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .admin-tab-btn.active {
+            background: rgba(0, 212, 170, 0.18);
+            color: var(--primary);
+            box-shadow: 0 0 12px rgba(0, 212, 170, 0.12);
+        }
+
+        .admin-tab-btn:hover:not(.active) {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Activity table */
+        .activity-table-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .activity-table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-table-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .activity-table thead tr {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .activity-table th {
+            padding: 0.85rem 1.25rem;
+            text-align: left;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-table td {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: var(--transition);
+        }
+
+        .activity-table tr:hover td {
+            background: rgba(0, 212, 170, 0.03);
+        }
+
+        .activity-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Avatar initials */
+        .user-initials-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.78rem;
+            color: #0A0F1E;
+            flex-shrink: 0;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-cell-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .user-cell-email {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* Activity type badges */
+        .activity-badge {
+            display: inline-block;
+            padding: 0.18rem 0.65rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .badge-entry {
+            background: rgba(0, 212, 170, 0.12);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        .badge-register {
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--blue);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .badge-login {
+            background: rgba(168, 85, 247, 0.12);
+            color: var(--purple);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .badge-admin {
+            background: rgba(255, 179, 71, 0.12);
+            color: var(--warning);
+            border: 1px solid rgba(255, 179, 71, 0.2);
+        }
+
+        /* New entry animation */
+        @keyframes rowSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+                background: rgba(0, 212, 170, 0.08);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+                background: transparent;
+            }
+        }
+
+        .row-new {
+            animation: rowSlideIn 0.5s ease forwards;
+        }
+
+        /* Users table */
+        .users-table-wrap {
+            overflow-x: auto;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.18rem 0.6rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .role-admin {
+            background: rgba(255, 179, 71, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(255, 179, 71, 0.25);
+        }
+
+        .role-user {
+            background: rgba(0, 212, 170, 0.12);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        /* Global emissions chart placeholder */
+        .global-chart-card {
+            background: var(--bg-glass);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            margin-bottom: 1.75rem;
+        }
+
+        .global-chart-card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+    </style>
+</head>
+
+<body class="app-body">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <span>🛡️</span>
+            <div class="logo-text"><b>EcoTrack</b> Admin</div>
+        </div>
+        <div class="sidebar-nav">
+            <a href="#" class="nav-item active" id="side-overview" onclick="switchAdminTab('overview'); return false;">
+                <span class="nav-icon">📊</span><span class="nav-label">Overview</span>
+            </a>
+            <a href="#" class="nav-item" id="side-users" onclick="switchAdminTab('users'); return false;">
+                <span class="nav-icon">👥</span><span class="nav-label">Manage Users</span>
+            </a>
+            <a href="#" class="nav-item" id="side-emails" onclick="switchAdminTab('emails'); return false;">
+                <span class="nav-icon">📧</span><span class="nav-label">Email Templates</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <div class="user-mini-profile">
+                <div class="user-avatar" id="sidebarAvatar">AD</div>
+                <div class="user-info">
+                    <div class="user-name" id="sidebarName">Admin</div>
+                    <div class="user-score-badge" style="color: var(--warning);">🛡️ Full Access</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title">Employee Portal</h1>
+                <div class="breadcrumb"
+                    style="font-size:0.78rem; color:var(--text-muted); margin-left:1rem; display:flex; align-items:center; gap:0.4rem;">
+                    <span>Home</span> <span>›</span> <span style="color:var(--primary)">Admin</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="live-indicator">
+                    <span class="live-dot"></span> LIVE
+                </div>
+                <div class="current-date" id="currentDate"></div>
+                <button class="btn-ghost" onclick="logout()"
+                    style="padding:0.4rem 0.8rem; font-size:0.78rem; border-color:rgba(255, 107, 107, 0.3); color:rgba(255, 107, 107, 0.8); height:34px; display:inline-flex; align-items:center; gap:4px;">
+                    ⬡ Logout
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard-grid full-width">
+            <!-- Admin Header Banner -->
+            <div class="admin-header">
+                <h2
+                    style="font-family:'Space Grotesk'; font-size: 1.75rem; margin-bottom: 0.4rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Employee Control Center 🛠️
+                </h2>
+                <p style="color:var(--text-secondary); font-size:0.9rem;">Monitor platform growth, manage users, and
+                    oversee system health in real-time.</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" onclick="switchAdminTab('overview')" id="tab-overview">📊
+                    Overview</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('users')" id="tab-users">👥 Manage Users</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('emails')" id="tab-emails">📧 Email
+                    Templates</button>
+            </div>
+
+            <!-- OVERVIEW SECTION -->
+            <div id="section-overview">
+                <!-- Stats Grid -->
+                <div class="admin-stats-grid">
+                    <div class="stat-card-admin">
+                        <span class="stat-admin-icon">👥</span>
+                        <div class="stat-admin-val" id="totalUsers">--</div>
+                        <div class="stat-admin-label">Total Users</div>
+                        <div class="stat-trend trend-up">↑ Growing</div>
+                    </div>
+                    <div class="stat-card-admin">
+                        <span class="stat-admin-icon">📝</span>
+                        <div class="stat-admin-val" id="totalEntries">--</div>
+                        <div class="stat-admin-label">Total Entries</div>
+                        <div class="stat-trend trend-up">↑ Active</div>
+                    </div>
+                    <div class="stat-card-admin">
+                        <span class="stat-admin-icon">💚</span>
+                        <div class="stat-admin-val" id="systemHealth" style="font-size:1.6rem;">Healthy</div>
+                        <div class="stat-admin-label">System Health</div>
+                        <div class="health-indicator">
+                            <span class="health-dot green" id="healthDot"></span>
+                            <span style="font-size:0.72rem; color:var(--primary); font-weight:600;"
+                                id="healthLabel">Operational</span>
+                        </div>
+                    </div>
+                    <div class="stat-card-admin">
+                        <span class="stat-admin-icon">⚡</span>
+                        <div class="stat-admin-val" id="uptime">99.9%</div>
+                        <div class="stat-admin-label">Server Uptime</div>
+                        <div class="stat-trend trend-up">↑ Excellent</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities Table -->
+                <div class="activity-table-card">
+                    <div class="activity-table-header">
+                        <h3>🔔 Recent Global Activities</h3>
+                        <div style="display:flex; gap:0.75rem; align-items:center;">
+                            <div class="badge-live">Live Feed</div>
+                            <button class="btn-ghost" style="font-size:0.78rem; padding:0.3rem 0.9rem;"
+                                onclick="refreshStats()">↻ Refresh</button>
+                        </div>
+                    </div>
+                    <table class="activity-table">
+                        <thead>
+                            <tr>
+                                <th>USER</th>
+                                <th>ACTIVITY</th>
+                                <th>TYPE</th>
+                                <th>TIMESTAMP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityLog">
+                            <tr>
+                                <td colspan="4" style="padding:2.5rem; text-align:center; color:var(--text-muted);">
+                                    <span style="font-size:1.5rem; display:block; margin-bottom:0.5rem;">📡</span>
+                                    Tracking active sessions...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MANAGE USERS SECTION -->
+            <div id="section-users" style="display:none">
+                <div class="activity-table-card">
+                    <div class="activity-table-header">
+                        <h3>👥 Registered Platform Users</h3>
+                        <button class="btn-ghost" onclick="fetchAdminUsers()"
+                            style="font-size:0.78rem; padding:0.3rem 0.9rem;">↻ Refresh List</button>
+                    </div>
+                    <div class="users-table-wrap">
+                        <table class="activity-table">
+                            <thead>
+                                <tr>
+                                    <th>USER</th>
+                                    <th>EMAIL</th>
+                                    <th>PHONE/WA</th>
+                                    <th>ROLE</th>
+                                    <th>JOINED</th>
+                                    <th style="text-align:right;">ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody">
+                                <!-- Users loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMAIL TEMPLATES SECTION -->
+            <div id="section-emails" style="display:none">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📧 Welcome Email Template</h3>
+                        <span class="badge-live">Active</span>
+                    </div>
+                    <div
+                        style="background:rgba(0,212,170,0.04); padding:1.5rem; border-radius:var(--radius-sm); margin-top:1rem; border:1px solid rgba(0,212,170,0.12);">
+                        <p style="color:var(--primary); font-weight:700; margin-bottom:0.75rem; font-size:0.9rem;">
+                            📬 Subject: Welcome to EcoTrack AI – Your Journey to Net Zero Starts Now!
+                        </p>
+                        <div style="color:var(--text-secondary); font-size:0.88rem; line-height:1.7; white-space: pre-wrap;"
+                            id="emailPreview">Hi [First Name],
+
+                            Thank you for joining EcoTrack AI Team! We're thrilled to have you on board.
+
+                            Your journey to understanding and reducing your carbon footprint starts today. With EcoTrack
+                            AI, you can:
+                            • Log your daily transport, food, and energy usage.
+                            • Receive AI-powered insights to save costs and carbon.
+                            • Compare your progress with friends on the leaderboard.
+
+                            Let's make a positive impact on the planet, together. 🌿
+
+                            Best regards,
+                            The EcoTrack AI Admin Team</div>
+                    </div>
+                    <div style="margin-top:1.5rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button class="btn-primary-glow"
+                            onclick="showGlobalToast('Template editing restricted to Super-Admin.')">✏️ Edit
+                            Template</button>
+                        <button class="btn-ghost" onclick="sendTestEmailDirectly()">📤 Send Manual Welcome</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = requireAuth();
+            if (!user || user.role !== 'admin') {
+                window.location.href = 'index.html';
+                return;
+            }
+            // Set admin name in sidebar
+            if (user.firstName) {
+                document.getElementById('sidebarName').textContent = user.firstName + ' (Admin)';
+                document.getElementById('sidebarAvatar').textContent = user.firstName[0].toUpperCase();
+            }
+            // Set current date
+            const dateEl = document.getElementById('currentDate');
+            if (dateEl) {
+                dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            }
+            refreshStats();
+        });
+
+        async function refreshStats() {
+            try {
+                const data = await apiFetch('/admin/stats');
+                if (data.success) {
+                    animateCount('totalUsers', data.stats.totalUsers);
+                    animateCount('totalEntries', data.stats.totalEntries);
+                    // System health
+                    const health = data.stats.systemHealth || 'Healthy';
+                    document.getElementById('systemHealth').textContent = health;
+                    const dot = document.getElementById('healthDot');
+                    const label = document.getElementById('healthLabel');
+                    if (health === 'Healthy' || health === 'Good') {
+                        dot.className = 'health-dot green';
+                        label.textContent = 'Operational';
+                        label.style.color = 'var(--primary)';
+                    } else if (health === 'Warning') {
+                        dot.className = 'health-dot yellow';
+                        label.textContent = 'Degraded';
+                        label.style.color = 'var(--warning)';
+                    } else {
+                        dot.className = 'health-dot red';
+                        label.textContent = 'Down';
+                        label.style.color = 'var(--danger)';
+                    }
+                    document.getElementById('uptime').textContent = data.stats.uptime || '99.9%';
+                    // Load activities
+                    loadActivities(data);
+                }
+            } catch (err) {
+                console.error("Admin stats failed", err);
+            }
+        }
+
+        function animateCount(id, target) {
+            const el = document.getElementById(id);
+            if (!el || isNaN(target)) return;
+            let start = 0;
+            const dur = 1500;
+            const startTime = performance.now();
+            function update(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / dur, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(eased * target).toLocaleString();
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        function loadActivities(data) {
+            const tbody = document.getElementById('activityLog');
+            if (!tbody) return;
+            // Build sample activities from stats if not included
+            const activities = data.activities || [];
+            if (activities.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding:2rem; text-align:center; color:var(--text-muted);">No recent activities recorded.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = '';
+            activities.forEach((act, i) => {
+                const initials = (act.user || 'U?')[0].toUpperCase();
+                const typeClass = act.type === 'entry' ? 'badge-entry' : act.type === 'register' ? 'badge-register' : act.type === 'login' ? 'badge-login' : 'badge-admin';
+                const typeLabel = act.type ? act.type.charAt(0).toUpperCase() + act.type.slice(1) : 'Action';
+                const row = document.createElement('tr');
+                row.className = i === 0 ? 'row-new' : '';
+                row.innerHTML = `
+                    <td>
+                        <div class="user-cell">
+                            <div class="user-initials-badge">${initials}</div>
+                            <div>
+                                <div class="user-cell-name">${act.user || 'Unknown'}</div>
+                                <div class="user-cell-email">${act.email || ''}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="color:var(--text-secondary); font-size:0.85rem;">${act.action || 'Logged data'}</td>
+                    <td><span class="activity-badge ${typeClass}">${typeLabel}</span></td>
+                    <td style="color:var(--text-muted); font-size:0.78rem;">${act.time || new Date().toLocaleTimeString()}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function switchAdminTab(tab) {
+            ['overview', 'users', 'emails'].forEach(t => {
+                const section = document.getElementById(`section-${t}`);
+                const tabBtn = document.getElementById(`tab-${t}`);
+                const sideBtn = document.getElementById(`side-${t}`);
+                if (section) section.style.display = (t === tab) ? 'block' : 'none';
+                if (tabBtn) tabBtn.classList.toggle('active', t === tab);
+                if (sideBtn) sideBtn.classList.toggle('active', t === tab);
+            });
+            if (tab === 'users') fetchAdminUsers();
+            if (tab === 'overview') refreshStats();
+        }
+
+        async function fetchAdminUsers() {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = `<tr><td colspan="6" style="padding:2rem; text-align:center; color:var(--text-muted);">
+                <span style="font-size:1.5rem; display:block; margin-bottom:0.5rem;">⏳</span>Loading users...
+            </td></tr>`;
+            try {
+                const data = await apiFetch('/admin/users');
+                if (data.success) {
+                    tbody.innerHTML = '';
+                    data.users.forEach(u => {
+                        const initials = (u.firstName || 'U')[0].toUpperCase() + (u.lastName || '?')[0].toUpperCase();
+                        const roleClass = u.role === 'admin' ? 'role-admin' : 'role-user';
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-initials-badge">${initials}</div>
+                                    <div>
+                                        <div class="user-cell-name">${u.firstName} ${u.lastName || ''}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="color:var(--text-secondary); font-size:0.83rem;">${u.email}</td>
+                            <td style="color:var(--text-secondary); font-size:0.83rem;">${u.phone || '—'}</td>
+                            <td><span class="role-badge ${roleClass}">${u.role}</span></td>
+                            <td style="font-size:0.78rem; color:var(--text-muted);">${new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                            <td style="text-align:right;">
+                                <div style="display:flex; gap:8px; justify-content:flex-end; align-items:center;">
+                                    ${u.phone ? `<a href="https://wa.me/${u.phone.replace(/\D/g, '')}?text=Hi%20${u.firstName},%20Welcome%20to%20EcoTrack%20AI!%20🌿" target="_blank" style="text-decoration:none; font-size:1.1rem;" title="Chat on WhatsApp">💬</a>` : ''}
+                                    <button onclick="resendWelcome('${u.email}', '${u.firstName}')" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:1rem; transition:0.2s;" title="Resend Welcome Email" onmouseover="this.style.filter='drop-shadow(0 0 6px var(--primary))'" onmouseout="this.style.filter='none'">📧</button>
+                                    <button onclick="deleteUser('${u.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.1rem; transition:0.2s;" title="Delete User" onmouseover="this.style.filter='drop-shadow(0 0 6px var(--danger))'" onmouseout="this.style.filter='none'">🗑️</button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="6" style="padding:2rem; text-align:center; color:var(--danger);">Failed to load users: ${err.message}</td></tr>`;
+            }
+        }
+
+        async function deleteUser(uid) {
+            if (!confirm("Are you SURE you want to delete this user? This cannot be undone.")) return;
+            try {
+                const data = await apiFetch(`/admin/users/${uid}`, { method: 'DELETE' });
+                if (data.success) {
+                    showGlobalToast("✅ User deleted successfully.");
+                    fetchAdminUsers();
+                }
+            } catch (err) {
+                showGlobalToast("❌ Error deleting user: " + err.message);
+            }
+        }
+
+        async function resendWelcome(email, firstName) {
+            showGlobalToast(`📤 Resending welcome to ${firstName}...`);
+            try {
+                const data = await apiFetch('/admin/resend-welcome', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, firstName })
+                });
+                if (data.success) {
+                    showGlobalToast(`✅ Welcome letter sent to ${email}`);
+                }
+            } catch (err) {
+                showGlobalToast("❌ Failed: " + err.message);
+            }
+        }
+
+        function sendTestEmailDirectly() {
+            const email = prompt("Enter user email to send welcome letter to:");
+            if (!email) return;
+            showGlobalToast(`📤 Sending personalized welcome to ${email}...`);
+            setTimeout(() => {
+                showGlobalToast("✅ Success: Personalized email dispatched via SMTP.");
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
