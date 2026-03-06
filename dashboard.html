@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard – EcoTrack AI</title>
+    <script src="js/i18n.js"></script>
     <meta name="description"
         content="Your personal carbon footprint dashboard. Track emissions, view EcoScore, and get AI-powered recommendations." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,7 +75,7 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title">Dashboard</h1>
+                <h1 class="page-title" data-i18n="dashboardTitle">Dashboard</h1>
                 <div class="live-indicator" style="margin-left: 1.5rem;">
                     <span class="live-dot"></span> REAL-TIME
                 </div>
@@ -135,7 +136,7 @@
                         <div class="streak-widget">
                             <div class="streak-icon">🔥</div>
                             <div class="streak-info">
-                                <div class="streak-label">DAILY STREAK</div>
+                                <div class="streak-label" data-i18n="dailyStreak">DAILY STREAK</div>
                                 <div class="streak-bar">
                                     <div class="streak-fill" style="width: 65%;"></div>
                                 </div>
@@ -153,7 +154,7 @@
                     <select class="period-select" id="emissionPeriod" onchange="updateEmissionDisplay()">
                         <option value="today">Today</option>
                         <option value="week">This Week</option>
-                        <option value="month" selected>This Month</option>
+                        <option value="month" selected data-i18n="thisMonth">This Month</option>
                     </select>
                 </div>
                 <div class="emissions-total" id="emissionsTotal">
@@ -198,7 +199,7 @@
             <div class="card chart-card full-width reveal">
                 <div class="activity-table-header"
                     style="padding: 1rem 0 1.5rem 0; display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="font-family:'Space Grotesk'; font-size:1.1rem;">📈 Emission Analytics</h3>
+                    <h3 style="font-family:'Space Grotesk'; font-size:1.1rem;" data-i18n="emissionAnalytics">📈 Emission Analytics</h3>
                     <div class="chart-controls">
                         <button class="chart-btn active" onclick="updateChart('week', this)">7D</button>
                         <button class="chart-btn" onclick="updateChart('month', this)">30D</button>
@@ -318,9 +319,7 @@
             title="Scroll down">&#8681;</button>
     </div>
 
-    <script src="js/i18n.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/i18n.js"></script>
     <script src="js/autolog.js"></script>
     <script src="js/chat.js"></script>
     <script src="js/dashboard.js"></script>
