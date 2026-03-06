@@ -4,7 +4,7 @@
    =================================================== */
 
 // ── Constants ─────────────────────────────────────────
-const API_BASE = 'http://localhost:5050/api';
+const API_BASE = window.location.port === '8080' ? 'http://localhost:5050/api' : '/api';
 const STORAGE_KEYS = {
   TOKEN: 'ecotrack_token',
   USER: 'ecotrack_user'

@@ -6,7 +6,7 @@ import bcrypt
 import json
 import requests
 import random
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from pymongo import MongoClient, UpdateOne
 from bson.objectid import ObjectId
@@ -50,7 +50,8 @@ if TWILIO_SID and TWILIO_TOKEN:
     except Exception as e:
         print(f"WARNING: Twilio failed to initialize: {e}")
 
-app = Flask(__name__)
+frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 # Allow both localhost and 127.0.0.1 to avoid common CORS networking issues
 CORS(app, resources={r"/api/*": {
     "origins": ["http://localhost:8080", "http://127.0.0.1:8080"],
@@ -1257,6 +1258,26 @@ def migrate_local_to_atlas():
             entry_count += 1
             
     print(f"✅ Migration Complete! Migrated {user_count} users and {entry_count} entries to Atlas.")
+
+# ── Frontend Serving Routes ───────────────────────────
+@app.route('/')
+def serve_index():
+    return send_from_directory(frontend_dir, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static_files(path):
+    import os
+    if path.startswith('backend_py') or '..' in path:
+        return jsonify({"error": "Forbidden"}), 403
+        
+    file_path = os.path.join(frontend_dir, path)
+    if os.path.exists(file_path):
+        return send_from_directory(frontend_dir, path)
+        
+    if os.path.exists(file_path + '.html'):
+        return send_from_directory(frontend_dir, path + '.html')
+        
+    return send_from_directory(frontend_dir, 'index.html')
 
 if __name__ == '__main__':
     # Check for migration flag
