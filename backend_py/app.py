@@ -60,6 +60,12 @@ CORS(app, resources={r"/api/*": {
 }})
 
 print("--- EcoTrack AI Backend Initializing ---")
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    return response
 
 # ── DATABASE SYSTEM (MongoDB Atlas with JSON Fallback) ───────
 DB_FILE = os.path.join(os.path.dirname(__file__), "local_db.json")
@@ -1284,5 +1290,6 @@ if __name__ == '__main__':
         
     port = int(os.getenv("PORT", 5050))
     app.run(host='0.0.0.0', port=port, debug=False)
-#   F o r c e   r e d e p l o y  
+#   F o r c e   r e d e p l o y 
+ 
  
