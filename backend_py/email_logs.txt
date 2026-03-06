@@ -1,0 +1,5 @@
+[2026-03-05 11:14:56.793471] SUCCESS: Welcome email sent to kumarfuture129@gmail.com
+[2026-03-05 12:06:02.496230] SUCCESS: Welcome email sent to bhavishya.0251btcs042@dgu.ac.in
+[2026-03-05 12:48:12.032636] RESET REQUEST: bhavishya.0251btcs042@dgu.ac.in | Token: 97b35fac897005a564f903689212ff15d5894d55428cec8b
+[2026-03-05 13:03:43.791034] RESET REQUEST: bhavishya.0251btcs042@dgu.ac.in | CODE: D5F16253
+[2026-03-05 15:09:30.194871] RESET REQUEST: bhavishya.0251btcs042@dgu.ac.in | CODE: C76F6129

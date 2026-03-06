@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "firstName": "Bhavishya",
+      "lastName": "Kumar",
+      "email": "kumarbhavishya384@gmail.com",
+      "password": "$2b$12$zUgj1oM9Vzzp8P61wmknoehyIckJx3A9JOdqMQIQSihMLiAuauf8i",
+      "location": "Delhi",
+      "role": "admin",
+      "ecoScore": 0,
+      "createdAt": "2026-03-03 00:12:30.239667",
+      "_id": "69a5da16178503c427ef5017"
+    },
+    {
+      "firstName": "Bhavishya",
+      "lastName": "0251BTCS042",
+      "email": "bhavishya.0251btcs042@dgu.ac.in",
+      "phone": "9068188593",
+      "password": "$2b$12$YU8Eyftl4gaESQEHleZg4OboIAb28h50L1lPPGji98Lg0FwWoUPJq",
+      "location": "Delhi",
+      "role": "user",
+      "ecoScore": 747,
+      "createdAt": "2026-03-05 12:05:37.888286",
+      "_id": "69a92439c64d91a720c8b315",
+      "resetToken": "C76F6129"
+    },
+    {
+      "phone": "+919068188593",
+      "pendingOTP": "128124",
+      "otpExpiry": "2026-03-06T04:13:53.568158",
+      "_id": "69aa522902eb42b4aabe9f35"
+    }
+  ],
+  "entries": [
+    {
+      "user": "69a92439c64d91a720c8b315",
+      "date": "2026-03-05",
+      "transport": 3.08,
+      "electricity": 106.494,
+      "food": 0.0,
+      "total": 109.574,
+      "ecoScore": 747,
+      "savedAt": "2026-03-05 13:06:03.292301",
+      "_id": "69a93263dc860a018d015f52"
+    }
+  ]
+}
