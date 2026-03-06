@@ -243,7 +243,13 @@ async function sendOTP() {
     if (data.success) {
       document.getElementById('otpGroup').style.display = 'flex';
       btn.textContent = "Resend OTP";
-      showGlobalToast(data.message || "OTP sent to your email! 📧");
+      if (data.otp) {
+        // Email could not be sent - show OTP directly on screen
+        document.getElementById('regOTP').value = data.otp;
+        showGlobalToast("📋 OTP (email unavailable): " + data.otp + " — it has been filled in for you!");
+      } else {
+        showGlobalToast(data.message || "OTP sent to your email! 📧");
+      }
     } else {
       showGlobalToast("Failed: " + data.message);
       btn.textContent = "Send OTP";

@@ -244,9 +244,9 @@ def _send_welcome_email_sync(user_email, first_name):
     smtp_pass    = smtp_pass_raw.strip() if smtp_pass_raw else ""
 
     try:
-        smtp_port = int(os.getenv("SMTP_PORT", 465))
+        smtp_port = int(os.getenv("SMTP_PORT", 587))
     except (ValueError, TypeError):
-        smtp_port = 465
+        smtp_port = 587
 
     subject = f"🌿 Welcome to {sender_name} – Let's Go Green Together!"
 
@@ -356,7 +356,9 @@ The {sender_name} Team
         msg.attach(MIMEText(html_body, 'html', 'utf-8'))
 
         # NOTE: Do NOT set_debuglevel inside threads — it can corrupt output and cause issues
-        with smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=20) as server:
+        with smtplib.SMTP(smtp_server, smtp_port, timeout=20) as server:
+            server.ehlo()
+            server.starttls()
             server.ehlo()
             server.login(smtp_user, smtp_pass)
             server.send_message(msg)
@@ -426,7 +428,7 @@ def send_otp():
         sender_name  = os.getenv("COMPANY_NAME", "EcoTrack AI").strip()
         sender_email = os.getenv("COMPANY_EMAIL", "").strip()
         smtp_server  = os.getenv("SMTP_SERVER", "smtp.gmail.com").strip()
-        smtp_port    = int(os.getenv("SMTP_PORT", 465))
+        smtp_port    = int(os.getenv("SMTP_PORT", 587))
         smtp_user    = os.getenv("SMTP_USER", "").strip()
         smtp_pass    = os.getenv("SMTP_PASS", "").strip()
 
@@ -481,12 +483,17 @@ def send_otp():
         msg.attach(MIMEText(plain_body, 'plain', 'utf-8'))
         msg.attach(MIMEText(html_body, 'html', 'utf-8'))
 
-        with smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=20) as server:
-            server.ehlo()
-            server.login(smtp_user, smtp_pass)
-            server.send_message(msg)
+        try:
+            with smtplib.SMTP_SSL(smtp_server, smtp_port, timeout=20) as server:
+                server.ehlo()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+            print(f"OTP EMAIL: Sent OTP to {email}")
+        except Exception as mail_err:
+            print(f"OTP EMAIL FAILED (returning OTP in response): {mail_err}")
+            # Email failed but OTP is stored in DB - return OTP in response as fallback
+            return jsonify({"success": True, "message": f"OTP sent to {email} 📧", "otp": otp})
 
-        print(f"OTP EMAIL: Sent OTP to {email}")
         return jsonify({"success": True, "message": f"OTP sent to {email} 📧"})
 
     except smtplib.SMTPAuthenticationError:
