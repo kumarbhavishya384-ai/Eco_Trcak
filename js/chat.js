@@ -110,11 +110,17 @@ class EcoChat {
                     window.dispatchEvent(new CustomEvent('aiLogSync'));
                 }
             } else {
-                this.addMessage('assistant', "Sorry, I'm having trouble connecting to the AI brain right now. 🧠⚡");
+                this.addMessage('assistant', data.response || data.message || "I'm having a moment! Please try again. 🌿");
             }
         } catch (err) {
-            document.getElementById(loadingId).remove();
-            this.addMessage('assistant', "Check your connection. I'm feeling a bit offline.");
+            document.getElementById(loadingId)?.remove();
+            // Show friendly error and still respond helpfully
+            const errMsg = err.message || '';
+            if (errMsg.includes('5050') || errMsg.includes('fetch')) {
+                this.addMessage('assistant', "⚡ The AI backend is warming up. Please try again in a moment!");
+            } else {
+                this.addMessage('assistant', "🌿 I'm having a moment! Try asking me again — I'm here to help log your carbon footprint.");
+            }
         }
     }
 
