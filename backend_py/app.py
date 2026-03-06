@@ -16,7 +16,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import threading
-from datetime impofrom datetime import datetime, timedelta
+from datetime import datetime, timedelta
 from twilio.rest import Client
 import pandas as pd
 import numpy as np
@@ -996,8 +996,9 @@ def get_report_comparison():
         try:
             edate = datetime.strptime(e['date'], '%Y-%m-%d')
             if edate.year == now.year and edate.month == now.month:
-er.get('role') != 'admin':
-        return jsonify({"success": False, "message": "Access denied"}), 403
+                monthly_electric += e.get('electricity', 0)
+        except (ValueError, KeyError):
+            continue
     
     data = request.json
     email = data.get('email')
@@ -1290,6 +1291,5 @@ if __name__ == '__main__':
         
     port = int(os.getenv("PORT", 5050))
     app.run(host='0.0.0.0', port=port, debug=False)
-#   F o r c e   r e d e p l o y 
- 
- 
+# Force redeploy
+
