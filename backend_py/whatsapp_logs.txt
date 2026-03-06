@@ -10,3 +10,15 @@ Message: Hi Bhavishya, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero sta
 Message: Hi Bhavishya, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero starts now. Track your daily footprint and save the planet with us. 🌍
 --------------------------------------------------
 [2026-03-06 09:33:53.579316] MOCK OTP SENT TO +919068188593: 128124
+
+[2026-03-06 19:04:50.779225] WHATSAPP PENDING TO: 9068188593
+Message: Hi Bhavishaya, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero starts now. Track your daily footprint and save the planet with us. 🌍
+--------------------------------------------------
+
+[2026-03-06 19:21:27.204960] WHATSAPP PENDING TO: 9068188593
+Message: Hi Bhavishaya, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero starts now. Track your daily footprint and save the planet with us. 🌍
+--------------------------------------------------
+
+[2026-03-06 19:23:25.279533] WHATSAPP PENDING TO: 9068188593
+Message: Hi Atharv, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero starts now. Track your daily footprint and save the planet with us. 🌍
+--------------------------------------------------

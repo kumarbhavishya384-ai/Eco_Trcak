@@ -16,8 +16,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import threading
-from twilio.rest import Client
 from datetime import datetime, timedelta
+from twilio.rest import Client
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
@@ -206,10 +206,10 @@ def calculate_ecoscore(total_co2):
 
 def seed_demo_data(user_id):
     import random
-    today = datetime.datetime.now()
+    today = datetime.now()
     bulk_data = []
     for i in range(29, -1, -1):
-        d = today - datetime.timedelta(days=i)
+        d = today - timedelta(days=i)
         date_str = d.strftime('%Y-%m-%d')
         t, e, f = round(random.uniform(1,5),2), round(random.uniform(0.5,3),2), round(random.uniform(1,4),2)
         total = round(t+e+f, 2)
@@ -218,7 +218,7 @@ def seed_demo_data(user_id):
             {"$setOnInsert": {
                 "user": user_id, "date": date_str, "transport": t, "electricity": e, 
                 "food": f, "total": total, "ecoScore": calculate_ecoscore(total),
-                "savedAt": str(datetime.datetime.now())
+                "savedAt": str(datetime.now())
             }},
             upsert=True
         ))
@@ -365,13 +365,13 @@ The {sender_name} Team
             server.login(smtp_user, smtp_pass)
             server.send_message(msg)
 
-        success_msg = f"[{datetime.datetime.now()}] SUCCESS: Welcome email sent to {user_email}\n"
+        success_msg = f"[{datetime.now()}] SUCCESS: Welcome email sent to {user_email}\n"
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(success_msg)
         print(f"EMAIL SUCCESS: Welcome email delivered to {user_email}")
 
     except smtplib.SMTPAuthenticationError as e:
-        error_msg = (f"[{datetime.datetime.now()}] AUTH ERROR for {user_email}: "
+        error_msg = (f"[{datetime.now()}] AUTH ERROR for {user_email}: "
                      f"Gmail App Password may be invalid or 2FA is off.\n"
                      f"Detail: {str(e)}\n" + "-"*60 + "\n")
         with open(log_path, "a", encoding='utf-8') as f:
@@ -379,14 +379,14 @@ The {sender_name} Team
         print(f"EMAIL AUTH ERROR for {user_email}: {str(e)}")
 
     except smtplib.SMTPException as e:
-        error_msg = (f"[{datetime.datetime.now()}] SMTP ERROR for {user_email}: {str(e)}\n"
+        error_msg = (f"[{datetime.now()}] SMTP ERROR for {user_email}: {str(e)}\n"
                      + "-"*60 + "\n")
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(error_msg)
         print(f"EMAIL SMTP ERROR for {user_email}: {str(e)}")
 
     except Exception as e:
-        error_msg = (f"[{datetime.datetime.now()}] UNEXPECTED ERROR for {user_email}: {str(e)}\n"
+        error_msg = (f"[{datetime.now()}] UNEXPECTED ERROR for {user_email}: {str(e)}\n"
                      + "-"*60 + "\n")
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(error_msg)
@@ -400,7 +400,7 @@ def send_whatsapp_notification(phone, first_name):
     
     msg = f"Hi {first_name}, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero starts now. Track your daily footprint and save the planet with us. 🌍"
     
-    log_entry = f"\n[{datetime.datetime.now()}] WHATSAPP PENDING TO: {phone}\nMessage: {msg}\n{'-'*50}\n"
+    log_entry = f"\n[{datetime.now()}] WHATSAPP PENDING TO: {phone}\nMessage: {msg}\n{'-'*50}\n"
     try:
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(log_entry)
@@ -412,62 +412,91 @@ def send_whatsapp_notification(phone, first_name):
 def send_otp():
     try:
         data = request.json
-        phone = data.get('phone', '').strip() # +91XXXXXXXXXX
-        if not phone:
-            return jsonify({"success": False, "message": "Phone number is required"}), 400
+        email = data.get('email', '').strip().lower()
+        if not email:
+            return jsonify({"success": False, "message": "Email is required"}), 400
 
         otp = str(random.randint(100000, 999999))
         expiry = (datetime.utcnow() + timedelta(minutes=10)).isoformat()
-        
-        # Store in users_col using upsert by phone
-        # Works for both MongoDB and FileCollection
-        users_col.update_one(
-            {"phone": phone},
+
+        # Store OTP against email (upsert)
+        otps_col.update_one(
+            {"email": email},
             {"$set": {"pendingOTP": otp, "otpExpiry": expiry}},
             upsert=True
         )
 
-        fast2sms_key = os.getenv("FAST2SMS_KEY", "")
-        
-        # MOCK MODE FALLBACK
-        if not fast2sms_key or fast2sms_key == "your_api_key_here":
-            # Log to local file so user can see the OTP without a real API key
-            base_dir = os.path.dirname(os.path.abspath(__file__))
-            log_path = os.path.join(base_dir, "whatsapp_logs.txt")
-            log_entry = f"[{datetime.now()}] MOCK OTP SENT TO {phone}: {otp}\n"
-            with open(log_path, "a", encoding='utf-8') as f:
-                f.write(log_entry)
-            print(f"DEBUG: Fast2SMS Mock Mode - OTP is {otp} (Refer to whatsapp_logs.txt)")
-            return jsonify({"success": True, "message": "OTP sent via Mock Mode (Check whatsapp_logs.txt)"})
+        # Send OTP via Gmail SMTP
+        sender_name  = os.getenv("COMPANY_NAME", "EcoTrack AI").strip()
+        sender_email = os.getenv("COMPANY_EMAIL", "").strip()
+        smtp_server  = os.getenv("SMTP_SERVER", "smtp.gmail.com").strip()
+        smtp_port    = int(os.getenv("SMTP_PORT", 587))
+        smtp_user    = os.getenv("SMTP_USER", "").strip()
+        smtp_pass    = os.getenv("SMTP_PASS", "").strip()
 
-        # Extract 10 digits for Fast2SMS
-        clean_phone = phone.replace("+91", "").replace("+", "")
-        if len(clean_phone) > 10:
-            clean_phone = clean_phone[-10:]
+        html_body = f"""
+        <!DOCTYPE html>
+        <html>
+        <head><meta charset="UTF-8"></head>
+        <body style="margin:0;padding:0;background:#0a1628;font-family:Arial,sans-serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a1628;padding:30px 0">
+            <tr><td align="center">
+              <table width="500" cellpadding="0" cellspacing="0"
+                     style="background:#0f2035;border-radius:16px;overflow:hidden;border:1px solid #1e3a5f;">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#0d4f3a,#0a3d5c);padding:35px 30px;text-align:center;">
+                    <div style="font-size:40px">🌿</div>
+                    <h1 style="color:#ffffff;margin:10px 0 4px;font-size:22px;font-weight:800;">Email Verification</h1>
+                    <p style="color:#a0d4b5;margin:0;font-size:14px;">{sender_name}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:35px 40px;text-align:center;">
+                    <p style="color:#94a3b8;font-size:15px;margin:0 0 20px;">
+                      Use the code below to verify your email. It expires in <strong style="color:#22d3ee;">10 minutes</strong>.
+                    </p>
+                    <div style="background:#0d2a40;border-radius:12px;padding:24px;display:inline-block;
+                                border:2px dashed #22c55e;margin:0 auto;">
+                      <span style="font-size:38px;font-weight:900;letter-spacing:10px;color:#4ade80;">{otp}</span>
+                    </div>
+                    <p style="color:#64748b;font-size:13px;margin:24px 0 0;">
+                      If you didn't request this, please ignore this email.
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:#071525;padding:16px 30px;text-align:center;">
+                    <p style="color:#475569;font-size:12px;margin:0;">© 2026 {sender_name}</p>
+                  </td>
+                </tr>
+              </table>
+            </td></tr>
+          </table>
+        </body>
+        </html>
+        """
 
-        url = "https://www.fast2sms.com/dev/bulkV2"
-        params = {
-            "authorization": fast2sms_key,
-            "message": f"Your EcoTrack AI verification code is {otp}. Valid for 10 minutes.",
-            "language": "english",
-            "route": "q",
-            "numbers": clean_phone
-        }
+        plain_body = f"Your {sender_name} OTP is: {otp}\nValid for 10 minutes. Do not share this with anyone."
 
-        try:
-            response = requests.get(url, params=params, timeout=10)
-            res_data = response.json()
+        msg = MIMEMultipart('alternative')
+        msg['From']    = f"{sender_name} <{sender_email}>"
+        msg['To']      = email
+        msg['Subject'] = f"🔐 Your {sender_name} Verification Code"
+        msg.attach(MIMEText(plain_body, 'plain', 'utf-8'))
+        msg.attach(MIMEText(html_body, 'html', 'utf-8'))
 
-            if res_data.get("return"):
-                return jsonify({"success": True})
-            else:
-                # If key is invalid, still provide a way to bypass for the user in development
-                error_msg = res_data.get("message", "Fast2SMS Error")
-                print(f"DEBUG: Fast2SMS Failed ({error_msg}). Falling back to Mock.")
-                return jsonify({"success": True, "mocked": True, "message": f"Real SMS failed ({error_msg}). Use code: {otp}"})
-        except Exception as e:
-            return jsonify({"success": True, "mocked": True, "message": f"Network Error. Use code: {otp}"})
+        with smtplib.SMTP(smtp_server, smtp_port, timeout=20) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
 
+        print(f"OTP EMAIL: Sent OTP to {email}")
+        return jsonify({"success": True, "message": f"OTP sent to {email} 📧"})
+
+    except smtplib.SMTPAuthenticationError:
+        return jsonify({"success": False, "message": "Email config error. Check SMTP credentials in .env"}), 500
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
@@ -475,25 +504,24 @@ def send_otp():
 def verify_otp():
     try:
         data = request.json
-        phone = data.get('phone', '').strip()
+        email = data.get('email', '').strip().lower()
         otp = data.get('otp', '').strip()
 
-        user = users_col.find_one({"phone": phone})
-        if not user or user.get("pendingOTP") != otp:
+        record = otps_col.find_one({"email": email})
+        if not record or record.get("pendingOTP") != otp:
             return jsonify({"success": False, "message": "Invalid OTP code"}), 401
 
-        expiry_str = user.get("otpExpiry")
+        expiry_str = record.get("otpExpiry")
         if not expiry_str:
-             return jsonify({"success": False, "message": "No OTP pending for this number"}), 401
+            return jsonify({"success": False, "message": "No OTP pending for this email"}), 401
 
-        # Use datetime.fromisoformat as requested
         expiry = datetime.fromisoformat(expiry_str)
         if datetime.utcnow() > expiry:
-            return jsonify({"success": False, "message": "OTP has expired"}), 401
+            return jsonify({"success": False, "message": "OTP has expired. Please request a new one."}), 401
 
-        # Success: clear pendingOTP and otpExpiry
-        users_col.update_one(
-            {"phone": phone},
+        # Clear OTP after successful verification
+        otps_col.update_one(
+            {"email": email},
             {"$set": {"pendingOTP": None, "otpExpiry": None}}
         )
         return jsonify({"success": True})
@@ -526,7 +554,7 @@ def register():
             "location": data.get('location', 'India'),
             "role": "admin" if email in ["admin@ecotrack.ai", "kumarbhavishya384@gmail.com"] else "user",
             "ecoScore": 0,
-            "createdAt": str(datetime.datetime.now())
+            "createdAt": str(datetime.now())
         }
         res = users_col.insert_one(user_doc)
         user_id = str(res.inserted_id)
@@ -538,7 +566,7 @@ def register():
         
         # seed_demo_data(user_id if not use_mongodb else ObjectId(user_id))
         
-        token = jwt.encode({'id': user_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)}, 
+        token = jwt.encode({'id': user_id, 'exp': datetime.utcnow() + timedelta(days=7)}, 
                            os.getenv("JWT_SECRET", "ecotrack_secret"), algorithm="HS256")
         if isinstance(token, bytes): token = token.decode('utf-8')
 
@@ -558,7 +586,7 @@ def login():
         password = data.get('password', '')
         
         with open("local_db_debug.txt", "a") as f:
-            f.write(f"\n[{datetime.datetime.now()}] Login Attempt: '{email}'")
+            f.write(f"\n[{datetime.now()}] Login Attempt: '{email}'")
         
         user = users_col.find_one({"email": email})
         
@@ -579,7 +607,7 @@ def login():
             f.write(f" -> Success!")
             
         uid = str(user['_id'])
-        token = jwt.encode({'id': uid, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)}, 
+        token = jwt.encode({'id': uid, 'exp': datetime.utcnow() + timedelta(days=7)}, 
                            os.getenv("JWT_SECRET", "ecotrack_secret"), algorithm="HS256")
         if isinstance(token, bytes): token = token.decode('utf-8')
         return jsonify({
@@ -628,7 +656,7 @@ def forgot_password():
         # Log the reset request (Mocking email sending)
         base_dir = os.path.dirname(os.path.abspath(__file__))
         log_path = os.path.join(base_dir, "email_logs.txt")
-        log_entry = f"[{datetime.datetime.now()}] RESET REQUEST: {email} | CODE: {reset_token}\n"
+        log_entry = f"[{datetime.now()}] RESET REQUEST: {email} | CODE: {reset_token}\n"
         
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(log_entry)
@@ -701,7 +729,7 @@ def save_entry():
     # Check for existing monthly electricity if this submission has 0
     # This ensures the daily EcoScore remains accurate after the monthly bill is logged
     if e == 0:
-        today = datetime.datetime.now()
+        today = datetime.now()
         month_start = today.replace(day=1).strftime('%Y-%m-%d')
         
         if use_mongodb:
@@ -733,7 +761,7 @@ def save_entry():
             "food": f,
             "total": total_raw, 
             "ecoScore": score, 
-            "savedAt": str(datetime.datetime.now())
+            "savedAt": str(datetime.now())
         }},
         upsert=True
     )
@@ -759,7 +787,7 @@ def delete_entry(date):
 @token_required
 def check_monthly_electricity():
     uid = str(request.user['_id'])
-    today = datetime.datetime.now()
+    today = datetime.now()
     month_start = today.replace(day=1).strftime('%Y-%m-%d')
     
     # Fetch entries for this user
@@ -951,16 +979,16 @@ def get_report_comparison():
     avg_food = sum(e.get('food', 0) for e in sample) / len(sample)
 
     # 2. Monthly Electricity (Current Calendar Month)
-    now = datetime.datetime.now()
+    now = datetime.now()
     month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    month_days = (now.replace(day=1) + datetime.timedelta(days=32)).replace(day=1) - datetime.timedelta(days=1)
+    month_days = (now.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
     days_in_month = month_days.day
     
     monthly_electric = 0
     for e in entries:
         # Handle string or datetime dates
         try:
-            edate = datetime.datetime.strptime(e['date'], '%Y-%m-%d')
+            edate = datetime.strptime(e['date'], '%Y-%m-%d')
             if edate.year == now.year and edate.month == now.month:
                 monthly_electric += e.get('electricity', 0)
         except: continue

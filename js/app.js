@@ -4,7 +4,7 @@
    =================================================== */
 
 // ── Constants ─────────────────────────────────────────
-const API_BASE = window.location.port === '8080' ? 'http://localhost:5050/api' : '/api';
+const API_BASE = window.location.port === '8080' ? 'http://localhost:5050/api' : 'https://ecotrack-ai-kg5q.onrender.com/api';
 const STORAGE_KEYS = {
   TOKEN: 'ecotrack_token',
   USER: 'ecotrack_user'
@@ -227,33 +227,25 @@ async function handleFinalReset(e) {
 }
 
 async function sendOTP() {
-  const phone = document.getElementById('regPhone').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
 
-  if (!phone) {
-    showGlobalToast("Please enter a phone number first.");
+  if (!email) {
+    showGlobalToast("Please enter your email address first.");
     return;
   }
-
   const btn = document.getElementById('sendOTPBtn');
   btn.disabled = true;
   btn.textContent = "Sending...";
 
   try {
-    // Prefix with +91 if necessary
-    let formattedPhone = phone;
-    if (!phone.startsWith('+')) {
-      formattedPhone = '+91' + phone.replace(/^91/, '');
-    }
-
     const data = await apiFetch('/auth/send-otp', {
       method: 'POST',
-      body: JSON.stringify({ phone: formattedPhone })
+      body: JSON.stringify({ email })
     });
-
     if (data.success) {
       document.getElementById('otpGroup').style.display = 'flex';
       btn.textContent = "Resend OTP";
-      showGlobalToast(data.message || "OTP sent to your phone! 📱");
+      showGlobalToast(data.message || "OTP sent to your email! 📧");
     } else {
       showGlobalToast("Failed: " + data.message);
       btn.textContent = "Send OTP";
@@ -265,7 +257,6 @@ async function sendOTP() {
     btn.disabled = false;
   }
 }
-
 async function handleRegister(e) {
   e.preventDefault();
   const firstName = document.getElementById('regFirstName').value.trim();
@@ -282,16 +273,10 @@ async function handleRegister(e) {
     btn.disabled = true;
     btn.textContent = 'Verifying OTP...';
 
-    // Prefix with +91
-    let formattedPhone = phone;
-    if (!phone.startsWith('+')) {
-      formattedPhone = '+91' + phone.replace(/^91/, '');
-    }
-
-    // 1. Verify OTP first via separate API call
+    // 1. Verify OTP via email
     const verifyRes = await apiFetch('/auth/verify-otp', {
       method: 'POST',
-      body: JSON.stringify({ phone: formattedPhone, otp: otpInput })
+      body: JSON.stringify({ email, otp: otpInput })
     });
 
     if (!verifyRes.success) {
@@ -304,7 +289,7 @@ async function handleRegister(e) {
     const data = await apiFetch('/auth/register', {
       method: 'POST',
       body: JSON.stringify({
-        firstName, lastName, email, phone: formattedPhone, password, location
+        firstName, lastName, email, phone, password, location
       })
     });
 
