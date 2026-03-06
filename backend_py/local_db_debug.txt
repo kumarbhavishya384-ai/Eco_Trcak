@@ -1,9 +1,0 @@
-
-[2026-03-03 09:41:14.926049] Login Attempt: 'test' -> User NOT found.
-[2026-03-03 09:50:16.372907] Login Attempt: 'aditya.0251btcs020@dgu.ac.in' -> Success!
-[2026-03-03 09:51:15.728983] Login Attempt: 'aditya.0251btcs020@dgu.ac.in' -> Success!
-[2026-03-03 10:07:13.116167] Login Attempt: 'aditya.0251btcs020@dgu.ac.in' -> Success!
-[2026-03-05 11:31:11.255733] Login Attempt: 'kumarbhavishya384@gmail.com' -> Success!
-[2026-03-05 12:04:51.078364] Login Attempt: 'kumarbhavishya384@gmail.com' -> Success!
-[2026-03-05 12:41:34.314683] Login Attempt: 'bhavishya.0251btcs042@dgu.ac.in' -> Password mismatch. DB Email: 'bhavishya.0251btcs042@dgu.ac.in'
-[2026-03-05 12:41:43.495323] Login Attempt: 'kumarbhavishya384@gmail.com' -> Success!
