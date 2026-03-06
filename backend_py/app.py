@@ -301,7 +301,7 @@ def _send_welcome_email_sync(user_email, first_name):
                   </tr>
                 </table>
                 <div style="text-align:center;margin:30px 0;">
-                  <a href="http://localhost:8080/dashboard.html"
+                  <a href="https://inspiring-dango-b3bb97.netlify.app/dashboard.html"
                      style="background:linear-gradient(135deg,#22c55e,#06b6d4);color:#fff;text-decoration:none;
                             padding:14px 36px;border-radius:50px;font-size:16px;font-weight:700;display:inline-block;">
                     🌍 Start Tracking Now
