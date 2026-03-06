@@ -31,7 +31,7 @@ import google.generativeai as genai
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if GOOGLE_API_KEY:
     genai.configure(api_key=GOOGLE_API_KEY)
-    ai_model = genai.GenerativeModel('gemini-1.5-flash')
+    ai_model = genai.GenerativeModel('gemini-2.0-flash')
 else:
     print("WARNING: GOOGLE_API_KEY not found. AI Chat will work in mock mode.")
     ai_model = None
@@ -1225,7 +1225,7 @@ def ai_vision():
             image_data = base64.b64decode(image_b64)
             
             # Use multi-modal generative model
-            vision_model = genai.GenerativeModel('gemini-1.5-flash')
+            vision_model = genai.GenerativeModel('gemini-2.0-flash')
             response = vision_model.generate_content([
                 prompt,
                 {'mime_type': 'image/jpeg', 'data': image_data}
