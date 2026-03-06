@@ -1196,7 +1196,12 @@ def ai_chat():
             return jsonify({"success": True, "response": "Hi! (Mock Mode) That sounds like a great eco-friendly choice. I've logged it for you.", "autoLog": False})
             
     except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+        print(f"AI Chat error: {str(e)}")
+        return jsonify({
+            "success": True, 
+            "response": "I'm having trouble connecting to the AI service right now. Please try again in a moment! 🌿",
+            "autoLog": False
+        })
 
 @app.route('/api/ai/vision', methods=['POST'])
 @token_required
