@@ -16,7 +16,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import threading
-from datetime import datetime, timedelta
+from datetime impofrom datetime import datetime, timedelta
 from twilio.rest import Client
 import pandas as pd
 import numpy as np
@@ -53,11 +53,11 @@ if TWILIO_SID and TWILIO_TOKEN:
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 # Allow both localhost and 127.0.0.1 to avoid common CORS networking issues
-CORS(app, 
-     origins= ["http://localhost:8080", "http://127.0.0.1:8080", "https://inspiring-dango-b3bb97.netlify.app"],
-     allow_headers=["Content-Type", "Authorization"],
-     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-     supports_credentials=True)
+CORS(app, resources={r"/api/*": {
+    "origins": "*",
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization"]
+}})
 
 print("--- EcoTrack AI Backend Initializing ---")
 
@@ -990,38 +990,7 @@ def get_report_comparison():
         try:
             edate = datetime.strptime(e['date'], '%Y-%m-%d')
             if edate.year == now.year and edate.month == now.month:
-                monthly_electric += e.get('electricity', 0)
-        except: continue
-
-    # 3. Targets (National Benchmarks)
-    targets = {
-        "transportDaily": 1.0,
-        "foodDaily": 1.2,
-        "electricityMonthly": 60.0,
-        "nationalDailyLimit": 5.2
-    }
-
-    # 4. Normalized Daily Total for Banner
-    normalized_daily = avg_transport + (monthly_electric / days_in_month) + avg_food
-
-    return jsonify({
-        "success": True,
-        "hasData": True,
-        "data": {
-            "transport": round(avg_transport, 3),
-            "food": round(avg_food, 3),
-            "electricity": round(monthly_electric, 3),
-            "normalizedDailyTotal": round(normalized_daily, 3)
-        },
-        "targets": targets,
-        "status": "good" if normalized_daily <= targets["nationalDailyLimit"] else "danger",
-        "daysInMonth": days_in_month
-    })
-
-@app.route('/api/admin/resend-welcome', methods=['POST'])
-@token_required
-def resend_welcome():
-    if request.user.get('role') != 'admin':
+er.get('role') != 'admin':
         return jsonify({"success": False, "message": "Access denied"}), 403
     
     data = request.json
