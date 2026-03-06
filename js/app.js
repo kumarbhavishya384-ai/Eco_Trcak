@@ -113,9 +113,7 @@ async function apiFetch(endpoint, options = {}) {
     return data;
   } catch (err) {
     if (err.message === 'Failed to fetch') {
-      const msg = " Backend Error: The server on port 5050 is not responding. Please run 'Launch_EcoTrack_AI.bat' and ensure you have MongoDB installed locally.";
-      console.warn(msg);
-      throw new Error(msg);
+  const msg = "Server is waking up... Please wait 60 seconds and try again.";
     }
     console.error(`API Error (${endpoint}):`, err);
     throw err;
