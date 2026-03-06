@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Offset Tools – EcoTrack AI</title>
+    <script src="js/i18n.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
@@ -18,21 +19,20 @@
         <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span><span
-                    class="nav-label">Dashboard</span></a>
+                    class="nav-label" data-i18n="nav_dashboard">Dashboard</span></a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label">Report Dashboard</span>
+                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
             </a>
 
             <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span
-                    class="nav-label">Calculator</span></a>
+                    class="nav-label" data-i18n="nav_calculator">Calculator</span></a>
             <a href="history.html" class="nav-item"><span class="nav-icon">📅</span><span
-                    class="nav-label">History</span></a>
+                    class="nav-label" data-i18n="nav_history">History</span></a>
             <a href="recommendations.html" class="nav-item"><span class="nav-icon">💡</span><span class="nav-label">AI
                     Insights</span></a>
             <a href="leaderboard.html" class="nav-item"><span class="nav-icon">🏆</span><span
-                    class="nav-label">Leaderboard</span></a>
-            <a href="offset.html" class="nav-item active"><span class="nav-icon">🌲</span><span class="nav-label">Offset
-                    Tools</span></a>
+                    class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span></a>
+            <a href="offset.html" class="nav-item active"><span class="nav-icon">🌲</span><span class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-mini-profile">
@@ -42,6 +42,12 @@
                     <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
                 </div>
             </div>
+                        <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; gap: 0.5rem;">
+                <button onclick="switchLanguage('en')" data-lang="en" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">EN</button>
+                <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
+            </div>
             <button class="logout-btn" onclick="logout()">⬡ Logout</button>
         </div>
     </aside>
@@ -50,7 +56,7 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title">🌲 Carbon Offset Tools</h1>
+                <h1 class="page-title" data-i18n="offset_title">🌲 Carbon Offset Tools</h1>
             </div>
         </header>
 
@@ -61,7 +67,7 @@
                 <div class="offset-hero">
                     <div class="offset-globe">🌍</div>
                     <div class="offset-hero-text">
-                        <h2>Your Carbon Neutrality Journey</h2>
+                        <h2 data-i18n="carbon_journey">Your Carbon Neutrality Journey</h2>
                         <p>You need to offset <strong id="totalToOffset">0</strong> kg CO₂ this month</p>
                     </div>
                     <div class="offset-progress-ring">
@@ -87,30 +93,30 @@
                 <div class="card offset-tool-card">
                     <div class="tool-header">
                         <span class="tool-big-icon">🌳</span>
-                        <h3>Tree Plantation Calculator</h3>
+                        <h3 data-i18n="tree_calc">Tree Plantation Calculator</h3>
                     </div>
                     <p class="tool-desc">One mature tree absorbs ~21 kg CO₂ per year. Calculate how many trees you need
                         to plant.</p>
 
                     <div class="tool-input-wrap">
-                        <label>CO₂ to offset (kg)</label>
+                        <label data-i18n="co2_to_offset">CO₂ to offset (kg)</label>
                         <input type="number" id="treeOffsetKg" placeholder="Enter kg CO₂" oninput="calcTrees()" />
                     </div>
                     <div class="tool-input-wrap">
-                        <label>Tree Type</label>
+                        <label data-i18n="tree_type">Tree Type</label>
                         <select id="treeType" onchange="calcTrees()">
-                            <option value="21">Average Tree (21 kg CO₂/yr)</option>
-                            <option value="50">Bamboo (50 kg CO₂/yr)</option>
-                            <option value="48">Oak (48 kg CO₂/yr)</option>
-                            <option value="15">Fruit Tree (15 kg CO₂/yr)</option>
-                            <option value="30">Pine (30 kg CO₂/yr)</option>
+                            <option value="21" data-i18n="avg_tree">Average Tree (21 kg CO₂/yr)</option>
+                            <option value="50" data-i18n="bamboo">Bamboo (50 kg CO₂/yr)</option>
+                            <option value="48" data-i18n="oak">Oak (48 kg CO₂/yr)</option>
+                            <option value="15" data-i18n="fruit_tree">Fruit Tree (15 kg CO₂/yr)</option>
+                            <option value="30" data-i18n="pine">Pine (30 kg CO₂/yr)</option>
                         </select>
                     </div>
 
                     <div class="tool-result" id="treeResult">
                         <div class="tree-display">
                             <div class="tree-count" id="treeCount">0</div>
-                            <div class="tree-label">Trees Needed</div>
+                            <div class="tree-label" data-i18n="trees_needed">Trees Needed</div>
                         </div>
                         <div class="tree-visual" id="treeVisual">🌱</div>
                     </div>
@@ -121,21 +127,21 @@
                 <div class="card offset-tool-card">
                     <div class="tool-header">
                         <span class="tool-big-icon">☀️</span>
-                        <h3>Solar Savings Predictor</h3>
+                        <h3 data-i18n="solar_title">Solar Savings Predictor</h3>
                     </div>
                     <p class="tool-desc">Calculate how much CO₂ and money you'd save by switching to solar energy in
                         India.</p>
 
                     <div class="tool-input-wrap">
-                        <label>Monthly Electricity Bill (₹)</label>
+                        <label data-i18n="monthly_bill_label">Monthly Electricity Bill (₹)</label>
                         <input type="number" id="solarBill" placeholder="e.g. 1500" oninput="calcSolar()" />
                     </div>
                     <div class="tool-input-wrap">
-                        <label>Roof Area Available (sq ft)</label>
+                        <label data-i18n="roof_area">Roof Area Available (sq ft)</label>
                         <input type="number" id="solarArea" placeholder="e.g. 200" oninput="calcSolar()" />
                     </div>
                     <div class="tool-input-wrap">
-                        <label>Your State</label>
+                        <label data-i18n="your_state">Your State</label>
                         <select id="solarState" onchange="calcSolar()">
                             <option value="5">Rajasthan (5 kWh/m²/day)</option>
                             <option value="4.8">Gujarat (4.8)</option>
@@ -150,15 +156,15 @@
                         <div class="solar-stats">
                             <div class="solar-stat">
                                 <div class="ss-val" id="solarKwPerYear">--</div>
-                                <div class="ss-label">kWh/year</div>
+                                <div class="ss-label" data-i18n="kwh_year">kWh/year</div>
                             </div>
                             <div class="solar-stat">
                                 <div class="ss-val" id="solarCO2Save">--</div>
-                                <div class="ss-label">kg CO₂ saved/yr</div>
+                                <div class="ss-label" data-i18n="co2_saved">kg CO₂ saved/yr</div>
                             </div>
                             <div class="solar-stat">
                                 <div class="ss-val" id="solarMoneySave">--</div>
-                                <div class="ss-label">₹ saved/year</div>
+                                <div class="ss-label" data-i18n="money_saved">₹ saved/year</div>
                             </div>
                         </div>
                         <div class="solar-payback" id="solarPayback"></div>
@@ -169,29 +175,29 @@
                 <div class="card offset-tool-card">
                     <div class="tool-header">
                         <span class="tool-big-icon">💳</span>
-                        <h3>Carbon Credit Calculator</h3>
+                        <h3 data-i18n="credit_calc">Carbon Credit Calculator</h3>
                     </div>
                     <p class="tool-desc">Calculate the cost to buy carbon credits to offset your emissions through
                         certified programs.</p>
 
                     <div class="tool-input-wrap">
-                        <label>CO₂ to offset (kg)</label>
+                        <label data-i18n="co2_to_offset">CO₂ to offset (kg)</label>
                         <input type="number" id="creditKg" placeholder="Enter kg CO₂" oninput="calcCredits()" />
                     </div>
                     <div class="tool-input-wrap">
-                        <label>Offset Program Type</label>
+                        <label data-i18n="offset_program">Offset Program Type</label>
                         <select id="creditType" onchange="calcCredits()">
-                            <option value="6">Reforestation (₹6/kg CO₂)</option>
-                            <option value="12">Renewable Energy (₹12/kg CO₂)</option>
-                            <option value="20">Direct Air Capture (₹20/kg CO₂)</option>
-                            <option value="8">Biochar (₹8/kg CO₂)</option>
+                            <option value="6" data-i18n="reforestation">Reforestation (₹6/kg CO₂)</option>
+                            <option value="12" data-i18n="renewable">Renewable Energy (₹12/kg CO₂)</option>
+                            <option value="20" data-i18n="direct_air">Direct Air Capture (₹20/kg CO₂)</option>
+                            <option value="8" data-i18n="biochar">Biochar (₹8/kg CO₂)</option>
                         </select>
                     </div>
 
                     <div class="tool-result" id="creditResult">
                         <div class="credit-display">
                             <div class="credit-amount" id="creditCost">₹0</div>
-                            <div class="credit-label">Estimated Cost to Offset</div>
+                            <div class="credit-label" data-i18n="cost_label">Estimated Cost to Offset</div>
                         </div>
                         <div class="credit-equiv" id="creditEquiv"></div>
                     </div>
@@ -202,7 +208,7 @@
             <!-- NGO Partners -->
             <div class="card ngo-partners-card full-width">
                 <div class="card-header">
-                    <h3>🤝 NGO & CSR Partners</h3>
+                    <h3 data-i18n="ngo_partners">🤝 NGO & CSR Partners</h3>
                     <span class="badge-verified">Verified</span>
                 </div>
                 <p class="ngo-intro">Partner with these certified organizations to offset your carbon footprint</p>

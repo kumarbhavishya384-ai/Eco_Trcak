@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Campus Leaderboard – EcoTrack AI</title>
+    <script src="js/i18n.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
@@ -18,21 +19,20 @@
         <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span><span
-                    class="nav-label">Dashboard</span></a>
+                    class="nav-label" data-i18n="nav_dashboard">Dashboard</span></a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label">Report Dashboard</span>
+                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
             </a>
 
             <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span
-                    class="nav-label">Calculator</span></a>
+                    class="nav-label" data-i18n="nav_calculator">Calculator</span></a>
             <a href="history.html" class="nav-item"><span class="nav-icon">📅</span><span
-                    class="nav-label">History</span></a>
+                    class="nav-label" data-i18n="nav_history">History</span></a>
             <a href="recommendations.html" class="nav-item"><span class="nav-icon">💡</span><span class="nav-label">AI
                     Insights</span></a>
             <a href="leaderboard.html" class="nav-item active"><span class="nav-icon">🏆</span><span
-                    class="nav-label">Leaderboard</span></a>
-            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label">Offset
-                    Tools</span></a>
+                    class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span></a>
+            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-mini-profile">
@@ -42,6 +42,12 @@
                     <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
                 </div>
             </div>
+                        <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; gap: 0.5rem;">
+                <button onclick="switchLanguage('en')" data-lang="en" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">EN</button>
+                <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
+            </div>
             <button class="logout-btn" onclick="logout()">⬡ Logout</button>
         </div>
     </aside>
@@ -50,13 +56,13 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title">🏆 Campus Leaderboard</h1>
+                <h1 class="page-title" data-i18n="lb_title">🏆 Campus Leaderboard</h1>
             </div>
             <div class="topbar-right">
                 <select class="period-select" id="leaderboardPeriod" onchange="loadLeaderboard()">
-                    <option value="week">This Week</option>
-                    <option value="month" selected>This Month</option>
-                    <option value="alltime">All Time</option>
+                    <option value="week" data-i18n="this_week">This Week</option>
+                    <option value="month" selected data-i18n="this_month">This Month</option>
+                    <option value="alltime" data-i18n="all_time">All Time</option>
                 </select>
             </div>
         </header>
@@ -70,7 +76,7 @@
                         <div class="my-rank-num" id="myRankDisplay">#--</div>
                         <div>
                             <h3 id="myRankName">You</h3>
-                            <p>Your current leaderboard position</p>
+                            <p data-i18n="your_position">Your current leaderboard position</p>
                         </div>
                     </div>
                     <div class="my-rank-score">
@@ -80,8 +86,7 @@
                     <div class="my-rank-right">
                         <div class="rank-till-next" id="rankTillNext"></div>
                         <button class="btn-primary" onclick="generateShareCard()"
-                            style="margin-top: 10px; padding: 0.5rem 1rem; font-size: 0.8rem;">🤳 Share My
-                            Impact</button>
+                            style="margin-top: 10px; padding: 0.5rem 1rem; font-size: 0.8rem;" data-i18n="share_impact" data-i18n="share_impact">🤳 Share My Impact</button>
                     </div>
                 </div>
             </div>
@@ -112,25 +117,25 @@
             <!-- Full Rankings Table -->
             <div class="card leaderboard-table-card">
                 <div class="card-header">
-                    <h3>Full Rankings</h3>
+                    <h3 data-i18n="full_rankings">Full Rankings</h3>
                     <div class="lb-tabs">
-                        <button class="lb-tab active" onclick="switchLbTab('individual', this)">Individual</button>
-                        <button class="lb-tab" onclick="switchLbTab('groups', this)">Campus Groups</button>
-                        <button class="lb-tab" onclick="switchLbTab('ngo', this)">NGO/CSR</button>
+                        <button class="lb-tab active" onclick="switchLbTab('individual', this)" data-i18n="individual">Individual</button>
+                        <button class="lb-tab" onclick="switchLbTab('groups', this)" data-i18n="campus_groups">Campus Groups</button>
+                        <button class="lb-tab" onclick="switchLbTab('ngo', this)" data-i18n="ngo_csr">NGO/CSR</button>
                     </div>
                 </div>
 
                 <!-- Individual Tab -->
                 <div id="tab-individual">
                     <div class="leaderboard-list" id="leaderboardList">
-                        <div class="lb-loading">Loading rankings...</div>
+                        <div class="lb-loading" data-i18n="loading_rankings">Loading rankings...</div>
                     </div>
                 </div>
 
                 <!-- Groups Tab -->
                 <div id="tab-groups" style="display:none">
                     <div class="leaderboard-list" id="groupLeaderboardList">
-                        <div class="lb-loading">Loading group rankings...</div>
+                        <div class="lb-loading" data-i18n="loading_groups">Loading group rankings...</div>
                     </div>
                 </div>
 
@@ -143,7 +148,7 @@
             <!-- Badges Section -->
             <div class="card badges-card full-width">
                 <div class="card-header">
-                    <h3>🎖️ My Eco Badges</h3>
+                    <h3 data-i18n="my_badges">🎖️ My Eco Badges</h3>
                 </div>
                 <div class="badges-grid" id="badgesGrid"></div>
             </div>

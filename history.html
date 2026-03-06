@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>History – EcoTrack AI</title>
+    <script src="js/i18n.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
@@ -19,21 +20,20 @@
         <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span><span
-                    class="nav-label">Dashboard</span></a>
+                    class="nav-label" data-i18n="nav_dashboard">Dashboard</span></a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label">Report Dashboard</span>
+                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
             </a>
 
             <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span
-                    class="nav-label">Calculator</span></a>
+                    class="nav-label" data-i18n="nav_calculator">Calculator</span></a>
             <a href="history.html" class="nav-item active"><span class="nav-icon">📅</span><span
-                    class="nav-label">History</span></a>
+                    class="nav-label" data-i18n="nav_history">History</span></a>
             <a href="recommendations.html" class="nav-item"><span class="nav-icon">💡</span><span class="nav-label">AI
                     Insights</span></a>
             <a href="leaderboard.html" class="nav-item"><span class="nav-icon">🏆</span><span
-                    class="nav-label">Leaderboard</span></a>
-            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label">Offset
-                    Tools</span></a>
+                    class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span></a>
+            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-mini-profile">
@@ -43,6 +43,12 @@
                     <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
                 </div>
             </div>
+                        <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; gap: 0.5rem;">
+                <button onclick="switchLanguage('en')" data-lang="en" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">EN</button>
+                <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
+            </div>
             <button class="logout-btn" onclick="logout()">⬡ Logout</button>
         </div>
     </aside>
@@ -51,10 +57,10 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title">📅 Emission History</h1>
+                <h1 class="page-title" data-i18n="hist_title">📅 Emission History</h1>
             </div>
             <div class="topbar-right">
-                <button class="btn-export" onclick="exportHistory()">⬇ Export CSV</button>
+                <button class="btn-export" onclick="exportHistory()" data-i18n="export_csv">⬇ Export CSV</button>
             </div>
         </header>
 
@@ -65,33 +71,33 @@
                 <div class="card hist-stat-card">
                     <div class="hist-stat-icon">📈</div>
                     <div class="hist-stat-val" id="hst-total">0</div>
-                    <div class="hist-stat-label">Total Entries</div>
+                    <div class="hist-stat-label" data-i18n="total_entries">Total Entries</div>
                 </div>
                 <div class="card hist-stat-card">
                     <div class="hist-stat-icon">🌍</div>
                     <div class="hist-stat-val" id="hst-co2">0</div>
-                    <div class="hist-stat-label">Total kg CO₂</div>
+                    <div class="hist-stat-label" data-i18n="total_co2">Total kg CO₂</div>
                 </div>
                 <div class="card hist-stat-card">
                     <div class="hist-stat-icon">📉</div>
                     <div class="hist-stat-val" id="hst-best">--</div>
-                    <div class="hist-stat-label">Best Day</div>
+                    <div class="hist-stat-label" data-i18n="best_day">Best Day</div>
                 </div>
                 <div class="card hist-stat-card">
                     <div class="hist-stat-icon">🔥</div>
                     <div class="hist-stat-val" id="hst-streak">0</div>
-                    <div class="hist-stat-label">Logging Streak</div>
+                    <div class="hist-stat-label" data-i18n="logging_streak">Logging Streak</div>
                 </div>
             </div>
 
             <!-- History Chart -->
             <div class="card full-width">
                 <div class="card-header">
-                    <h3>Emission Timeline</h3>
+                    <h3 data-i18n="emission_timeline">Emission Timeline</h3>
                     <select class="period-select" id="histPeriod" onchange="updateHistoryChart()">
-                        <option value="7">Last 7 Days</option>
-                        <option value="30" selected>Last 30 Days</option>
-                        <option value="90">Last 90 Days</option>
+                        <option value="7" data-i18n="last7">Last 7 Days</option>
+                        <option value="30" selected data-i18n="last30">Last 30 Days</option>
+                        <option value="90" data-i18n="last90">Last 90 Days</option>
                     </select>
                 </div>
                 <div class="chart-wrapper">
@@ -102,15 +108,15 @@
             <!-- History Table -->
             <div class="card full-width history-table-card">
                 <div class="card-header">
-                    <h3>All Entries</h3>
+                    <h3 data-i18n="all_entries">All Entries</h3>
                     <div class="history-search-wrap">
                         <input type="text" class="history-search" id="historySearch" placeholder="🔍 Search by date..."
                             oninput="filterHistory()" />
                         <select class="period-select" id="histCategoryFilter" onchange="filterHistory()">
-                            <option value="all">All Categories</option>
-                            <option value="transport">Transport</option>
-                            <option value="electricity">Electricity</option>
-                            <option value="food">Food</option>
+                            <option value="all" data-i18n="all_categories">All Categories</option>
+                            <option value="transport" data-i18n="transport_cat">Transport</option>
+                            <option value="electricity" data-i18n="electricity_cat">Electricity</option>
+                            <option value="food" data-i18n="food_cat">Food</option>
                         </select>
                     </div>
                 </div>
@@ -119,13 +125,13 @@
                     <table class="history-table" id="historyTable">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>🚗 Transport</th>
-                                <th>⚡ Electricity</th>
-                                <th>🍽️ Food</th>
-                                <th>Total CO₂</th>
-                                <th>EcoScore</th>
-                                <th>Action</th>
+                                <th data-i18n="date_col">Date</th>
+                                <th data-i18n="transport_col">🚗 Transport</th>
+                                <th data-i18n="electricity_col">⚡ Electricity</th>
+                                <th data-i18n="food_col">🍽️ Food</th>
+                                <th data-i18n="total_co2_col">Total CO₂</th>
+                                <th data-i18n="ecoscore_col">EcoScore</th>
+                                <th data-i18n="action_col">Action</th>
                             </tr>
                         </thead>
                         <tbody id="historyTableBody">

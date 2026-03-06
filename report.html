@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Report Dashboard – EcoTrack AI</title>
+    <script src="js/i18n.js"></script>
     <meta name="description" content="Compare your data with government standards and see your environmental status." />
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
@@ -85,26 +86,26 @@
         </div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item" id="nav-dashboard">
-                <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+                <span class="nav-icon">📊</span><span class="nav-label" data-i18n="nav_dashboard">Dashboard</span>
             </a>
             <a href="report.html" class="nav-item active" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label">Report Dashboard</span>
+                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
             </a>
 
             <a href="calculator.html" class="nav-item" id="nav-calculator">
-                <span class="nav-icon">🧮</span><span class="nav-label">Calculator</span>
+                <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="nav_calculator">Calculator</span>
             </a>
             <a href="history.html" class="nav-item" id="nav-history">
-                <span class="nav-icon">📅</span><span class="nav-label">History</span>
+                <span class="nav-icon">📅</span><span class="nav-label" data-i18n="nav_history">History</span>
             </a>
             <a href="recommendations.html" class="nav-item" id="nav-recommendations">
-                <span class="nav-icon">💡</span><span class="nav-label">AI Insights</span>
+                <span class="nav-icon">💡</span><span class="nav-label" data-i18n="nav_insights">AI Insights</span>
             </a>
             <a href="leaderboard.html" class="nav-item" id="nav-leaderboard">
-                <span class="nav-icon">🏆</span><span class="nav-label">Leaderboard</span>
+                <span class="nav-icon">🏆</span><span class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span>
             </a>
             <a href="offset.html" class="nav-item" id="nav-offset">
-                <span class="nav-icon">🌲</span><span class="nav-label">Offset Tools</span>
+                <span class="nav-icon">🌲</span><span class="nav-label" data-i18n="nav_offset">Offset Tools</span>
             </a>
         </nav>
         <div class="sidebar-footer">
@@ -114,6 +115,12 @@
                     <div class="user-name" id="sidebarName">Loading...</div>
                     <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
                 </div>
+            </div>
+                        <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; gap: 0.5rem;">
+                <button onclick="switchLanguage('en')" data-lang="en" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">EN</button>
+                <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
             </div>
             <button class="logout-btn" onclick="logout()">⬡ Logout</button>
         </div>
@@ -125,7 +132,7 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title">Report Dashboard</h1>
+                <h1 class="page-title" data-i18n="report_title">Report Dashboard</h1>
             </div>
             <div class="topbar-right">
                 <div class="current-date" id="currentDate"></div>
@@ -140,8 +147,8 @@
             <!-- Status Banner -->
             <div id="statusBanner" class="status-banner status-good">
                 <div class="status-text">
-                    <h2 id="statusTitle">Analyzing Data...</h2>
-                    <p id="statusDesc">Please wait while we compare your footprint with national standards.</p>
+                    <h2 id="statusTitle" data-i18n="analyzing_data">Analyzing Data...</h2>
+                    <p id="statusDesc" data-i18n="please_wait">Please wait while we compare your footprint with national standards.</p>
                 </div>
                 <div class="status-icon" id="statusIcon">🤔</div>
             </div>
@@ -150,8 +157,8 @@
                 <!-- User vs Gov Chart -->
                 <div class="card full-width">
                     <div class="card-header">
-                        <h3>Live Comparison: Your Data vs India (Daily/Monthly)</h3>
-                        <span class="badge-live">Custom Comparison (Daily/Monthly)</span>
+                        <h3 data-i18n="live_comparison">Live Comparison: Your Data vs India (Daily/Monthly)</h3>
+                        <span class="badge-live" data-i18n="custom_comparison">Custom Comparison (Daily/Monthly)</span>
                     </div>
                     <div class="chart-wrapper" style="height: 350px;">
                         <canvas id="comparisonChart"></canvas>
@@ -161,7 +168,7 @@
                 <!-- Metrics Comparison -->
                 <div class="card">
                     <div class="card-header">
-                        <h3>Detailed Comparison</h3>
+                        <h3 data-i18n="detailed_comparison">Detailed Comparison</h3>
                     </div>
                     <div class="activity-list" id="metricsList">
                         <!-- Filled by JS -->
@@ -171,15 +178,15 @@
                 <!-- Insights & Tips -->
                 <div class="card">
                     <div class="card-header">
-                        <h3>Government Standards</h3>
+                        <h3 data-i18n="gov_standards">Government Standards</h3>
                     </div>
                     <div class="activity-list">
                         <div class="activity-item">
                             <div class="activity-left">
                                 <span class="activity-icon">🇮🇳</span>
                                 <div>
-                                    <div class="activity-total">National Target 2030</div>
-                                    <div class="activity-date">Reducing emission intensity by 45%</div>
+                                    <div class="activity-total" data-i18n="nat_target">National Target 2030</div>
+                                    <div class="activity-date" data-i18n="nat_target_desc">Reducing emission intensity by 45%</div>
                                 </div>
                             </div>
                         </div>
@@ -187,8 +194,8 @@
                             <div class="activity-left">
                                 <span class="activity-icon">🎯</span>
                                 <div>
-                                    <div class="activity-total">Net Zero Target</div>
-                                    <div class="activity-date">India aims for Net Zero by 2070</div>
+                                    <div class="activity-total" data-i18n="net_zero">Net Zero Target</div>
+                                    <div class="activity-date" data-i18n="net_zero_desc">India aims for Net Zero by 2070</div>
                                 </div>
                             </div>
                         </div>
@@ -196,8 +203,8 @@
                             <div class="activity-left">
                                 <span class="activity-icon">📋</span>
                                 <div>
-                                    <div class="activity-total">Daily Benchmark</div>
-                                    <div class="activity-date">Approx. 5.2 kg CO₂e per person</div>
+                                    <div class="activity-total" data-i18n="daily_benchmark">Daily Benchmark</div>
+                                    <div class="activity-date" data-i18n="daily_benchmark_desc">Approx. 5.2 kg CO₂e per person</div>
                                 </div>
                             </div>
                         </div>

@@ -75,7 +75,7 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title" data-i18n="dashboardTitle">Dashboard</h1>
+                <h1 class="page-title" data-i18n="dashboardTitle" data-i18n="db_title">Dashboard</h1>
                 <div class="live-indicator" style="margin-left: 1.5rem;">
                     <span class="live-dot"></span> REAL-TIME
                 </div>
@@ -98,7 +98,7 @@
             <!-- EcoScore Card (Large) -->
             <div class="card ecoscore-card reveal">
                 <div class="card-header">
-                    <h3 data-i18n="yourEcoScore">Your EcoScore</h3>
+                    <h3 data-i18n="yourEcoScore" data-i18n="your_ecoscore">Your EcoScore</h3>
                     <div class="score-level-badge" style="background: rgba(0, 212, 170, 0.1); color: var(--primary);">
                         <span>⭐</span> Elite
                     </div>
@@ -121,7 +121,7 @@
                         </svg>
                         <div class="score-inner">
                             <div class="score-number" id="ecoScoreDisplay">--</div>
-                            <div class="score-label" data-i18n="points">POINTS</div>
+                            <div class="score-label" data-i18n="points" data-i18n="points">POINTS</div>
                         </div>
                     </div>
                     <div class="score-info" style="flex: 1;">
@@ -136,7 +136,7 @@
                         <div class="streak-widget">
                             <div class="streak-icon">🔥</div>
                             <div class="streak-info">
-                                <div class="streak-label" data-i18n="dailyStreak">DAILY STREAK</div>
+                                <div class="streak-label" data-i18n="dailyStreak" data-i18n="daily_streak">DAILY STREAK</div>
                                 <div class="streak-bar">
                                     <div class="streak-fill" style="width: 65%;"></div>
                                 </div>
@@ -150,11 +150,11 @@
             <!-- Total Emissions Card -->
             <div class="card emissions-summary-card reveal">
                 <div class="card-header">
-                    <h3 data-i18n="impactBreakdown">Impact Breakdown</h3>
+                    <h3 data-i18n="impactBreakdown" data-i18n="impact_breakdown">Impact Breakdown</h3>
                     <select class="period-select" id="emissionPeriod" onchange="updateEmissionDisplay()">
                         <option value="today">Today</option>
                         <option value="week">This Week</option>
-                        <option value="month" selected data-i18n="thisMonth">This Month</option>
+                        <option value="month" selected data-i18n="thisMonth" data-i18n="this_month">This Month</option>
                     </select>
                 </div>
                 <div class="emissions-total" id="emissionsTotal">
@@ -165,7 +165,7 @@
                     <div class="breakdown-item" data-cat="transport">
                         <span class="breakdown-icon">🚗</span>
                         <div class="breakdown-bar-wrap">
-                            <span class="breakdown-label" data-i18n="transportation">TRANSPORTATION</span>
+                            <span class="breakdown-label" data-i18n="transport_label" data-i18n="transport_label">TRANSPORTATION</span>
                             <div class="breakdown-bar">
                                 <div class="breakdown-fill transport-fill" id="transportFill" style="width:0%"></div>
                             </div>
@@ -175,7 +175,7 @@
                     <div class="breakdown-item" data-cat="electricity">
                         <span class="breakdown-icon">⚡</span>
                         <div class="breakdown-bar-wrap">
-                            <span class="breakdown-label" data-i18n="electricity">ELECTRICITY</span>
+                            <span class="breakdown-label" data-i18n="electricity_label" data-i18n="electricity_label">ELECTRICITY</span>
                             <div class="breakdown-bar">
                                 <div class="breakdown-fill electricity-fill" id="electricFill" style="width:0%"></div>
                             </div>
@@ -185,7 +185,7 @@
                     <div class="breakdown-item" data-cat="food">
                         <span class="breakdown-icon">🍽️</span>
                         <div class="breakdown-bar-wrap">
-                            <span class="breakdown-label" data-i18n="dietMeals">DIET & MEALS</span>
+                            <span class="breakdown-label" data-i18n="diet_label" data-i18n="diet_label">DIET & MEALS</span>
                             <div class="breakdown-bar">
                                 <div class="breakdown-fill food-fill" id="foodFill" style="width:0%"></div>
                             </div>
@@ -199,7 +199,7 @@
             <div class="card chart-card full-width reveal">
                 <div class="activity-table-header"
                     style="padding: 1rem 0 1.5rem 0; display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="font-family:'Space Grotesk'; font-size:1.1rem;" data-i18n="emissionAnalytics">📈 Emission Analytics</h3>
+                    <h3 style="font-family:'Space Grotesk'; font-size:1.1rem;" data-i18n="emission_analytics" data-i18n="emission_analytics">📈 Emission Analytics</h3>
                     <div class="chart-controls">
                         <button class="chart-btn active" onclick="updateChart('week', this)">7D</button>
                         <button class="chart-btn" onclick="updateChart('month', this)">30D</button>
