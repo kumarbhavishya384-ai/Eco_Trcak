@@ -204,10 +204,10 @@ def calculate_ecoscore(total_co2):
 
 def seed_demo_data(user_id):
     import random
-    today = datetime.datetime.now()
+    today = datetime.now()
     bulk_data = []
     for i in range(29, -1, -1):
-        d = today - datetime.timedelta(days=i)
+        d = today - timedelta(days=i)
         date_str = d.strftime('%Y-%m-%d')
         t, e, f = round(random.uniform(1,5),2), round(random.uniform(0.5,3),2), round(random.uniform(1,4),2)
         total = round(t+e+f, 2)
@@ -216,7 +216,7 @@ def seed_demo_data(user_id):
             {"$setOnInsert": {
                 "user": user_id, "date": date_str, "transport": t, "electricity": e, 
                 "food": f, "total": total, "ecoScore": calculate_ecoscore(total),
-                "savedAt": str(datetime.datetime.now())
+                "savedAt": str(datetime.now())
             }},
             upsert=True
         ))
@@ -363,13 +363,13 @@ The {sender_name} Team
             server.login(smtp_user, smtp_pass)
             server.send_message(msg)
 
-        success_msg = f"[{datetime.datetime.now()}] SUCCESS: Welcome email sent to {user_email}\n"
+        success_msg = f"[{datetime.now()}] SUCCESS: Welcome email sent to {user_email}\n"
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(success_msg)
         print(f"EMAIL SUCCESS: Welcome email delivered to {user_email}")
 
     except smtplib.SMTPAuthenticationError as e:
-        error_msg = (f"[{datetime.datetime.now()}] AUTH ERROR for {user_email}: "
+        error_msg = (f"[{datetime.now()}] AUTH ERROR for {user_email}: "
                      f"Gmail App Password may be invalid or 2FA is off.\n"
                      f"Detail: {str(e)}\n" + "-"*60 + "\n")
         with open(log_path, "a", encoding='utf-8') as f:
@@ -377,14 +377,14 @@ The {sender_name} Team
         print(f"EMAIL AUTH ERROR for {user_email}: {str(e)}")
 
     except smtplib.SMTPException as e:
-        error_msg = (f"[{datetime.datetime.now()}] SMTP ERROR for {user_email}: {str(e)}\n"
+        error_msg = (f"[{datetime.now()}] SMTP ERROR for {user_email}: {str(e)}\n"
                      + "-"*60 + "\n")
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(error_msg)
         print(f"EMAIL SMTP ERROR for {user_email}: {str(e)}")
 
     except Exception as e:
-        error_msg = (f"[{datetime.datetime.now()}] UNEXPECTED ERROR for {user_email}: {str(e)}\n"
+        error_msg = (f"[{datetime.now()}] UNEXPECTED ERROR for {user_email}: {str(e)}\n"
                      + "-"*60 + "\n")
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(error_msg)
@@ -398,7 +398,7 @@ def send_whatsapp_notification(phone, first_name):
     
     msg = f"Hi {first_name}, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero starts now. Track your daily footprint and save the planet with us. 🌍"
     
-    log_entry = f"\n[{datetime.datetime.now()}] WHATSAPP PENDING TO: {phone}\nMessage: {msg}\n{'-'*50}\n"
+    log_entry = f"\n[{datetime.now()}] WHATSAPP PENDING TO: {phone}\nMessage: {msg}\n{'-'*50}\n"
     try:
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(log_entry)
@@ -483,17 +483,18 @@ def send_otp():
         msg.attach(MIMEText(plain_body, 'plain', 'utf-8'))
         msg.attach(MIMEText(html_body, 'html', 'utf-8'))
 
-        try:
-            with smtplib.SMTP_SSL(smtp_server, 465, timeout=20) as server:
-                server.ehlo()
-                server.login(smtp_user, smtp_pass)
-                server.send_message(msg)
-            print(f"OTP EMAIL: Sent OTP to {email}")
-            return jsonify({"success": True, "message": f"OTP sent to {email} 📧"})
-        except Exception as mail_err:
-            print(f"OTP EMAIL FAILED, returning OTP in response: {mail_err}")
-            return jsonify({"success": True, "message": f"OTP (email unavailable): check below", "otp": otp})
+        with smtplib.SMTP(smtp_server, smtp_port, timeout=20) as server:
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
+            server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
 
+        print(f"OTP EMAIL: Sent OTP to {email}")
+        return jsonify({"success": True, "message": f"OTP sent to {email} 📧"})
+
+    except smtplib.SMTPAuthenticationError:
+        return jsonify({"success": False, "message": "Email config error. Check SMTP credentials in .env"}), 500
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
@@ -551,7 +552,7 @@ def register():
             "location": data.get('location', 'India'),
             "role": "admin" if email in ["admin@ecotrack.ai", "kumarbhavishya384@gmail.com"] else "user",
             "ecoScore": 0,
-            "createdAt": str(datetime.datetime.now())
+            "createdAt": str(datetime.now())
         }
         res = users_col.insert_one(user_doc)
         user_id = str(res.inserted_id)
@@ -563,7 +564,7 @@ def register():
         
         # seed_demo_data(user_id if not use_mongodb else ObjectId(user_id))
         
-        token = jwt.encode({'id': user_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)}, 
+        token = jwt.encode({'id': user_id, 'exp': datetime.utcnow() + timedelta(days=7)}, 
                            os.getenv("JWT_SECRET", "ecotrack_secret"), algorithm="HS256")
         if isinstance(token, bytes): token = token.decode('utf-8')
 
@@ -583,7 +584,7 @@ def login():
         password = data.get('password', '')
         
         with open("local_db_debug.txt", "a") as f:
-            f.write(f"\n[{datetime.datetime.now()}] Login Attempt: '{email}'")
+            f.write(f"\n[{datetime.now()}] Login Attempt: '{email}'")
         
         user = users_col.find_one({"email": email})
         
@@ -604,7 +605,7 @@ def login():
             f.write(f" -> Success!")
             
         uid = str(user['_id'])
-        token = jwt.encode({'id': uid, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)}, 
+        token = jwt.encode({'id': uid, 'exp': datetime.utcnow() + timedelta(days=7)}, 
                            os.getenv("JWT_SECRET", "ecotrack_secret"), algorithm="HS256")
         if isinstance(token, bytes): token = token.decode('utf-8')
         return jsonify({
@@ -653,7 +654,7 @@ def forgot_password():
         # Log the reset request (Mocking email sending)
         base_dir = os.path.dirname(os.path.abspath(__file__))
         log_path = os.path.join(base_dir, "email_logs.txt")
-        log_entry = f"[{datetime.datetime.now()}] RESET REQUEST: {email} | CODE: {reset_token}\n"
+        log_entry = f"[{datetime.now()}] RESET REQUEST: {email} | CODE: {reset_token}\n"
         
         with open(log_path, "a", encoding='utf-8') as f:
             f.write(log_entry)
@@ -726,7 +727,7 @@ def save_entry():
     # Check for existing monthly electricity if this submission has 0
     # This ensures the daily EcoScore remains accurate after the monthly bill is logged
     if e == 0:
-        today = datetime.datetime.now()
+        today = datetime.now()
         month_start = today.replace(day=1).strftime('%Y-%m-%d')
         
         if use_mongodb:
@@ -758,7 +759,7 @@ def save_entry():
             "food": f,
             "total": total_raw, 
             "ecoScore": score, 
-            "savedAt": str(datetime.datetime.now())
+            "savedAt": str(datetime.now())
         }},
         upsert=True
     )
@@ -784,7 +785,7 @@ def delete_entry(date):
 @token_required
 def check_monthly_electricity():
     uid = str(request.user['_id'])
-    today = datetime.datetime.now()
+    today = datetime.now()
     month_start = today.replace(day=1).strftime('%Y-%m-%d')
     
     # Fetch entries for this user
@@ -976,16 +977,16 @@ def get_report_comparison():
     avg_food = sum(e.get('food', 0) for e in sample) / len(sample)
 
     # 2. Monthly Electricity (Current Calendar Month)
-    now = datetime.datetime.now()
+    now = datetime.now()
     month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    month_days = (now.replace(day=1) + datetime.timedelta(days=32)).replace(day=1) - datetime.timedelta(days=1)
+    month_days = (now.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1)
     days_in_month = month_days.day
     
     monthly_electric = 0
     for e in entries:
         # Handle string or datetime dates
         try:
-            edate = datetime.datetime.strptime(e['date'], '%Y-%m-%d')
+            edate = datetime.strptime(e['date'], '%Y-%m-%d')
             if edate.year == now.year and edate.month == now.month:
                 monthly_electric += e.get('electricity', 0)
         except: continue
