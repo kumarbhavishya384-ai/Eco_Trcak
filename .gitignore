@@ -103,4 +103,4 @@ local_db_debug.txt
 whatsapp_logs.txt
 node_modules/
 .DS_Store
-Thumbs.db
+Thumbs.db".env" 
