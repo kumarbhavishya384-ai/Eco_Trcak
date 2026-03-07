@@ -1067,69 +1067,154 @@ def ai_chat():
         data = request.json
         user_msg = data.get('message', '')
         uid = request.user['_id']
-        
-        # System instructions to extract data
+        user_name = request.user.get('firstName', 'there')
+
+        # Fetch user's recent entries for personalized tips
+        recent_entries = list(entries_col.find({"user": uid})) if use_mongodb else entries_col.find({"user": uid})
+        recent_entries = sorted(recent_entries, key=lambda x: x.get('date',''), reverse=True)[:7]
+        avg_transport = round(sum(e.get('transport',0) for e in recent_entries) / max(len(recent_entries),1), 2)
+        avg_electricity = round(sum(e.get('electricity',0) for e in recent_entries) / max(len(recent_entries),1), 2)
+        avg_food = round(sum(e.get('food',0) for e in recent_entries) / max(len(recent_entries),1), 2)
+        user_ecoscore = request.user.get('ecoScore', 0)
+
         prompt = f"""
-        You are 'EcoAssistant', an AI for EcoTrack. Your goal is to help users log their carbon footprint and answer questions.
-        
-        USER MESSAGE: "{user_msg}"
-        
-        CURRENT EMISSION FACTORS (kg CO2):
-        - Petrol Car: 2.31/L or avg 0.18/km
-        - Bus: 0.08/km
-        - Metro: 0.03/km
-        - Diet: Vegan (~1.5kg/day), Non-Veg (~3.5kg/day)
-        
-        INSTRUCTIONS:
-        1. If the user mentions an activity (e.g., "I drove 10km"), extract the category and value.
-        2. Respond conversationally and supportive.
-        3. If you identify a loggable activity, include a field 'autoLog' with values: category (transport/food/electricity), value (kg co2), and detail.
-        
-        RESPOND IN JSON FORMAT ONLY:
-        {{
-          "response": "Your conversational answer here.",
-          "autoLog": true/false,
-          "category": "transport",
-          "value": 1.5,
-          "detail": "10km drive in petrol car"
-        }}
-        """
+You are EcoAssistant, the friendly AI chatbot for EcoTrack AI — an Indian carbon footprint tracking platform.
+You help users understand their carbon footprint, answer eco questions, give personalized tips, and log activities.
+
+USER: {user_name}
+USER'S ECOSCORE: {user_ecoscore}/800
+USER'S 7-DAY AVERAGES: Transport={avg_transport}kg CO2/day, Electricity={avg_electricity}kg CO2/day, Food={avg_food}kg CO2/day
+
+USER MESSAGE: "{user_msg}"
+
+INDIA-SPECIFIC EMISSION FACTORS (kg CO2):
+Transport:
+- Petrol car: 2.31/litre, avg 0.18/km
+- Diesel car: 2.68/litre, avg 0.15/km
+- CNG car: 2.66/kg, avg 0.10/km
+- Electric car: 0.82/kWh, avg 0.02/km
+- Auto/Taxi: 0.15/km
+- Bus: 0.08/km per person
+- Metro/Train: 0.03/km per person
+- Flight Economy: 0.158/km, Business: 0.428/km
+
+Electricity:
+- Grid electricity: 0.82 kg CO2/kWh
+- LPG cylinder (14.2kg): 42.5 kg CO2 each
+- PNG: 2.05 kg CO2/cubic meter
+
+Food (per meal/day):
+- Vegan: ~1.5 kg CO2/day
+- Pure Vegetarian: ~1.8 kg CO2/day
+- Egg-Veg: ~2.0 kg CO2/day
+- Omnivore: ~2.8 kg CO2/day
+- Heavy Meat: ~3.5 kg CO2/day
+- Butter Chicken: 3.0 kg, Chicken Biryani: 2.5 kg, Dal Tadka: 0.8 kg
+- Paneer Butter Masala: 2.5 kg, Rajma Chawal: 0.8 kg
+
+ECOTRACK FEATURES YOU CAN EXPLAIN:
+- Carbon Calculator: Log transport, electricity, food emissions daily
+- EcoScore (0-800): Higher = greener. 50+ kg CO2/day = 400 score, 20 kg/day = 640 score
+- AI Insights: ML predictions for next month's emissions
+- Leaderboard: Compete with other users
+- Offset Tools: Tree planting calculator, solar savings predictor, carbon credit calculator
+- History: View past emission trends
+- Report Dashboard: Compare with India's national average (5.2 kg CO2/person/day)
+
+INDIA NATIONAL TARGETS:
+- Daily average: 5.2 kg CO2e per person
+- Net Zero target: 2070
+- 2030 target: 45% reduction in emission intensity
+
+INSTRUCTIONS:
+1. Answer any carbon/eco/environment question thoroughly and helpfully
+2. Give personalized tips based on the user's actual data (transport={avg_transport}, electricity={avg_electricity}, food={avg_food})
+3. If the user mentions a loggable activity (drove, ate, used electricity), set autoLog=true
+4. Support both Hindi and English — detect language from user message and respond in same language
+5. Be friendly, encouraging, and India-specific
+6. Keep responses concise but complete (max 4-5 sentences for general questions)
+7. Use emojis appropriately 🌿
+
+RESPOND IN STRICT JSON FORMAT ONLY (no markdown, no extra text):
+{{
+  "response": "Your helpful answer here in the same language as user message",
+  "autoLog": false,
+  "category": "transport",
+  "value": 0,
+  "detail": ""
+}}
+"""
 
         if ai_model:
             response = ai_model.generate_content(prompt)
-            # Basic JSON extraction from text
             text = response.text.strip()
+            # Clean JSON from markdown
             if "```json" in text:
                 text = text.split("```json")[1].split("```")[0].strip()
-            
-            ai_data = json.loads(text)
-            
-            # If autoLog is true, actually save it to the DB
-            if ai_data.get('autoLog'):
+            elif "```" in text:
+                text = text.split("```")[1].split("```")[0].strip()
+
+            # Safe JSON parse
+            try:
+                ai_data = json.loads(text)
+            except json.JSONDecodeError:
+                # Extract response text even if JSON is malformed
+                import re
+                match = re.search(r'"response"\s*:\s*"([^"]+)"', text)
+                if match:
+                    ai_data = {"response": match.group(1), "autoLog": False, "value": 0, "detail": ""}
+                else:
+                    ai_data = {"response": text, "autoLog": False, "value": 0, "detail": ""}
+
+            # Auto-log activity if detected
+            if ai_data.get('autoLog') and ai_data.get('value', 0) > 0:
                 date_str = datetime.now().strftime('%Y-%m-%d')
-                cat = ai_data.get('category')
-                val = ai_data.get('value', 0)
-                
-                # Update today's entry
+                cat = ai_data.get('category', 'transport')
+                val = float(ai_data.get('value', 0))
+
                 query = {"user": uid, "date": date_str}
-                update = {"$inc": {cat: val, "total": val}, "$set": {"savedAt": str(datetime.now())}}
-                entries_col.update_one(query, update, upsert=True)
-                
-                # Recalculate score for today
+                if use_mongodb:
+                    entries_col.update_one(
+                        query,
+                        {"$inc": {cat: val, "total": val}, "$set": {"savedAt": str(datetime.now())}},
+                        upsert=True
+                    )
+                else:
+                    existing = entries_col.find_one(query)
+                    if existing:
+                        existing[cat] = round(existing.get(cat, 0) + val, 2)
+                        existing['total'] = round(existing.get('total', 0) + val, 2)
+                        entries_col.update_one(query, {"$set": existing})
+                    else:
+                        new_entry = {
+                            "user": uid, "date": date_str,
+                            "transport": val if cat == "transport" else 0,
+                            "electricity": val if cat == "electricity" else 0,
+                            "food": val if cat == "food" else 0,
+                            "total": val, "savedAt": str(datetime.now())
+                        }
+                        entries_col.insert_one(new_entry)
+
                 entry = entries_col.find_one(query)
-                new_score = calculate_ecoscore(entry.get('total', 0))
-                entries_col.update_one(query, {"$set": {"ecoScore": new_score}})
-            
+                if entry:
+                    new_score = calculate_ecoscore(entry.get('total', 0))
+                    entries_col.update_one(query, {"$set": {"ecoScore": new_score}})
+
             return jsonify({
-                "success": True, 
-                "response": ai_data['response'], 
-                "autoLog": ai_data.get('autoLog'),
-                "detail": ai_data.get('detail')
+                "success": True,
+                "response": ai_data.get('response', 'I am here to help! 🌿'),
+                "autoLog": ai_data.get('autoLog', False),
+                "detail": ai_data.get('detail', '')
             })
         else:
-            return jsonify({"success": True, "response": "Hi! (Mock Mode) That sounds like a great eco-friendly choice. I've logged it for you.", "autoLog": False})
-            
+            return jsonify({
+                "success": True,
+                "response": f"Hi {user_name}! 🌿 I'm in mock mode (no API key). Ask me anything about your carbon footprint!",
+                "autoLog": False
+            })
+
     except Exception as e:
+        print(f"AI CHAT ERROR: {str(e)}")
         return jsonify({"success": False, "message": str(e)}), 500
 
 @app.route('/api/ai/vision', methods=['POST'])
