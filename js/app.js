@@ -285,8 +285,11 @@ async function sendOTP() {
 
     // Step 2: Send email via EmailJS with the real OTP
     if (typeof emailjs === 'undefined') {
-      throw new Error('EmailJS not loaded');
+      throw new Error('EmailJS SDK not loaded. Please refresh and try again.');
     }
+
+    // ✅ Always re-init right before sending — fixes Netlify timing issues
+    emailjs.init(EMAILJS_PUBLIC_KEY);
 
     const result = await emailjs.send(
       EMAILJS_SERVICE_ID,
