@@ -1,8 +1,7 @@
 [build]
   publish = "."
-  command = "echo done"
-  ignore = "exit 0"
+  command = ""
 
 [build.environment]
-  PYTHON_VERSION = ""
+  PYTHON_VERSION = "3.11"
   NODE_VERSION = "18"
