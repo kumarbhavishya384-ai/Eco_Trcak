@@ -579,7 +579,7 @@ def forgot_password():
             
         # Mock token generation
         reset_token = os.urandom(4).hex().upper()  # Shorter 8-char code for easy typing
-        expiry = datetime.utcnow() + timedelta(minutes=15)
+        expiry = str(datetime.utcnow() + timedelta(minutes=15))
         
         # Persist token in user document so it survives server restarts
         users_col.update_one(
@@ -599,7 +599,7 @@ def forgot_password():
         
         return jsonify({
             "success": True, 
-            "message": "A verification code has been generated and sent to your email. Please check your inbox (and spam) to proceed."
+            "message": "Reset code generated successfully.", "resetCode": reset_token
         })
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
@@ -1371,3 +1371,4 @@ if __name__ == '__main__':
         
     port = int(os.getenv("PORT", 5050))
     app.run(host='0.0.0.0', port=port, debug=False)
+
