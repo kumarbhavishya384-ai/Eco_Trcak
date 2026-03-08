@@ -186,7 +186,6 @@ async function handleLogin(e) {
   }
 }
 
-// ── FIXED: Forgot Password — now sends reset code via EmailJS ✅
 async function handleForgotPassword(e) {
   e.preventDefault();
   const email = document.getElementById('resetEmail').value.trim();
@@ -197,49 +196,14 @@ async function handleForgotPassword(e) {
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
-    // Step 1: Ask backend to generate & store the reset code
     const data = await apiFetch('/auth/forgot-password', {
       method: 'POST',
       body: JSON.stringify({ email })
     });
 
-    const resetCode = data.resetCode;
-    if (!resetCode) {
-      throw new Error('No reset code received from server. Please try again.');
-    }
-
-    // Step 2: Send the reset code via EmailJS — reusing the same OTP template ✅
-    if (typeof emailjs === 'undefined') {
-      throw new Error('EmailJS SDK not loaded. Please refresh and try again.');
-    }
-
-    // Always re-init right before sending — fixes timing issues
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-
-    const result = await emailjs.send(
-      EMAILJS_SERVICE_ID,
-      EMAILJS_OTP_TEMPLATE,       // ✅ Reusing the same OTP template — no new template needed!
-      {
-        to_email: email,
-        to_name: email,           // name not available at this step, use email as fallback
-        otp: resetCode,           // reset code goes into the OTP field of the template
-        email: email
-      },
-      EMAILJS_PUBLIC_KEY
-    );
-
-    console.log('Reset code email sent via EmailJS:', result);
-
-    // Step 3: Show success with link to proceed
-    statusEl.innerHTML = `<strong>Code Sent! ✅</strong> A password reset code has been sent to <strong>${email}</strong>. Check your inbox (and spam folder).<br><br>
-      <a href="#" onclick="switchModal('forgotPasswordModal','resetPasswordModal'); document.getElementById('finalResetEmail').value='${email}'" 
-      style="color:var(--primary); font-weight:700;">Enter Code & Reset Password →</a>`;
+    statusEl.innerHTML = `<strong>Code Dispatched!</strong> ${data.message}<br><br><a href="#" onclick="switchModal('forgotPasswordModal','resetPasswordModal'); document.getElementById('finalResetEmail').value='${email}'" style="color:var(--primary); font-weight:700;">Proceed to Reset →</a>`;
     statusEl.style.display = 'block';
-    statusEl.style.background = 'rgba(34, 197, 94, 0.1)';
-    statusEl.style.borderColor = 'rgba(34, 197, 94, 0.2)';
-    statusEl.style.color = '#22c55e';
     btn.textContent = 'Check Email ✔️';
-
   } catch (err) {
     statusEl.textContent = err.message;
     statusEl.style.display = 'block';
@@ -547,58 +511,173 @@ function toggleSidebar() {
   }
 })();
 
-// ── Daily Reminders & Notifications ───────────────────
-async function initNotifications() {
-  if (!("Notification" in window)) return;
+// ═══════════════════════════════════════════════════════
+//   EcoTrack AI – Complete Daily Reminder System
+// ═══════════════════════════════════════════════════════
 
-  // Create a listener for a potential "Enable Notifications" button
-  document.addEventListener('click', async (e) => {
-    if (e.target.id === 'enableNotificationsBtn' || e.target.closest('#enableNotificationsBtn')) {
-      const permission = await Notification.requestPermission();
-      if (permission === "granted") {
-        showGlobalToast("Notifications Enabled! You'll receive daily reminders. 🔔");
-        const btn = document.getElementById('enableNotificationsBtn');
-        if (btn) btn.style.display = 'none';
-        checkDailyReminder();
-      } else {
-        showGlobalToast("Notifications were not enabled. You'll see reminders in-app.");
-      }
-    }
-  });
+const REMINDER_STORAGE_KEY = 'ecotrack_reminder_settings';
+const REMINDER_LAST_KEY    = 'ecotrack_last_reminder';
+const DEFAULT_REMINDER = { enabled: false, time: '20:00', message: "Don't forget to log your carbon footprint today! 🌍", permission: 'default' };
+
+function getReminderSettings() {
+  try { const s = localStorage.getItem(REMINDER_STORAGE_KEY); return s ? { ...DEFAULT_REMINDER, ...JSON.parse(s) } : { ...DEFAULT_REMINDER }; }
+  catch { return { ...DEFAULT_REMINDER }; }
+}
+
+function saveReminderSettings(s) { localStorage.setItem(REMINDER_STORAGE_KEY, JSON.stringify(s)); }
+
+async function enableDailyReminder(time, message) {
+  const settings = getReminderSettings();
+  settings.time    = time    || settings.time;
+  settings.message = message || settings.message;
+  if (!("Notification" in window)) { showGlobalToast("Your browser does not support notifications."); return false; }
+  let permission = Notification.permission;
+  if (permission === "default") permission = await Notification.requestPermission();
+  settings.permission = permission;
+  if (permission === "granted") {
+    settings.enabled = true;
+    saveReminderSettings(settings);
+    scheduleReminderLoop();
+    showGlobalToast("🔔 Daily reminder set for " + formatTime12h(settings.time) + "!");
+    return true;
+  } else if (permission === "denied") {
+    settings.enabled = false;
+    saveReminderSettings(settings);
+    showGlobalToast("❌ Notifications blocked. Please allow them in browser settings.");
+    return false;
+  }
+  return false;
+}
+
+function disableDailyReminder() {
+  const s = getReminderSettings(); s.enabled = false; saveReminderSettings(s);
+  showGlobalToast("🔕 Daily reminder disabled.");
+}
+
+let _reminderInterval = null;
+function scheduleReminderLoop() {
+  if (_reminderInterval) clearInterval(_reminderInterval);
+  _reminderInterval = setInterval(async () => {
+    const settings = getReminderSettings();
+    if (!settings.enabled || Notification.permission !== "granted") return;
+    const now  = new Date();
+    const hhmm = now.getHours().toString().padStart(2,"0") + ":" + now.getMinutes().toString().padStart(2,"0");
+    const today = getTodayDateStr();
+    if (hhmm !== settings.time) return;
+    if (localStorage.getItem(REMINDER_LAST_KEY) === today) return;
+    try {
+      const entries = await getUserEntries();
+      if (!entries.some(e => e.date === today)) fireReminder(settings);
+      else localStorage.setItem(REMINDER_LAST_KEY, today);
+    } catch { fireReminder(settings); }
+  }, 60 * 1000);
+}
+
+function fireReminder(settings) {
+  const today = getTodayDateStr();
+  localStorage.setItem(REMINDER_LAST_KEY, today);
+  const msgs = [
+    "🌱 Time to log your carbon footprint! Every entry helps the planet.",
+    "🌍 Daily check-in: How was your footprint today? Log it now!",
+    "♻️ Small steps matter! Log today's emissions and track your progress.",
+    "🌿 Your EcoScore is waiting! Log today's activities.",
+    "📊 Keep your streak alive — log your carbon footprint for today!"
+  ];
+  const body = settings.message || msgs[Math.floor(Math.random() * msgs.length)];
+  if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: "SHOW_REMINDER", title: "EcoTrack AI 🌿", body });
+  } else {
+    try { new Notification("EcoTrack AI 🌿", { body, icon: "/logo.png", tag: "ecotrack-daily-reminder", renotify: true }); }
+    catch(e) { console.warn("Notification failed:", e); }
+  }
+  if (window.location.pathname.includes("dashboard")) showReminderBanner(body);
+}
+
+function showReminderBanner(message) {
+  const existing = document.getElementById("ecoReminderBanner");
+  if (existing) existing.remove();
+  const banner = document.createElement("div");
+  banner.id = "ecoReminderBanner";
+  banner.innerHTML = `<div style="position:fixed;top:80px;right:1.5rem;z-index:9999;background:linear-gradient(135deg,rgba(0,212,170,0.15),rgba(10,15,30,0.95));border:1px solid rgba(0,212,170,0.4);border-radius:16px;padding:1rem 1.25rem;max-width:320px;width:calc(100vw - 3rem);box-shadow:0 8px 40px rgba(0,0,0,0.5);backdrop-filter:blur(20px);animation:slideInRight 0.4s ease;font-family:'Inter',sans-serif;"><div style="display:flex;align-items:flex-start;gap:0.75rem;"><span style="font-size:1.6rem;flex-shrink:0;">🔔</span><div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:0.9rem;color:#F0F6FF;margin-bottom:0.3rem;">Daily Reminder</div><div style="font-size:0.82rem;color:#8B9BB4;line-height:1.5;">${message}</div><div style="display:flex;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap;"><button onclick="window.location.href='calculator.html'" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">📊 Log Now</button><button onclick="document.getElementById('ecoReminderBanner').remove()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#8B9BB4;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Inter',sans-serif;">Later</button></div></div><button onclick="document.getElementById('ecoReminderBanner').remove()" style="background:none;border:none;color:#4A6080;cursor:pointer;font-size:1.2rem;padding:0;line-height:1;flex-shrink:0;">×</button></div></div>`;
+  document.body.appendChild(banner);
+  setTimeout(() => { if (banner.parentNode) banner.remove(); }, 12000);
+}
+
+function openReminderSettings() {
+  const existing = document.getElementById("reminderModal");
+  if (existing) existing.remove();
+  const settings = getReminderSettings();
+  const isEnabled = settings.enabled && Notification.permission === "granted";
+  const permDenied = Notification.permission === "denied";
+  const presets = [["08:00","Morning ☀️"],["12:00","Noon 🌤️"],["18:00","Evening 🌆"],["20:00","Night 🌙"],["22:00","Late 🌚"]];
+  const modal = document.createElement("div");
+  modal.id = "reminderModal";
+  modal.innerHTML = `<div style="position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);z-index:10000;display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn 0.2s ease;" onclick="if(event.target===this)this.remove()"><div style="background:linear-gradient(135deg,rgba(10,20,40,0.98),rgba(13,21,38,0.98));border:1px solid rgba(0,212,170,0.25);border-radius:20px;padding:2rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.6);font-family:'Inter',sans-serif;max-height:90vh;overflow-y:auto;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;"><div style="display:flex;align-items:center;gap:0.75rem;"><span style="font-size:1.8rem;">🔔</span><div><h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;color:#F0F6FF;margin:0;">Daily Reminder</h3><p style="font-size:0.78rem;color:#8B9BB4;margin:0;">Get notified to log your footprint</p></div></div><button onclick="document.getElementById('reminderModal').remove()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#8B9BB4;width:32px;height:32px;border-radius:8px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button></div><div style="background:${isEnabled?"rgba(0,212,170,0.08)":"rgba(255,255,255,0.04)"};border:1px solid ${isEnabled?"rgba(0,212,170,0.3)":"rgba(255,255,255,0.08)"};border-radius:12px;padding:0.9rem 1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.75rem;"><div style="width:10px;height:10px;border-radius:50%;flex-shrink:0;background:${isEnabled?"var(--primary)":"#4A6080"};${isEnabled?"box-shadow:0 0 8px var(--primary);animation:healthPulse 2s ease-in-out infinite;":""}"></div><span style="font-size:0.85rem;color:${isEnabled?"var(--primary)":"#8B9BB4"};font-weight:600;">${isEnabled?"✅ Active — fires at "+formatTime12h(settings.time):"⭕ Reminder Disabled"}</span></div>${permDenied?`<div style="background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);border-radius:10px;padding:0.75rem 1rem;margin-bottom:1.25rem;font-size:0.8rem;color:#fca5a5;line-height:1.5;">⚠️ Notifications are <b>blocked</b>.<br>Go to browser Settings → Site Settings → Notifications → Allow for this site.</div>`:""}<div style="margin-bottom:1.1rem;"><label style="display:block;font-size:0.82rem;font-weight:600;color:#8B9BB4;margin-bottom:0.5rem;">REMINDER TIME</label><input type="time" id="reminderTimeInput" value="${settings.time}" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#F0F6FF;border-radius:12px;padding:0.75rem 1rem;font-size:1rem;font-family:'Inter',sans-serif;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></div><div style="margin-bottom:1rem;"><label style="display:block;font-size:0.82rem;font-weight:600;color:#8B9BB4;margin-bottom:0.5rem;">CUSTOM MESSAGE (optional)</label><input type="text" id="reminderMsgInput" value="${settings.message}" placeholder="Don't forget to log!" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#F0F6FF;border-radius:12px;padding:0.75rem 1rem;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></div><div style="margin-bottom:1.5rem;"><label style="display:block;font-size:0.82rem;font-weight:600;color:#8B9BB4;margin-bottom:0.6rem;">QUICK PRESETS</label><div style="display:flex;gap:0.5rem;flex-wrap:wrap;">${presets.map(([t,l])=>`<button onclick="document.getElementById('reminderTimeInput').value='${t}'" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#8B9BB4;padding:0.35rem 0.75rem;border-radius:8px;font-size:0.75rem;cursor:pointer;font-family:'Inter',sans-serif;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='#8B9BB4'">${l}</button>`).join("")}</div></div><div style="display:flex;flex-direction:column;gap:0.75rem;"><button onclick="handleSaveReminder()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:0.85rem;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🔔 Enable Daily Reminder</button>${isEnabled?`<button onclick="handleDisableReminder()" style="background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);color:rgba(255,107,107,0.8);padding:0.7rem;border-radius:12px;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🔕 Disable Reminder</button>`:""}<button onclick="handleTestReminder()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#8B9BB4;padding:0.7rem;border-radius:12px;font-size:0.85rem;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🧪 Send Test Notification Now</button></div></div></div>`;
+  document.body.appendChild(modal);
+}
+
+async function handleSaveReminder() {
+  const time = document.getElementById("reminderTimeInput").value;
+  const msg  = document.getElementById("reminderMsgInput").value.trim();
+  if (!time) { showGlobalToast("⚠️ Please select a reminder time."); return; }
+  const ok = await enableDailyReminder(time, msg || DEFAULT_REMINDER.message);
+  if (ok) document.getElementById("reminderModal").remove();
+}
+
+function handleDisableReminder() {
+  disableDailyReminder();
+  document.getElementById("reminderModal").remove();
+}
+
+async function handleTestReminder() {
+  const settings = getReminderSettings();
+  if (Notification.permission !== "granted") {
+    const p = await Notification.requestPermission();
+    if (p !== "granted") { showGlobalToast("❌ Please allow notifications first."); return; }
+    settings.permission = "granted"; saveReminderSettings(settings);
+  }
+  fireReminder({ ...settings, message: "🧪 Test: This is your EcoTrack daily reminder!" });
+  showGlobalToast("✅ Test notification sent!");
+}
+
+function formatTime12h(t) {
+  if (!t) return "";
+  const [h, m] = t.split(":").map(Number);
+  return (h % 12 || 12) + ":" + m.toString().padStart(2,"0") + (h >= 12 ? " PM" : " AM");
+}
+
+async function initNotifications() {
+  const settings = getReminderSettings();
+  const btn = document.getElementById("enableNotificationsBtn");
+  if (btn) {
+    btn.style.display = "inline-flex";
+    btn.title = settings.enabled ? "Reminder: " + formatTime12h(settings.time) : "Set Daily Reminder";
+    btn.style.color = settings.enabled ? "var(--primary)" : "";
+    btn.onclick = openReminderSettings;
+  }
+  if (settings.enabled && Notification.permission === "granted") {
+    scheduleReminderLoop();
+  } else if (settings.enabled && Notification.permission === "denied") {
+    settings.enabled = false; settings.permission = "denied"; saveReminderSettings(settings);
+  }
 }
 
 async function checkDailyReminder() {
-  const user = getCurrentUser();
-  if (!user) return;
-
+  const settings = getReminderSettings();
+  if (!settings.enabled || Notification.permission !== "granted") return;
+  const today = getTodayDateStr();
+  if (localStorage.getItem(REMINDER_LAST_KEY) === today) return;
   try {
-    // Check if we've already reminded today to avoid spam
-    const lastReminder = localStorage.getItem('last_eco_reminder');
-    const today = getTodayDateStr();
-    if (lastReminder === today) return;
-
     const entries = await getUserEntries();
-    const hasTodayEntry = entries.some(e => e.date === today);
-
-    if (!hasTodayEntry) {
-      if (Notification.permission === "granted") {
-        new Notification("EcoTrack AI Reminder 🌿", {
-          body: "Don't forget to log your carbon footprint for today! It only takes a minute. 😊",
-          icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063822.png'
-        });
-        localStorage.setItem('last_eco_reminder', today);
-      } else {
-        // Only show toast on dashboard
-        if (window.location.pathname.includes('dashboard.html')) {
-          showGlobalToast("Daily Reminder: Log your activities! 📅");
-          localStorage.setItem('last_eco_reminder', today);
-        }
+    if (!entries.some(e => e.date === today)) {
+      if (window.location.pathname.includes("dashboard")) {
+        setTimeout(() => showReminderBanner(settings.message), 3000);
+        localStorage.setItem(REMINDER_LAST_KEY, today);
       }
     }
-  } catch (e) {
-    console.warn("Could not check daily reminder", e);
-  }
+  } catch(e) { console.warn("checkDailyReminder failed", e); }
 }
+
 
 // ── Floating Scroll Logic ─────────────────────────────
 function scrollMainTo(dir) {
