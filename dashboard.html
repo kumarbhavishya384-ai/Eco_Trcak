@@ -82,9 +82,9 @@
             </div>
             <div class="topbar-right">
                 <div class="current-date" id="currentDate"></div>
-                <button class="btn-icon" id="enableNotificationsBtn" title="Enable Daily Reminders"
+                <button class="btn-icon" id="enableNotificationsBtn" title="Set Daily Reminder"
                     onclick="openReminderSettings()"
-                    style="display:inline-flex; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1); padding:0.6rem; color:#fff; cursor:pointer; font-size:1.1rem; align-items:center; justify-content:center; margin-right:4px; transition:0.3s"
+                    style="display:inline-flex; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1); padding:0.6rem; color:#fff; cursor:pointer; font-size:1.1rem; align-items:center; justify-content:center; margin-right:6px; transition:0.3s"
                     onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'"
                     onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='#fff'">🔔</button>
                 <button class="btn-ghost" onclick="logout()"
@@ -275,28 +275,7 @@
                     </div>
                 </div>
                 <div class="challenges-grid" id="dashboardChallenges">
-                    <div class="challenge-item joined">
-                        <div class="challenge-icon">🥗</div>
-                        <div class="challenge-info">
-                            <h4>No-Meat Monday</h4>
-                            <p>Eat plant-based all day Monday. 50pts.</p>
-                            <div class="challenge-progress-mini">
-                                <div class="fill" style="width: 100%;"></div>
-                            </div>
-                        </div>
-                        <button class="btn-ghost" disabled>✅ Completed</button>
-                    </div>
-                    <div class="challenge-item">
-                        <div class="challenge-icon">🚲</div>
-                        <div class="challenge-info">
-                            <h4>Cycle to Campus</h4>
-                            <p>Cycle or walk to college for 5 days. 100pts.</p>
-                            <div class="challenge-progress-mini">
-                                <div class="fill" style="width: 40%;"></div>
-                            </div>
-                        </div>
-                        <button class="btn-primary" onclick="joinChallenge(this)">Join</button>
-                    </div>
+                    <!-- Populated by renderChallengesWithNotifications() in app.js -->
                 </div>
             </div>
 

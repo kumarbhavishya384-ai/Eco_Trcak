@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Quick stats will be called inside updateEmissionDisplay for reactivity
         await renderDashboardRecs();
         renderRecentActivity(allEntries);
+        renderChallengesWithNotifications('dashboardChallenges');
+        initChallengeNotifications();
 
         // Research: Federated Learning (Privacy-Safe Model Update)
         if (typeof runFederatedTraining === 'function') {
@@ -41,11 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
 
-    // Notification Permission Check
-    if ("Notification" in window && Notification.permission === "default") {
-        const notifyBtn = document.getElementById('enableNotificationsBtn');
-        if (notifyBtn) notifyBtn.style.display = 'flex';
-    }
+    // Notifications and challenges initialized via initNotifications() in app.js
 });
 
 // ── Streak Logic ───────────────────────────────────────
@@ -449,13 +447,4 @@ function animateNumber(id, from, to, duration = 1000, decimals = 0, suffix = '')
     }
     requestAnimationFrame(update);
 }
-// ── Challenges Logic ──────────────────────────────────
-function joinChallenge(btn) {
-    const item = btn.closest('.challenge-item');
-    item.classList.add('joined');
-    btn.textContent = '🏠 Joined';
-    btn.disabled = true;
-    showGlobalToast("🎯 Challenge joined! Check back tomorrow to log progress.");
-
-    // In a real app, we'd sync this with the user profile in MongoDB
-}
+// ── Challenges handled by app.js notification system ─

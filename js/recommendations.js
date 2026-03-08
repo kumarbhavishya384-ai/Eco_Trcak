@@ -182,20 +182,10 @@ async function renderAICoach() {
 }
 
 function renderChallenges() {
-    const grid = document.getElementById('challengesGrid');
-    if (!grid) return;
-    const ch = [
-        { icon: '🥦', title: 'Plant-Based Week', diff: 'Easy' },
-        { icon: '🚌', title: 'Public Transport Only', diff: 'Medium' }
-    ];
-    grid.innerHTML = ch.map(c => `
-        <div class="challenge-card">
-            <span style="font-size:2rem">${c.icon}</span>
-            <h3>${c.title}</h3>
-            <p>Difficulty: ${c.diff}</p>
-            <button class="btn-primary" style="padding:0.5rem" onclick="showGlobalToast('Challenge Joined!')">Join</button>
-        </div>
-    `).join('');
+    if (typeof renderChallengesWithNotifications === 'function') {
+        renderChallengesWithNotifications('challengesGrid');
+        initChallengeNotifications();
+    }
 }
 
 function filterRecs(cat, btn) {
