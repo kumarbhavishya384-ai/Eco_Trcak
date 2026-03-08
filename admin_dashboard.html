@@ -398,6 +398,83 @@
             align-items: center;
             gap: 0.75rem;
         }
+
+        /* ── Zoom & Responsive Stability Fixes ── */
+        * { box-sizing: border-box; }
+
+        .main-content {
+            min-width: 0;
+            overflow-x: hidden;
+        }
+
+        .dashboard-grid.full-width {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .history-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .history-table {
+            width: 100%;
+            min-width: 600px;
+            table-layout: auto;
+        }
+
+        .history-table td, .history-table th {
+            word-break: break-word;
+            max-width: 200px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .topbar {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .topbar-right {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .admin-stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+
+        /* Sidebar stable at all zoom levels */
+        .sidebar {
+            flex-shrink: 0;
+            min-width: 240px;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar { position: fixed; z-index: 999; transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0 !important; }
+        }
+
+        /* User table action buttons stable */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+        }
+
+        /* Prevent layout shift on role badge */
+        .role-badge {
+            white-space: nowrap;
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -628,6 +705,7 @@
                 dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
             }
             refreshStats();
+            fetchAdminUsers(); // ✅ Auto-load all users on page load
         });
 
         async function refreshStats() {
@@ -756,7 +834,6 @@
                                 <div style="display:flex; gap:8px; justify-content:flex-end; align-items:center;">
                                     ${u.phone ? `<a href="https://wa.me/${u.phone.replace(/\D/g, '')}?text=Hi%20${u.firstName},%20Welcome%20to%20EcoTrack%20AI!%20🌿" target="_blank" style="text-decoration:none; font-size:1.1rem;" title="Chat on WhatsApp">💬</a>` : ''}
                                     <button onclick="resendWelcome('${u.email}', '${u.firstName}')" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:1rem; transition:0.2s;" title="Resend Welcome Email" onmouseover="this.style.filter='drop-shadow(0 0 6px var(--primary))'" onmouseout="this.style.filter='none'">📧</button>
-                                    <button onclick="changeRole('${u.id}', '${u.role}')" style="background:none; border:1px solid var(--border); color:var(--text-secondary); cursor:pointer; font-size:0.75rem; padding:3px 8px; border-radius:6px; transition:0.2s;" title="Toggle Role" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">${u.role === 'admin' ? '👤 Make User' : '🔑 Make Admin'}</button>
                                     <button onclick="deleteUser('${u.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.1rem; transition:0.2s;" title="Delete User" onmouseover="this.style.filter='drop-shadow(0 0 6px var(--danger))'" onmouseout="this.style.filter='none'">🗑️</button>
                                 </div>
                             </td>
@@ -779,23 +856,6 @@
                 }
             } catch (err) {
                 showGlobalToast("❌ Error deleting user: " + err.message);
-            }
-        }
-
-        async function changeRole(uid, currentRole) {
-            const newRole = currentRole === 'admin' ? 'user' : 'admin';
-            if (!confirm(`Change this user's role to "${newRole}"?`)) return;
-            try {
-                const data = await apiFetch(`/admin/users/${uid}/role`, {
-                    method: 'PUT',
-                    body: JSON.stringify({ role: newRole })
-                });
-                if (data.success) {
-                    showGlobalToast(`✅ Role updated to ${newRole}`);
-                    fetchAdminUsers(); // Refresh table
-                }
-            } catch (err) {
-                showGlobalToast("❌ Error updating role: " + err.message);
             }
         }
 

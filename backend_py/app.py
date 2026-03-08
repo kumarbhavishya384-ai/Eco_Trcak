@@ -821,17 +821,29 @@ def get_admin_users():
         return jsonify({"success": False, "message": "Access denied"}), 403
 
     if use_mongodb:
-        users = list(users_col.find({}, {"password": 0}))
+        raw_users = list(users_col.find({}, {"password": 0}))
     else:
-        users = load_local_db()["users"]
+        raw_users = load_local_db().get("users", [])
 
     result = []
-    for u in users:
-        u = dict(u)
-        u['id'] = str(u.get('_id', ''))
-        u.pop('_id', None)
-        u.pop('password', None)
-        result.append(u)
+    for u in raw_users:
+        safe = {}
+        for k, v in u.items():
+            if k == '_id':
+                safe['id'] = str(v)
+            elif k == 'password':
+                continue
+            else:
+                # Convert any non-serializable types to string
+                try:
+                    import json
+                    json.dumps(v)
+                    safe[k] = v
+                except (TypeError, ValueError):
+                    safe[k] = str(v)
+        if 'id' not in safe:
+            safe['id'] = str(u.get('_id', ''))
+        result.append(safe)
 
     return jsonify({"success": True, "users": result})
 
@@ -840,17 +852,16 @@ def get_admin_users():
 def delete_user(uid):
     if request.user.get('role') != 'admin':
         return jsonify({"success": False, "message": "Access denied"}), 403
-
+    
     if use_mongodb:
         users_col.delete_one({"_id": ObjectId(uid)})
-        # ✅ FIX: entries store user as string uid, not ObjectId
-        entries_col.delete_many({"user": uid})
+        entries_col.delete_many({"user": ObjectId(uid)})
     else:
         db_data = load_local_db()
         db_data["users"] = [u for u in db_data["users"] if str(u.get("_id")) != uid]
         db_data["entries"] = [e for e in db_data["entries"] if str(e.get("user")) != uid]
         save_local_db(db_data)
-
+        
     return jsonify({"success": True, "message": "User deleted successfully"})
 
 @app.route('/api/admin/users/<uid>/role', methods=['PUT'])
@@ -858,12 +869,10 @@ def delete_user(uid):
 def update_user_role(uid):
     if request.user.get('role') != 'admin':
         return jsonify({"success": False, "message": "Access denied"}), 403
-
     data = request.json
     new_role = data.get('role', '').strip()
     if new_role not in ['admin', 'user']:
-        return jsonify({"success": False, "message": "Invalid role. Must be 'admin' or 'user'"}), 400
-
+        return jsonify({"success": False, "message": "Invalid role"}), 400
     if use_mongodb:
         users_col.update_one({"_id": ObjectId(uid)}, {"$set": {"role": new_role}})
     else:
@@ -873,7 +882,6 @@ def update_user_role(uid):
                 u["role"] = new_role
                 break
         save_local_db(db_data)
-
     return jsonify({"success": True, "message": f"Role updated to {new_role}"})
 
 @app.route('/api/recommendations', methods=['GET'])
@@ -1371,4 +1379,3 @@ if __name__ == '__main__':
         
     port = int(os.getenv("PORT", 5050))
     app.run(host='0.0.0.0', port=port, debug=False)
-
