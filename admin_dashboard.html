@@ -398,87 +398,14 @@
             align-items: center;
             gap: 0.75rem;
         }
-
-        /* ── Zoom & Responsive Stability Fixes ── */
-        * { box-sizing: border-box; }
-
-        .main-content {
-            min-width: 0;
-            overflow-x: hidden;
-        }
-
-        .dashboard-grid.full-width {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        .history-table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .history-table {
-            width: 100%;
-            min-width: 600px;
-            table-layout: auto;
-        }
-
-        .history-table td, .history-table th {
-            word-break: break-word;
-            max-width: 200px;
-        }
-
-        .admin-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .topbar {
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .topbar-right {
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .admin-stats-grid {
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        }
-
-        /* Sidebar stable at all zoom levels */
-        .sidebar {
-            flex-shrink: 0;
-            min-width: 240px;
-        }
-
-        @media (max-width: 900px) {
-            .sidebar { position: fixed; z-index: 999; transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0 !important; }
-        }
-
-        /* User table action buttons stable */
-        .user-cell {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 120px;
-        }
-
-        /* Prevent layout shift on role badge */
-        .role-badge {
-            white-space: nowrap;
-            display: inline-block;
-        }
     </style>
+    <link rel="stylesheet" href="css/responsive.css" />
 </head>
 
 <body class="app-body">
+    <!-- Mobile sidebar backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
@@ -705,7 +632,6 @@
                 dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
             }
             refreshStats();
-            fetchAdminUsers(); // ✅ Auto-load all users on page load
         });
 
         async function refreshStats() {

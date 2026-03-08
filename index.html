@@ -27,6 +27,7 @@
       console.log('EmailJS initialized ✅');
     }
   </script>
+    <link rel="stylesheet" href="css/responsive.css" />
 </head>
 
 <body class="landing-body">
@@ -447,6 +448,29 @@
   </div>
   <script src="js/app.js?v=1772902104"></script>
   <script src="js/landing.js?v=1772902104"></script>
+
+    <script>
+    // Responsive sidebar helpers
+    function toggleSidebar() {
+        const s = document.getElementById('sidebar');
+        const b = document.getElementById('sidebarBackdrop');
+        if (s) s.classList.toggle('open');
+        if (b) b.classList.toggle('active');
+        document.body.style.overflow = s && s.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeSidebar() {
+        const s = document.getElementById('sidebar');
+        const b = document.getElementById('sidebarBackdrop');
+        if (s) s.classList.remove('open');
+        if (b) b.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    // Close sidebar on nav link click (mobile)
+    document.querySelectorAll('.nav-item').forEach(a => {
+        a.addEventListener('click', () => { if (window.innerWidth <= 900) closeSidebar(); });
+    });
+    </script>
+
 </body>
 
 </html>
