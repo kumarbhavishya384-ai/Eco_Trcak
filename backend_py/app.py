@@ -579,7 +579,7 @@ def forgot_password():
             
         # Mock token generation
         reset_token = os.urandom(4).hex().upper()  # Shorter 8-char code for easy typing
-        expiry = str(datetime.utcnow() + timedelta(minutes=15))
+        expiry = datetime.utcnow() + timedelta(minutes=15)
         
         # Persist token in user document so it survives server restarts
         users_col.update_one(
@@ -599,7 +599,7 @@ def forgot_password():
         
         return jsonify({
             "success": True, 
-            "message": "Reset code generated successfully.", "resetCode": reset_token
+            "message": "A verification code has been generated and sent to your email. Please check your inbox (and spam) to proceed."
         })
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
@@ -819,31 +819,62 @@ def get_admin_stats():
 def get_admin_users():
     if request.user.get('role') != 'admin':
         return jsonify({"success": False, "message": "Access denied"}), 403
-    
-    users = load_local_db()["users"] if not use_mongodb else list(users_col.find({}, {"password":0}))
+
+    if use_mongodb:
+        users = list(users_col.find({}, {"password": 0}))
+    else:
+        users = load_local_db()["users"]
+
+    result = []
     for u in users:
+        u = dict(u)
         u['id'] = str(u.get('_id', ''))
-        if '_id' in u: del u['_id']
+        u.pop('_id', None)
         u.pop('password', None)
-        
-    return jsonify({"success": True, "users": users})
+        result.append(u)
+
+    return jsonify({"success": True, "users": result})
 
 @app.route('/api/admin/users/<uid>', methods=['DELETE'])
 @token_required
 def delete_user(uid):
     if request.user.get('role') != 'admin':
         return jsonify({"success": False, "message": "Access denied"}), 403
-    
+
     if use_mongodb:
         users_col.delete_one({"_id": ObjectId(uid)})
-        entries_col.delete_many({"user": ObjectId(uid)})
+        # ✅ FIX: entries store user as string uid, not ObjectId
+        entries_col.delete_many({"user": uid})
     else:
         db_data = load_local_db()
         db_data["users"] = [u for u in db_data["users"] if str(u.get("_id")) != uid]
         db_data["entries"] = [e for e in db_data["entries"] if str(e.get("user")) != uid]
         save_local_db(db_data)
-        
+
     return jsonify({"success": True, "message": "User deleted successfully"})
+
+@app.route('/api/admin/users/<uid>/role', methods=['PUT'])
+@token_required
+def update_user_role(uid):
+    if request.user.get('role') != 'admin':
+        return jsonify({"success": False, "message": "Access denied"}), 403
+
+    data = request.json
+    new_role = data.get('role', '').strip()
+    if new_role not in ['admin', 'user']:
+        return jsonify({"success": False, "message": "Invalid role. Must be 'admin' or 'user'"}), 400
+
+    if use_mongodb:
+        users_col.update_one({"_id": ObjectId(uid)}, {"$set": {"role": new_role}})
+    else:
+        db_data = load_local_db()
+        for u in db_data["users"]:
+            if str(u.get("_id")) == uid:
+                u["role"] = new_role
+                break
+        save_local_db(db_data)
+
+    return jsonify({"success": True, "message": f"Role updated to {new_role}"})
 
 @app.route('/api/recommendations', methods=['GET'])
 @token_required
