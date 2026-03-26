@@ -486,6 +486,10 @@ def register():
             "phone": data.get('phone', ''),
             "password": hashed_pw,
             "location": data.get('location', 'India'),
+            "state": data.get('state'),
+            "zone": data.get('zone'),
+            "zone_ef": data.get('zone_ef', 0.82),
+            "zone_avg": data.get('zone_avg', 5.2),
             "role": "admin" if email in ["admin@ecotrack.ai", "kumarbhavishya384@gmail.com"] else "user",
             "ecoScore": 0,
             "createdAt": str(datetime.now())
@@ -635,6 +639,26 @@ def reset_password():
         users_col.update_one({"email": email}, {"$set": {"password": hashed_pw, "resetToken": None}})
         
         return jsonify({"success": True, "message": "Password updated successfully! You can now log in with your new password."})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
+@app.route('/api/auth/update-location', methods=['POST'])
+@token_required
+def update_location():
+    try:
+        data = request.json
+        uid = request.user['_id']
+        update_data = {
+            "state": data.get('state'),
+            "zone": data.get('zone'),
+            "zone_ef": data.get('zone_ef'),
+            "zone_avg": data.get('zone_avg')
+        }
+        # Clean None values
+        update_data = {k: v for k, v in update_data.items() if v is not None}
+        
+        users_col.update_one({"_id": uid}, {"$set": update_data})
+        return jsonify({"success": True, "message": "Location and regional grid updated"})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
@@ -1128,7 +1152,9 @@ def ai_chat():
         avg_food = round(sum(e.get('food', 0) for e in recent_entries) / max(len(recent_entries), 1), 2)
         user_ecoscore = request.user.get('ecoScore', 0)
 
-        system_prompt = """You are EcoAssistant, the friendly AI chatbot for EcoTrack AI — an Indian carbon footprint tracking platform.
+        user = request.user
+        zone_info = f"\nUSER CONTEXT: The user is in the {user.get('zone', 'Northern')} Grid zone (Emission Factor: {user.get('zone_ef', 0.82)} kg CO2/kWh)." if user.get('zone') else ""
+        system_prompt = f"""You are EcoAssistant, the friendly AI chatbot for EcoTrack AI — an Indian carbon footprint tracking platform.{zone_info}
 You help users understand their carbon footprint, answer eco questions, give personalized tips, and log activities.
 
 INDIA-SPECIFIC EMISSION FACTORS (kg CO2):
@@ -1173,13 +1199,13 @@ INSTRUCTIONS:
 6. Use emojis appropriately 🌿
 
 RESPOND IN STRICT JSON FORMAT ONLY (no markdown, no extra text):
-{
+{{
   "response": "Your helpful answer here",
   "autoLog": false,
   "category": "transport",
   "value": 0,
   "detail": ""
-}"""
+}}"""
 
         user_prompt = f"""User: {user_name}
 EcoScore: {user_ecoscore}/800

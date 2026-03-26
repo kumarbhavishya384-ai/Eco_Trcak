@@ -50,6 +50,92 @@ async function runFederatedTraining() {
     }, 3000);
 }
 
+// ── Regional Grid Data (CEA FY 2022-23) ───────────────
+const REGIONAL_GRIDS = {
+    'Northern': { ef: 0.82, avg: 5.8, states: ['Delhi', 'Uttar Pradesh', 'Punjab', 'Haryana', 'Rajasthan', 'Himachal Pradesh', 'Jammu & Kashmir', 'Uttarakhand', 'Ladakh'] },
+    'Western': { ef: 0.79, avg: 5.5, states: ['Maharashtra', 'Gujarat', 'Madhya Pradesh', 'Goa', 'Chhattisgarh', 'Dadra and Nagar Haveli', 'Daman and Diu'] },
+    'Southern': { ef: 0.65, avg: 4.6, states: ['Tamil Nadu', 'Karnataka', 'Kerala', 'Andhra Pradesh', 'Telangana', 'Puducherry', 'Lakshadweep', 'Andaman and Nicobar Islands'] },
+    'Eastern': { ef: 0.88, avg: 5.2, states: ['West Bengal', 'Bihar', 'Jharkhand', 'Odisha'] },
+    'North-Eastern': { ef: 0.58, avg: 4.0, states: ['Assam', 'Meghalaya', 'Manipur', 'Tripura', 'Arunachal Pradesh', 'Nagaland', 'Mizoram', 'Sikkim'] }
+};
+
+function getZoneFromState(stateName) {
+    if (!stateName) return null;
+    for (const [zone, data] of Object.entries(REGIONAL_GRIDS)) {
+        if (data.states.some(s => s.toLowerCase() === stateName.toLowerCase() || stateName.toLowerCase().includes(s.toLowerCase()))) {
+            return { zone, ...data };
+        }
+    }
+    return null;
+}
+
+async function detectUserZone(force = false) {
+    const user = getCurrentUser();
+    if (!user) return;
+    if (!force && user.zone) return; // Already detected
+
+    console.log("📍 Detecting user location for regional grid mapping...");
+    
+    try {
+        // 1. Try Browser Geolocation
+        const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+        });
+
+        const { latitude, longitude } = pos.coords;
+        // 2. Reverse Geocode via Nominatim (Free)
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+        const data = await res.json();
+        const state = data.address.state || data.address.state_district;
+        
+        console.log(`📍 Detected State: ${state}`);
+        const zoneData = getZoneFromState(state);
+        if (zoneData) {
+            await saveUserLocation(state, zoneData);
+        }
+    } catch (err) {
+        console.warn("Geolocation failed or denied, trying IP fallback...", err);
+        // 3. IP Fallback via ip-api.com
+        try {
+            const res = await fetch('http://ip-api.com/json/');
+            const data = await res.json();
+            if (data.regionName) {
+                console.log(`📍 IP Fallback State: ${data.regionName}`);
+                const zoneData = getZoneFromState(data.regionName);
+                if (zoneData) {
+                    await saveUserLocation(data.regionName, zoneData);
+                }
+            }
+        } catch (ipErr) {
+            console.error("Location detection totally failed.", ipErr);
+        }
+    }
+}
+
+async function saveUserLocation(state, zoneData) {
+    try {
+        const payload = {
+            state: state,
+            zone: zoneData.zone,
+            zone_ef: zoneData.ef,
+            zone_avg: zoneData.avg
+        };
+        await apiFetch('/auth/update-location', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+        
+        // Update local user object
+        const user = getCurrentUser();
+        const updatedUser = { ...user, ...payload };
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
+        console.log(`✅ User zone updated to ${zoneData.zone} (${zoneData.ef} kg/kWh)`);
+        showGlobalToast(`📍 Location detected: ${state} (${zoneData.zone} Grid)`);
+    } catch (err) {
+        console.error("Failed to save user location to backend", err);
+    }
+}
+
 // ── India-specific emission factors ───────────────────
 const EMISSION_FACTORS = {
     transport: {
@@ -58,14 +144,13 @@ const EMISSION_FACTORS = {
         flightEconomy: 0.158, flightBusiness: 0.428, flightFirst: 0.591
     },
     electricity: {
-        gridFactor: 0.82,
+        gridFactor: 0.82, // Base national factor, replaced by user.zone_ef if available
         lpgCylinder: 42.5,
         pngCubicM: 2.05,
         ac: 1.5, pc: 0.2, tv: 0.1, washer: 0.5
     },
     food: {
         dietBase: { vegan: 0, 'pure-veg': 0, 'egg-veg': 0, omnivore: 0, 'heavy-meat': 0 },
-        beef: 9.0, lamb: 8.5, pork: 2.1, chicken: 1.3, fish: 1.1,
         pulses: 0.15, tofu: 0.18, nuts: 0.2,
         milk: 0.6, cheese: 1.8, eggs: 0.4,
         rice: 0.6, grains: 0.25, veggies: 0.15, imports: 0.8,
@@ -301,9 +386,16 @@ async function handleRegister(e) {
 
         btn.textContent = 'Creating Account...';
 
+        const zoneData = getZoneFromState(location);
         const data = await apiFetch('/auth/register', {
             method: 'POST',
-            body  : JSON.stringify({ firstName, lastName, email, phone, password, location })
+            body  : JSON.stringify({ 
+                firstName, lastName, email, phone, password, location,
+                state: location,
+                zone: zoneData ? zoneData.zone : null,
+                zone_ef: zoneData ? zoneData.ef : 0.82,
+                zone_avg: zoneData ? zoneData.avg : 5.2
+            })
         });
 
         localStorage.setItem(STORAGE_KEYS.TOKEN, data.token);
@@ -449,12 +541,31 @@ function closeSidebar() {
                 const data = await apiFetch('/auth/me');
                 localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
                 populateSidebar(data.user);
+                updateEmissionFactors(data.user);
+                
+                // Trigger auto-location detection if zone missing
+                if (!data.user.zone) {
+                    setTimeout(detectUserZone, 2000);
+                }
+                
                 initNotifications();
                 checkDailyReminder();
             } catch (e) { console.log("Profile sync failed", e); }
         }
     }
 })();
+
+function updateEmissionFactors(user) {
+    if (user && user.zone_ef) {
+        EMISSION_FACTORS.electricity.gridFactor = user.zone_ef;
+        EMISSION_FACTORS.transport.electric = user.zone_ef; // Assuming electric cars use grid factor
+        console.log(`💡 EMISSION FACTORS UPDATED for zone ${user.zone}: ${user.zone_ef} kg/kWh`);
+    } else {
+        // Clear or default
+        EMISSION_FACTORS.electricity.gridFactor = 0.82;
+        EMISSION_FACTORS.transport.electric = 0.82;
+    }
+}
 
 // =======================================================
 //  NOTIFICATION SYSTEM — FULLY FIXED

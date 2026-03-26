@@ -192,7 +192,9 @@ function calcElectricity() {
     const pngImpact = (+document.getElementById('pngCubic')?.value || 0) * EF.pngCubicM;
 
     // Total household emissions
-    const householdTotal = (totalMonthlyKwh * EF.gridFactor) + lpgImpact + pngImpact;
+    const user = getCurrentUser();
+    const factor = user && user.zone_ef ? user.zone_ef : EF.gridFactor;
+    const householdTotal = (totalMonthlyKwh * factor) + lpgImpact + pngImpact;
 
     // Per-person share
     const perPersonTotal = householdTotal / familyMembers;

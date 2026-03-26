@@ -184,6 +184,49 @@ function updateEmissionDisplay(entriesOverride) {
 
     // Update Quick Stats to reflect this period
     renderQuickStats(user, filtered, period);
+    
+    // NEW: Regional Grid Comparisons
+    renderRegionalBenchmarks(user, filtered);
+}
+
+function renderRegionalBenchmarks(user, currentEntries) {
+    const nationalAvg = 5.2;
+    const zoneAvg = user.zone_avg || 5.2;
+    const zoneName = user.zone || 'National';
+    
+    // Calculate user's daily avg for the filtered entries
+    const numDays = 30; // 30 day marker for comparison normalization
+    // Instead of total cumulative, we want the daily average of the user
+    // Calculated over the last 30 entries for a fair "current" baseline
+    const last30 = allEntries.slice(0, 30);
+    const userDailyAvg = last30.length > 0 
+        ? last30.reduce((s, e) => s + (e.total || 0), 0) / last30.length 
+        : 0;
+
+    // Display updates
+    const zoneBadge = document.getElementById('userZoneBadge');
+    if (zoneBadge) zoneBadge.textContent = zoneName.toUpperCase();
+    
+    const zoneLabel = document.getElementById('zoneAvgLabel');
+    if (zoneLabel) zoneLabel.textContent = `vs ${zoneName} Avg`;
+
+    const zoneVal = document.getElementById('zoneAvgVal');
+    if (zoneVal) zoneVal.textContent = `${zoneAvg} kg/day`;
+
+    // Max for scaling (e.g. 10 kg)
+    const scaleMax = Math.max(nationalAvg, zoneAvg, userDailyAvg, 10);
+
+    const nationalFill = document.getElementById('nationalAvgFill');
+    if (nationalFill) nationalFill.style.width = (nationalAvg / scaleMax * 100) + '%';
+
+    const zoneFill = document.getElementById('zoneAvgFill');
+    if (zoneFill) zoneFill.style.width = (zoneAvg / scaleMax * 100) + '%';
+
+    const natMarker = document.getElementById('userAvgMarkerNational');
+    if (natMarker) natMarker.style.left = Math.min((userDailyAvg / scaleMax * 100), 99) + '%';
+
+    const zoneMarker = document.getElementById('userAvgMarkerZone');
+    if (zoneMarker) zoneMarker.style.left = Math.min((userDailyAvg / scaleMax * 100), 99) + '%';
 }
 
 // ── Trend Chart – Enhanced Premium ────────────────────

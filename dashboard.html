@@ -254,6 +254,39 @@
                 </div>
             </div>
 
+            <!-- Regional Benchmark Comparison (New Requirement) -->
+            <div class="card regional-benchmark-card reveal" style="grid-column: span 1;">
+                <div class="card-header">
+                    <h3>Carbon Benchmarks</h3>
+                    <div id="userZoneBadge" class="badge-live" style="background:var(--primary); color:#000;">GLOBAL</div>
+                </div>
+                <div class="benchmark-content" style="padding: 1rem 0;">
+                    <div class="benchmark-item" style="margin-bottom: 1.5rem;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
+                            <span style="color:var(--text-secondary);">vs India National Avg</span>
+                            <span style="font-weight:700;">5.2 kg/day</span>
+                        </div>
+                        <div style="height:8px; background:rgba(255,255,255,0.05); border-radius:4px; position:relative; overflow:hidden;">
+                            <div id="nationalAvgFill" style="position:absolute; height:100%; width:0%; background:#3B82F6; transition:1.5s ease-out;"></div>
+                            <div id="userAvgMarkerNational" style="position:absolute; height:100%; width:2px; background:#fff; left:0%; z-index:2; box-shadow:0 0 10px #fff;"></div>
+                        </div>
+                    </div>
+                    <div class="benchmark-item">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
+                            <span style="color:var(--text-secondary);" id="zoneAvgLabel">vs Zone Average</span>
+                            <span style="font-weight:700;" id="zoneAvgVal">-- kg/day</span>
+                        </div>
+                        <div style="height:8px; background:rgba(255,255,255,0.05); border-radius:4px; position:relative; overflow:hidden;">
+                            <div id="zoneAvgFill" style="position:absolute; height:100%; width:0%; background:var(--primary); transition:1.5s ease-out;"></div>
+                            <div id="userAvgMarkerZone" style="position:absolute; height:100%; width:2px; background:#fff; left:0%; z-index:2; box-shadow:0 0 10px #fff;"></div>
+                        </div>
+                    </div>
+                    <p style="font-size:0.7rem; color:var(--text-muted); margin-top:1.25rem; line-height:1.4;">
+                        💡 Your white marker relative to the bars shows your daily average performance.
+                    </p>
+                </div>
+            </div>
+
             <!-- AI Recommendations Preview -->
             <div class="card recommendations-preview-card full-width reveal">
                 <div class="card-header">
