@@ -16,8 +16,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/dashboard.css" />
-    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#22c55e">
+    <!-- Leaflet Map Library -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
 <body class="app-body">
@@ -260,7 +262,13 @@
                     <h3>Carbon Benchmarks</h3>
                     <div id="userZoneBadge" class="badge-live" style="background:var(--primary); color:#000;">GLOBAL</div>
                 </div>
-                <div class="benchmark-content" style="padding: 1rem 0;">
+                <!-- Mini Map Section -->
+                <div id="miniMap" style="height: 180px; border-radius: 12px; margin: 10px 0; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); overflow: hidden; z-index: 10;">
+                    <div style="display:flex; align-items:center; justify-content:center; height:100%; color:var(--text-muted); font-size:0.8rem;">
+                        <span class="loading-spinner"></span> Calibrating Geo-Grid...
+                    </div>
+                </div>
+                <div class="benchmark-content" style="padding: 0.5rem 0;">
                     <div class="benchmark-item" style="margin-bottom: 1.5rem;">
                         <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
                             <span style="color:var(--text-secondary);">vs India National Avg</span>

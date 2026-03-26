@@ -652,7 +652,9 @@ def update_location():
             "state": data.get('state'),
             "zone": data.get('zone'),
             "zone_ef": data.get('zone_ef'),
-            "zone_avg": data.get('zone_avg')
+            "zone_avg": data.get('zone_avg'),
+            "lat": data.get('lat'),
+            "lon": data.get('lon')
         }
         # Clean None values
         update_data = {k: v for k, v in update_data.items() if v is not None}

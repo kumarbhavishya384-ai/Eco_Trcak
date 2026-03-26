@@ -91,7 +91,7 @@ async function detectUserZone(force = false) {
         console.log(`📍 Detected State: ${state}`);
         const zoneData = getZoneFromState(state);
         if (zoneData) {
-            await saveUserLocation(state, zoneData);
+            await saveUserLocation(state, zoneData, latitude, longitude);
         }
     } catch (err) {
         console.warn("Geolocation failed or denied, trying IP fallback...", err);
@@ -103,7 +103,7 @@ async function detectUserZone(force = false) {
                 console.log(`📍 IP Fallback State: ${data.regionName}`);
                 const zoneData = getZoneFromState(data.regionName);
                 if (zoneData) {
-                    await saveUserLocation(data.regionName, zoneData);
+                    await saveUserLocation(data.regionName, zoneData, data.lat, data.lon);
                 }
             }
         } catch (ipErr) {
@@ -112,13 +112,15 @@ async function detectUserZone(force = false) {
     }
 }
 
-async function saveUserLocation(state, zoneData) {
+async function saveUserLocation(state, zoneData, lat, lon) {
     try {
         const payload = {
             state: state,
             zone: zoneData.zone,
             zone_ef: zoneData.ef,
-            zone_avg: zoneData.avg
+            zone_avg: zoneData.avg,
+            lat: lat,
+            lon: lon
         };
         await apiFetch('/auth/update-location', {
             method: 'POST',

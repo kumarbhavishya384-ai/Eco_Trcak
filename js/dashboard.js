@@ -187,6 +187,62 @@ function updateEmissionDisplay(entriesOverride) {
     
     // NEW: Regional Grid Comparisons
     renderRegionalBenchmarks(user, filtered);
+    initMiniMap(user);
+}
+
+let miniMapInstance = null;
+function initMiniMap(user) {
+    if (!document.getElementById('miniMap')) return;
+    if (miniMapInstance) return;
+
+    const lat = user.lat || 20.5937; // Default India center
+    const lon = user.lon || 78.9629;
+    
+    document.getElementById('miniMap').innerHTML = ''; // Clear spinner
+    
+    miniMapInstance = L.map('miniMap', {
+        center: [lat, lon],
+        zoom: 4,
+        zoomControl: false,
+        attributionControl: false
+    });
+
+    // Dark Premium Tiles
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 10
+    }).addTo(miniMapInstance);
+
+    // Grid Zone Outlines (Simple visual representation)
+    const zoneColors = {
+        'Northern': '#ff4d4d', 'Western': '#ffa500', 'Southern': '#22c55e', 
+        'Eastern': '#3b82f6', 'North-Eastern': '#a855f7'
+    };
+    
+    const zoneColor = user.zone ? zoneColors[user.zone] : '#00d4aa';
+    
+    // Custom Pulsing Dot for user location
+    const customIcon = L.divIcon({
+        className: 'user-location-marker',
+        html: `<div style="width:12px; height:12px; background:${zoneColor}; border:2px solid #fff; border-radius:50%; box-shadow: 0 0 15px ${zoneColor};"></div>`,
+        iconSize: [12, 12]
+    });
+
+    if (user.lat && user.lon) {
+        L.marker([lat, lon], { icon: customIcon }).addTo(miniMapInstance);
+        miniMapInstance.setView([lat, lon], 5);
+        
+        // Label for detected state
+        if (user.state) {
+            L.popup({ 
+                closeButton: false, 
+                autoClose: false,
+                className: 'map-label'
+            })
+            .setLatLng([lat + 0.5, lon])
+            .setContent(`<div style="font-size:0.7rem; font-weight:800; color:${zoneColor}">${user.state.toUpperCase()}</div>`)
+            .openOn(miniMapInstance);
+        }
+    }
 }
 
 function renderRegionalBenchmarks(user, currentEntries) {
@@ -194,14 +250,17 @@ function renderRegionalBenchmarks(user, currentEntries) {
     const zoneAvg = user.zone_avg || 5.2;
     const zoneName = user.zone || 'National';
     
-    // Calculate user's daily avg for the filtered entries
-    const numDays = 30; // 30 day marker for comparison normalization
-    // Instead of total cumulative, we want the daily average of the user
-    // Calculated over the last 30 entries for a fair "current" baseline
-    const last30 = allEntries.slice(0, 30);
-    const userDailyAvg = last30.length > 0 
-        ? last30.reduce((s, e) => s + (e.total || 0), 0) / last30.length 
-        : 0;
+    // Calculate REAL Daily Average over the last 30 CALENDAR days
+    const now = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(now.getDate() - 30);
+    const startDateStr = thirtyDaysAgo.toISOString().split('T')[0];
+    
+    const entriesLast30 = allEntries.filter(e => e.date >= startDateStr);
+    
+    // total = sum of transport + sum of food + TOTAL electricity bill for the month
+    const totalCO2 = entriesLast30.reduce((s, e) => s + (e.total || 0), 0);
+    const userDailyAvg = totalCO2 / 30; // Spread over 30 days
 
     // Display updates
     const zoneBadge = document.getElementById('userZoneBadge');
