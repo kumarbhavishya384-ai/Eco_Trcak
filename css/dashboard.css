@@ -100,14 +100,32 @@
 .nav-item.active::before {
     content: '';
     position: absolute;
-    left: -0.9rem;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 3px;
-    height: 22px;
+    width: 4px;
+    height: 60%;
     background: linear-gradient(180deg, var(--primary), var(--accent));
-    border-radius: 0 3px 3px 0;
-    box-shadow: 0 0 8px var(--primary);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px var(--primary);
+}
+
+.nav-item {
+    margin: 0.2rem 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    transform: translateX(5px);
+}
+
+.nav-item.active {
+    background: linear-gradient(90deg, rgba(0, 212, 170, 0.15) 0%, transparent 100%);
+    color: var(--primary);
+    border-color: rgba(0, 212, 170, 0.2);
+    box-shadow: none;
 }
 
 .nav-icon {
@@ -177,9 +195,75 @@
 }
 
 .logout-btn:hover {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.15);
+    color: #ff5c5c;
+    border-color: rgba(239, 68, 68, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+}
+
+/* Onboarding Section Styles */
+.onboarding-section {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(0, 212, 170, 0.08) 0%, rgba(13, 21, 38, 0.8) 100%);
+    border: 1px dashed var(--primary);
+    border-radius: var(--radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    display: none; /* Shown via JS if no data */
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.onboarding-section.visible {
+    display: flex;
+}
+
+.onboarding-illustration {
+    font-size: 4rem;
+    filter: drop-shadow(0 0 20px var(--primary));
+    margin-bottom: 0.5rem;
+}
+
+.onboarding-text h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.onboarding-text p {
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Gamification Progress */
+.level-progress-container {
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+.level-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.level-name {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+.next-level-target {
+    font-size: 0.75rem;
+    color: var(--text-muted);
 }
 
 /* ===================================================
@@ -366,11 +450,17 @@
 
 /* EcoScore Card – Animated Gradient Arc + Glow Ring */
 .ecoscore-card {
-    grid-column: 1;
-    background: linear-gradient(135deg,
-            rgba(0, 212, 170, 0.06) 0%,
-            rgba(10, 15, 30, 0.8) 60%);
-    border-color: rgba(0, 212, 170, 0.2);
+    grid-column: 1 / -1; /* Make it dominant across the top */
+    background: radial-gradient(circle at top right, rgba(0, 212, 170, 0.1), transparent),
+                linear-gradient(135deg, rgba(13, 21, 38, 0.9) 0%, rgba(8, 12, 24, 1) 100%);
+    border: 1px solid rgba(0, 212, 170, 0.3);
+    padding: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 320px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 212, 170, 0.1);
 }
 
 .ecoscore-display {

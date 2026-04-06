@@ -13,6 +13,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         allEntries = await getUserEntries();
 
+        // Zero State check
+        const onboardingSection = document.getElementById('onboardingSection');
+        const chartEmptyState = document.getElementById('chartEmptyState');
+        const dashboardGrid = document.querySelector('.dashboard-grid');
+
+        if (!allEntries || allEntries.length === 0) {
+            if (onboardingSection) onboardingSection.classList.add('visible');
+            if (chartEmptyState) chartEmptyState.style.display = 'flex';
+            // Hide some secondary sections if empty to reduce clutter
+            const secondaryCards = document.querySelectorAll('.donut-card, .quick-stats-card, .regional-benchmark-card');
+            secondaryCards.forEach(c => c.style.opacity = '0.3');
+        } else {
+            if (onboardingSection) onboardingSection.classList.remove('visible');
+            if (chartEmptyState) chartEmptyState.style.display = 'none';
+        }
+
         // Initial renders
         renderEcoScore(allEntries);
         updateEmissionDisplay(); // This now uses allEntries by default
@@ -23,6 +39,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderRecentActivity(allEntries);
         renderChallengesWithNotifications('dashboardChallenges');
         initChallengeNotifications();
+
+        // Level System / Gamification
+        updateLevelProgress(allEntries);
 
         // Research: Federated Learning (Privacy-Safe Model Update)
         if (typeof runFederatedTraining === 'function') {
@@ -70,62 +89,61 @@ function updateStreak(entries) {
     }, 500);
 }
 
-// ── EcoScore Render – Redesigned ───────────────────────
-function renderEcoScore(entries) {
+// ── Level / Gamification Logic ───────────────────────
+function updateLevelProgress(entries) {
     const user = getCurrentUser();
-    const score = user.ecoScore || (entries.length > 0 ? entries[0].ecoScore : 0);
-    const tier = getScoreTier(score);
-    const pct = (score / 800) * 100;
+    const score = user.ecoScore || (entries.length > 0 ? entries.reduce((s, e) => s + (e.ecoScore || 0), 0) : 0);
+    
+    let levelName = "Neophyte";
+    let levelIcon = "🌱";
+    let nextLevelName = "Intermediate";
+    let nextLevelTarget = 1000;
+    let progress = 0;
 
-    // Animate score number
+    if (score >= 5000) {
+        levelName = "Elite";
+        levelIcon = "🏆";
+        nextLevelName = "Grandmaster";
+        nextLevelTarget = 10000;
+        progress = ((score - 5000) / 5000) * 100;
+    } else if (score >= 1000) {
+        levelName = "Intermediate";
+        levelIcon = "🚀";
+        nextLevelName = "Elite";
+        nextLevelTarget = 5000;
+        progress = ((score - 1000) / 4000) * 100;
+    } else {
+        progress = (score / 1000) * 100;
+    }
+
+    const badgeText = document.getElementById('levelBadgeText');
+    const badgeIcon = document.getElementById('levelBadgeIcon');
+    const levelProgressFill = document.getElementById('levelProgressFill');
+    const nextLevelTargetEl = document.querySelector('.next-level-target');
+    const levelNameEl = document.querySelector('.level-name');
+
+    if (badgeText) badgeText.textContent = levelName;
+    if (badgeIcon) badgeIcon.textContent = levelIcon;
+    if (levelProgressFill) {
+        setTimeout(() => {
+            levelProgressFill.style.width = Math.min(100, Math.max(5, progress)) + '%';
+        }, 800);
+    }
+    if (nextLevelTargetEl) nextLevelTargetEl.textContent = `${Math.max(0, nextLevelTarget - score)} pts to go`;
+    if (levelNameEl) levelNameEl.innerHTML = `Next Rank: <span style="color: #fff;">${nextLevelName}</span>`;
+
+    // Update main score display
     animateNumber('ecoScoreDisplay', 0, score, 2000);
 
-    // Arc animation with gradient handling
+    // Arc animation
     const circle = document.getElementById('scoreCircle');
     if (circle) {
         const circumference = 339;
-        const offset = circumference - (score / 800) * circumference;
+        const normalizedScore = Math.min(score, nextLevelTarget);
+        const offset = circumference - (normalizedScore / nextLevelTarget) * circumference;
         setTimeout(() => {
             circle.style.strokeDashoffset = offset;
         }, 300);
-    }
-
-    // Tier badge & background
-    const tierBadge = document.getElementById('scoreTierBadge');
-    if (tierBadge) {
-        if (entries.length === 0) {
-            tierBadge.textContent = 'NEOPHYTE 🌿';
-            tierBadge.style.background = 'rgba(0, 212, 170, 0.1)';
-            tierBadge.style.color = 'var(--primary)';
-        } else {
-            tierBadge.textContent = tier.tier.toUpperCase();
-            tierBadge.style.background = tier.bgColor;
-            tierBadge.style.color = tier.color;
-            tierBadge.style.borderColor = tier.color + '33';
-        }
-    }
-
-    // Fill bar
-    const fillEl = document.getElementById('scoreFill');
-    if (fillEl) {
-        setTimeout(() => {
-            fillEl.style.width = entries.length === 0 ? '5%' : Math.max(5, pct) + '%';
-        }, 600);
-    }
-
-    // Description text
-    const desc = document.getElementById('scoreDesc');
-    if (desc) {
-        if (entries.length === 0) {
-            desc.innerHTML = `Welcome! your adventure to <strong>Net Zero</strong> begins here. Log your first activity.`;
-        } else {
-            const msgs = {
-                'Good Carbon 🟢': `Excellent! You're performing better than 84% of your peers. Keep it up!`,
-                'Average Usage 🟡': `Solid progress. A few dietary adjustments could boost you to Elite status.`,
-                'High Usage 🔴': `Opportunity awaits! Our AI tips can help you reduce impact by up to 40%.`
-            };
-            desc.textContent = msgs[tier.tier] || 'Analyzing your environmental impact profile...';
-        }
     }
 }
 
