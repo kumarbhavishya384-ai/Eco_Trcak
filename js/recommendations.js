@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!getCurrentUser()) return;
 
     const grid = document.getElementById('recsFullGrid');
-    if (grid) grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem;"><div class="loading-spinner"></div><p style="margin-top:1rem; color:var(--text-secondary)">${t('ai_analyzing')}</p></div>';
+    if (grid) grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 3rem;"><div class="loading-spinner"></div><p style="margin-top:1rem; color:var(--text-secondary)">${t('ai_analyzing')}</p></div>`;
 
     try {
         const entries = await getUserEntries();

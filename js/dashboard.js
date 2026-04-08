@@ -1,10 +1,14 @@
-/* ===================================================
-   EcoTrack AI â€“ Dashboard JS (dashboard.js)
-   =================================================== */
-
-let trendChartInstance = null;
-let donutChartInstance = null;
-let allEntries = [];
+// Safety fallbacks to prevent dashboard crashes if dependencies fail to load
+if (typeof t !== 'function') {
+    console.warn("i18n.js not loaded. Using fallback translation function.");
+    window.t = (key) => {
+        // Fallback: return the key itself or a readable version
+        return key.includes('_') ? key.split('_').slice(-1)[0] : key;
+    };
+}
+if (typeof ALL_CHALLENGES === 'undefined') {
+    window.ALL_CHALLENGES = [];
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     const user = getCurrentUser();
