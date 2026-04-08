@@ -2,7 +2,6 @@
 
 const GOV_DAILY_LIMIT = 5.2; // 1.9 tonnes / 365 days = 5.2 kg/day (National Average, India)
 const GOV_TRANSPORT_TARGET = 1.0; // Daily
-const GOV_ELECTRIC_TARGET = 60.0; // Monthly
 const GOV_FOOD_TARGET = 1.2;      // Daily
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -26,16 +25,17 @@ async function renderReport() {
             return;
         }
 
-        const { data, targets, status } = res;
+        const { data, targets, status, daysInMonth } = res;
+        const days = daysInMonth || 30;
 
         // 1. Update Top Banner
         updateStatusBanner(data.normalizedDailyTotal, targets.nationalDailyLimit, status);
 
         // 2. Update Metrics Detailed List
-        updateMetricsList(data, targets);
+        updateMetricsList(data, targets, days);
 
         // 3. Render Comparison Chart
-        renderComparisonChart(data, targets);
+        renderComparisonChart(data, targets, days);
 
     } catch (err) {
         console.error("Report Comparison API Error:", err);
@@ -62,11 +62,11 @@ function updateStatusBanner(avgTotal, limit, status) {
     }
 }
 
-function updateMetricsList(data, targets) {
+function updateMetricsList(data, targets, days = 30) {
     const list = document.getElementById('metricsList');
     const metrics = [
         { label: 'Transport', val: data.transport, target: targets.transportDaily, icon: '🚗', period: 'Daily' },
-        { label: 'Electricity', val: data.electricity, target: targets.electricityMonthly, icon: '⚡', period: 'Monthly' },
+        { label: 'Electricity', val: data.electricity / days, target: targets.electricityMonthly / days, icon: '⚡', period: 'Daily' },
         { label: 'Food', val: data.food, target: targets.foodDaily, icon: '🍽️', period: 'Daily' }
     ];
 
@@ -89,24 +89,24 @@ function updateMetricsList(data, targets) {
     }).join('');
 }
 
-function renderComparisonChart(data, targets) {
+function renderComparisonChart(data, targets, days = 30) {
     const ctx = document.getElementById('comparisonChart').getContext('2d');
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Transport (Daily)', 'Electricity (Monthly)', 'Food (Daily)'],
+            labels: ['Transport (Daily)', 'Electricity (Daily)', 'Food (Daily)'],
             datasets: [
                 {
                     label: 'Your Data (kg CO2e)',
-                    data: [data.transport, data.electricity, data.food],
+                    data: [data.transport, data.electricity / days, data.food],
                     backgroundColor: 'rgba(34, 197, 94, 0.6)',
                     borderColor: 'var(--green)',
                     borderWidth: 1
                 },
                 {
                     label: 'National Target (kg CO2e)',
-                    data: [targets.transportDaily, targets.electricityMonthly, targets.foodDaily],
+                    data: [targets.transportDaily, targets.electricityMonthly / days, targets.foodDaily],
                     backgroundColor: 'rgba(239, 68, 68, 0.3)',
                     borderColor: '#ef4444',
                     borderWidth: 1,
@@ -139,6 +139,7 @@ function renderComparisonChart(data, targets) {
 
 function showNoData() {
     const banner = document.getElementById('statusBanner');
+    if (!banner) return;
     banner.className = 'status-banner';
     banner.style.background = 'rgba(255, 255, 255, 0.05)';
     document.getElementById('statusTitle').innerText = 'No Data Available';
