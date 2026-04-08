@@ -472,9 +472,20 @@ function requireAuth() {
 // ── Sidebar & UI ──────────────────────────────────────
 function populateSidebar(user) {
     const avatarEl = document.getElementById('sidebarAvatar');
+    const topNavAvatar = document.getElementById('topNavAvatar'); // added topnav
     const nameEl   = document.getElementById('sidebarName');
     const scoreEl  = document.getElementById('sidebarScore');
-    if (avatarEl) avatarEl.textContent = (user.firstName[0] + (user.lastName ? user.lastName[0] : '')).toUpperCase();
+    
+    // Check if user has profilePic
+    if (user.profilePic) {
+        if (avatarEl) avatarEl.innerHTML = `<img src="${user.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        if (topNavAvatar) topNavAvatar.innerHTML = `<img src="${user.profilePic}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+    } else {
+        const initials = (user.firstName[0] + (user.lastName ? user.lastName[0] : '')).toUpperCase();
+        if (avatarEl) avatarEl.textContent = initials;
+        if (topNavAvatar) topNavAvatar.textContent = initials;
+    }
+    
     if (nameEl)   nameEl.textContent   = `${user.firstName} ${user.lastName || ''}`;
     if (scoreEl)  scoreEl.textContent  = `EcoScore: ${user.ecoScore !== undefined ? user.ecoScore : '--'}`;
 }

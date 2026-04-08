@@ -736,6 +736,32 @@ def update_location():
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
+@app.route('/api/auth/update-profile', methods=['POST'])
+@token_required
+def update_profile():
+    try:
+        data = request.json
+        uid = request.user['_id']
+        update_data = {
+            "firstName": data.get('firstName'),
+            "lastName": data.get('lastName'),
+            "phone": data.get('phone'),
+            "profilePic": data.get('profilePic')
+        }
+        # Clean None values
+        update_data = {k: v for k, v in update_data.items() if v is not None}
+        
+        users_col.update_one({"_id": uid}, {"$set": update_data})
+        
+        updated_user = users_col.find_one({"_id": uid}, {"password": 0})
+        if '_id' in updated_user:
+            updated_user['id'] = str(updated_user['_id'])
+            del updated_user['_id']
+            
+        return jsonify({"success": True, "message": "Profile updated successfully", "user": updated_user})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+
 @app.route('/api/entries', methods=['GET'])
 @token_required
 def get_entries():
