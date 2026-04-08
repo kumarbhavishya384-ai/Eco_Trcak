@@ -35,8 +35,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // ── AI Predictions ────────────────────────────────────
 async function renderAIPredictions(entries) {
+    const els = ['predCurrentMonth', 'predNextMonth', 'predSavings'];
+    const clearLoading = () => els.forEach(id => { 
+        const el = document.getElementById(id);
+        if (el && el.textContent === 'Loading...') el.textContent = '--'; 
+    });
+
     if (!entries || entries.length === 0) {
-        const els = ['predCurrentMonth', 'predNextMonth', 'predSavings'];
         els.forEach(id => { if (document.getElementById(id)) document.getElementById(id).textContent = '--'; });
         return;
     }
@@ -60,9 +65,12 @@ async function renderAIPredictions(entries) {
 
                 renderPredictionChart(entries, currentMonthEst, mlData.prediction);
             }
+        } else {
+            throw new Error("API unsuccessful");
         }
     } catch (err) {
         console.warn("ML Prediction failed, using basic trend fallback", err);
+        clearLoading();
         // Fallback to basic logic if server-side ML fails
         const recent = entries.slice(0, 30);
         const avgDaily = recent.length > 0 ? recent.reduce((s, e) => s + e.total, 0) / recent.length : 0;

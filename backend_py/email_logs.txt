@@ -6,3 +6,6 @@
 [2026-03-06 19:05:14.100368] SUCCESS: Welcome email sent to futurecoders100@gmail.com
 [2026-03-06 19:21:50.946294] SUCCESS: Welcome email sent to kumarbhavishya384@gmail.com
 [2026-03-06 19:23:48.729277] SUCCESS: Welcome email sent to atharvpandey813@gmail.com
+[2026-04-07 13:28:26.025523] SUCCESS: Welcome email sent to bhavishya.0251btcs042@dgu.ac.in
+[2026-04-07 13:35:15.257248] SUCCESS: Welcome email sent to radityasingh100@gmail.com
+[2026-04-07 14:17:43.015212] SUCCESS: Welcome email sent to radityasingh100@gmail.com

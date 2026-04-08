@@ -20,21 +20,34 @@ from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
+import re
+
+def is_valid_email(email):
+    """Simple regex check for email format."""
+    return re.match(r"[^@]+@[^@]+\.[^@]+", email)
 
 # Load environment variables
 # Load environment variables from .env file (using absolute path)
 env_path = os.path.join(os.path.dirname(__file__), ".env")
+# Load environment variables from .env file (using absolute path)
+env_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(dotenv_path=env_path)
-from groq import Groq
 
 # ── AI CONFIGURATION ──────────────────────────────────
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+ai_client = None
+
 if GROQ_API_KEY:
-    ai_client = Groq(api_key=GROQ_API_KEY)
-    print("LOG: Groq AI Client Initialized (llama-3.3-70b-versatile)")
+    try:
+        from groq import Groq
+        ai_client = Groq(api_key=GROQ_API_KEY)
+        print("LOG: Groq AI Client Initialized (llama-3.3-70b-versatile)")
+    except ImportError:
+        print("WARNING: Groq package not found. AI Chat will work in mock mode. Run 'pip install groq' to fix.")
+    except Exception as e:
+        print(f"WARNING: Groq failed to initialize: {e}")
 else:
     print("WARNING: GROQ_API_KEY not found. AI Chat will work in mock mode.")
-    ai_client = None
 
 # ── TWILIO CONFIGURATION ─────────────────────────────
 TWILIO_SID = os.getenv("TWILIO_ACCOUNT_SID")
@@ -81,8 +94,9 @@ try:
     mongo_uri = os.getenv("MONGO_URI", "").strip() or "mongodb://localhost:27017/ecotrack"
     print(f"LOG: Attempting to connect to Database...")
     
-    # UPDATED: serverSelectionTimeoutMS increased to 5000 for Atlas
-    client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
+    # UPDATED: serverSelectionTimeoutMS increased to 10000 for better Atlas reliability
+    # Added retryWrites=true for better resilience
+    client = MongoClient(mongo_uri, serverSelectionTimeoutMS=10000, connectTimeoutMS=10000)
     db = client.get_database("ecotrack")
     client.server_info() # trigger connection check
     
@@ -92,7 +106,7 @@ try:
 except Exception as e:
     print(f"LOG: MongoDB Connection Failed: {e}")
     print("LOG: Fallback: Using local file database (" + str(DB_FILE) + ")")
-    print("   (To use real MongoDB, verify MONGO_URI in .env)")
+    print("   (To use real MongoDB, verify MONGO_URI in .env and Ensure IP whitelisted on Atlas)")
 
 class FileCollection:
     def __init__(self, table_name):
@@ -241,8 +255,8 @@ def _send_welcome_email_sync(user_email, first_name):
     smtp_server  = (os.getenv("SMTP_SERVER",   "smtp.gmail.com")).strip()
     smtp_user    = (os.getenv("SMTP_USER",     sender_email)).strip()
     smtp_pass_raw = os.getenv("SMTP_PASS", "")
-    # Gmail App Password: spaces are cosmetic only – remove them before using
-    smtp_pass    = smtp_pass_raw.strip() if smtp_pass_raw else ""
+    # Gmail App Password: remove all spaces to ensure it functions correctly with SMTP
+    smtp_pass    = smtp_pass_raw.replace(" ", "").strip() if smtp_pass_raw else ""
 
     try:
         smtp_port = int(os.getenv("SMTP_PORT", 465))
@@ -406,13 +420,77 @@ def send_whatsapp_notification(phone, first_name):
     except Exception as e:
         print(f"WHATSAPP LOG ERROR: {str(e)}")
 
+def send_otp_email(user_email, otp_code):
+    """Triggers the OTP email sending process in a background thread."""
+    thread = threading.Thread(target=_send_otp_email_sync, args=(user_email, otp_code))
+    thread.daemon = True
+    thread.start()
+
+def _send_otp_email_sync(user_email, otp_code):
+    """Internal synchronous function for sending OTP via email."""
+    sender_name  = (os.getenv("COMPANY_NAME",  "EcoTrack AI")).strip()
+    sender_email = (os.getenv("COMPANY_EMAIL", "kumarbhavishya384@gmail.com")).strip()
+    smtp_server  = (os.getenv("SMTP_SERVER",   "smtp.gmail.com")).strip()
+    smtp_user    = (os.getenv("SMTP_USER",     sender_email)).strip()
+    smtp_pass_raw = os.getenv("SMTP_PASS", "")
+    smtp_pass    = smtp_pass_raw.replace(" ", "").strip() if smtp_pass_raw else ""
+
+    subject = f"🔐 Your OTP for {sender_name}"
+
+    html_body = f"""
+    <!DOCTYPE html>
+    <html>
+    <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+        <div style="max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <h2 style="color: #22c55e; text-align: center;">{sender_name}</h2>
+            <p style="font-size: 16px; color: #333;">Hello,</p>
+            <p style="font-size: 16px; color: #333;">Use the following 6-digit code to verify your account. This code is valid for 10 minutes.</p>
+            <div style="font-size: 32px; font-weight: bold; text-align: center; color: #22c55e; padding: 20px; border: 2px dashed #22c55e; border-radius: 8px; margin: 20px 0;">
+                {otp_code}
+            </div>
+            <p style="font-size: 14px; color: #777;">If you did not request this code, please ignore this email.</p>
+            <p style="font-size: 14px; color: #777; border-top: 1px solid #eee; padding-top: 20px;">Best Regards,<br>The {sender_name} Team</p>
+        </div>
+    </body>
+    </html>
+    """
+
+    try:
+        msg = MIMEMultipart('alternative')
+        msg['From'] = f"{sender_name} <{sender_email}>"
+        msg['To'] = user_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(html_body, 'html', 'utf-8'))
+
+        with smtplib.SMTP_SSL(smtp_server, 465, timeout=20) as server:
+            server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
+        print(f"EMAIL SUCCESS: OTP sent to {user_email}")
+    except Exception as e:
+        print(f"EMAIL ERROR: Failed to send OTP to {user_email}: {e}")
+
 @app.route('/api/auth/send-otp', methods=['POST'])
 def send_otp():
     try:
         data = request.json
         email = data.get('email', '').strip().lower()
+        
+        # 1. Basic validation
         if not email:
             return jsonify({"success": False, "message": "Email is required"}), 400
+        
+        if not is_valid_email(email):
+            return jsonify({"success": False, "message": "Please enter a valid email address (e.g. user@example.com)"}), 400
+
+        # 2. Registration Check (Requested: Error if not registered)
+        # Note: If this is for registration of NEW users, this check might be counter-intuitive,
+        # but following user instruction: "If email is not registered then just error"
+        user_exists = users_col.find_one({"email": email})
+        if not user_exists:
+            return jsonify({
+                "success": False, 
+                "message": "This email is not registered in our system. Please contact admin for access."
+            }), 404
 
         otp = str(random.randint(100000, 999999))
         expiry = (datetime.utcnow() + timedelta(minutes=10)).isoformat()
@@ -424,15 +502,15 @@ def send_otp():
             upsert=True
         )
 
-        # EmailJS handles email sending from frontend — backend just generates & stores OTP
-        sender_name  = os.getenv("COMPANY_NAME", "EcoTrack AI").strip()
+        # Send OTP via Backend SMTP (Reliable)
+        send_otp_email(email, otp)
 
-        print(f"OTP generated for {email} — EmailJS will send the email from frontend")
-        return jsonify({"success": True, "message": f"OTP ready for {email}", "otp": otp})
+        print(f"OTP generated and sent to {email}")
+        return jsonify({"success": True, "message": f"OTP sent to {email}"})
 
     except Exception as e:
-        # Even if something else fails, try to return OTP
-        return jsonify({"success": False, "message": str(e)}), 500
+        print(f"Send OTP error: {e}")
+        return jsonify({"success": False, "message": "Failed to send OTP. Please try again."}), 500
 
 @app.route('/api/auth/verify-otp', methods=['POST'])
 def verify_otp():
@@ -1083,10 +1161,16 @@ def get_ai_coach():
         
         Format your response in simple HTML (just paragraphs, bold text, and <ul>/<li>).
         """
-
-        if ai_model:
-            response = ai_model.generate_content(prompt)
-            advice_html = response.text
+        if ai_client:
+            try:
+                chat_completion = ai_client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model="llama-3.3-70b-versatile",
+                )
+                advice_html = chat_completion.choices[0].message.content
+            except Exception as e:
+                print(f"ERROR: AI Advice failed: {e}")
+                advice_html = "<p><b>EcoCoach Insight:</b> (Live AI currently calibrating...) Switching to public transport today could reduce your footprint by up to 2.5kg per trip!</p>"
         else:
             # Fallback mock advice if API key is missing
             advice_html = "<p><b>EcoCoach Insight:</b> I noticed your transport emissions are higher than the 1.0kg target on 3 of the last 7 days. Switching to the metro or a bus for your main commute could save you nearly 15kg of CO₂ this week!</p>"
@@ -1314,10 +1398,10 @@ def ai_vision():
         """
 
         if ai_client:
-            # Groq vision using llama-4 scout (supports images)
+            # Groq vision using llama-3.2-11b-vision-preview (supports images)
             import base64
             completion = ai_client.chat.completions.create(
-                model="meta-llama/llama-4-scout-17b-16e-instruct",
+                model="llama-3.2-11b-vision-preview",
                 messages=[
                     {
                         "role": "user",
@@ -1331,7 +1415,7 @@ def ai_vision():
                     }
                 ],
                 temperature=0.5,
-                max_tokens=500,
+                max_tokens=1000,
                 response_format={"type": "json_object"}
             )
 

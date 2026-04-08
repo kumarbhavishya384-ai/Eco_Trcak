@@ -317,46 +317,50 @@ async function handleFinalReset(e) {
 }
 
 async function sendOTP() {
-    const email     = document.getElementById('regEmail').value.trim();
-    const firstName = document.getElementById('regFirstName')?.value.trim() || 'User';
-
-    if (!email) {
-        showGlobalToast("Please enter your email address first.");
-        return;
-    }
-
-    const btn       = document.getElementById('sendOTPBtn');
-    btn.disabled    = true;
-    btn.textContent = "Sending...";
+    const email = document.getElementById('regEmail').value.trim();
+    const btn = document.getElementById('sendOTPBtn');
+    const errEl = document.getElementById('regError');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     try {
+        if (!email) {
+            const msg = "Please enter your email address first.";
+            showGlobalToast(msg);
+            if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+            return;
+        }
+
+        if (!emailPattern.test(email)) {
+            const msg = "❌ Please enter a valid email address (e.g., user@example.com)";
+            showGlobalToast(msg);
+            if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+            return;
+        }
+
+        // Clear error if valid
+        if (errEl) errEl.style.display = 'none';
+
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+
+        // Now calling backend which handles SMTP directly
         const data = await apiFetch('/auth/send-otp', {
             method: 'POST',
-            body  : JSON.stringify({ email })
+            body: JSON.stringify({ email })
         });
 
-        if (!data.success) throw new Error(data.message || 'Backend failed to generate OTP');
+        if (!data.success) throw new Error(data.message || 'Backend failed to send OTP');
 
-        const otpCode = data.otp;
-        if (!otpCode) throw new Error('No OTP received from server');
-
-        if (typeof emailjs === 'undefined') throw new Error('EmailJS SDK not loaded. Please refresh.');
-
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-
-        await emailjs.send(
-            EMAILJS_SERVICE_ID,
-            EMAILJS_OTP_TEMPLATE,
-            { to_email: email, to_name: firstName, otp: otpCode, email: email },
-            EMAILJS_PUBLIC_KEY
-        );
-
+        // UI update
         document.getElementById('otpGroup').style.display = 'flex';
         btn.textContent = "Resend OTP";
         showGlobalToast("✅ OTP sent to " + email + " — check your inbox!");
+
     } catch (err) {
         console.error('sendOTP error:', err);
-        showGlobalToast("Error: " + (err.text || err.message || 'Something went wrong'));
+        const errorMsg = (err.message || 'Something went wrong');
+        showGlobalToast("Error: " + errorMsg);
+        if (errEl) { errEl.textContent = errorMsg; errEl.style.display = 'block'; }
         btn.textContent = "Send OTP";
     } finally {
         btn.disabled = false;
@@ -446,7 +450,7 @@ function populateSidebar(user) {
     const scoreEl  = document.getElementById('sidebarScore');
     if (avatarEl) avatarEl.textContent = (user.firstName[0] + (user.lastName ? user.lastName[0] : '')).toUpperCase();
     if (nameEl)   nameEl.textContent   = `${user.firstName} ${user.lastName || ''}`;
-    if (scoreEl)  scoreEl.textContent  = `EcoScore: ${user.ecoScore || '--'}`;
+    if (scoreEl)  scoreEl.textContent  = `EcoScore: ${user.ecoScore !== undefined ? user.ecoScore : '--'}`;
 }
 
 // ── Data Handlers ─────────────────────────────────────
@@ -462,7 +466,7 @@ async function saveUserEntry(entry) {
     });
     const user = getCurrentUser();
     if (user) {
-        user.ecoScore = data.userEcoScore;
+        user.ecoScore = data.ecoScore; // FIXED: Backend returns 'ecoScore'
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
         populateSidebar(user);
     }

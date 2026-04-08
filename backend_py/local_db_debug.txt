@@ -9,3 +9,7 @@
 [2026-03-05 12:41:43.495323] Login Attempt: 'kumarbhavishya384@gmail.com' -> Success!
 [2026-03-06 19:14:16.739395] Login Attempt: 'futurecoders100@gmail.com' -> Success!
 [2026-03-06 19:17:11.718290] Login Attempt: 'kumarbhavishya384@gmail.com' -> User NOT found.
+[2026-04-07 13:31:24.780124] Login Attempt: 'bhavishya.0251btcs042@dgu.ac.in' -> Password mismatch. DB Email: 'bhavishya.0251btcs042@dgu.ac.in'
+[2026-04-07 13:33:43.811090] Login Attempt: 'bhavishya.0251btcs042@dgu.ac.in' -> Password mismatch. DB Email: 'bhavishya.0251btcs042@dgu.ac.in'
+[2026-04-07 14:34:41.074081] Login Attempt: 'radityasingh100@gmail.com' -> Success!
+[2026-04-07 14:50:04.817480] Login Attempt: 'radityasingh100@gmail.com' -> User NOT found.
