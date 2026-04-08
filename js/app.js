@@ -1032,7 +1032,7 @@ const ALL_CHALLENGES = [
         tips: [
             '🗺️ Plan your metro/bus route the night before.',
             '🚲 Can you cycle the last mile from the station?',
-            '⏰ ${t('btn_leave')} 10 minutes early to catch the bus comfortably.',
+            `⏰ ${t('btn_leave')} 10 minutes early to catch the bus comfortably.`,
             '📱 Download your city\'s transit app for live updates.',
             '🏆 Last day! You\'ve saved nearly 20 kg CO₂ this week!'
         ]
