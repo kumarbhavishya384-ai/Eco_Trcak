@@ -64,17 +64,18 @@ if TWILIO_SID and TWILIO_TOKEN:
 
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
-# Allow both localhost and 127.0.0.1 to avoid common CORS networking issues
+# ── CORS CONFIGURATION ────────────────────────────────
+# Allow frontend origins for local development and production
 CORS(app, resources={r"/api/*": {
     "origins": [
-        "http://localhost:8080",
-        "http://127.0.0.1:8080",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
+        "http://localhost:8080", "http://127.0.0.1:8080",
+        "http://localhost:3000", "http://127.0.0.1:3000",
+        "http://localhost:5173", "http://127.0.0.1:5173", # Vite
+        "http://localhost:5500", "http://127.0.0.1:5500", # Live Server
         "https://inspiring-dango-b3bb97.netlify.app",
         "https://web-production-c50ca.up.railway.app",
-        re.compile(r"https://.*\.up\.railway\.app"),  # All Railway subdomains
-        re.compile(r"https://.*\.netlify\.app"),       # All Netlify subdomains
+        re.compile(r"https://.*\.up\.railway\.app"),
+        re.compile(r"https://.*\.netlify\.app")
     ],
     "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization"],
@@ -492,15 +493,17 @@ def send_otp():
         if not is_valid_email(email):
             return jsonify({"success": False, "message": "Please enter a valid email address (e.g. user@example.com)"}), 400
 
-        # 2. Registration Check (Requested: Error if not registered)
-        # Note: If this is for registration of NEW users, this check might be counter-intuitive,
-        # but following user instruction: "If email is not registered then just error"
-        user_exists = users_col.find_one({"email": email})
-        if not user_exists:
-            return jsonify({
-                "success": False, 
-                "message": "This email is not registered in our system. Please contact admin for access."
-            }), 404
+        # 2. Registration Check removed to allow NEW user registration.
+        # Support for both registration and forgot password flows.
+        
+        otp = str(random.randint(100000, 999999))
+        expiry = (datetime.utcnow() + timedelta(minutes=10)).isoformat()
+
+        # Log OTP request
+        try:
+            with open(os.path.join(os.path.dirname(__file__), 'email_logs.txt'), 'a') as f:
+                f.write(f"[{datetime.now()}] OTP REQUEST: {email} (Code generated)\n")
+        except: pass
 
         otp = str(random.randint(100000, 999999))
         expiry = (datetime.utcnow() + timedelta(minutes=10)).isoformat()
