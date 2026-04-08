@@ -15,7 +15,6 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import threading
-from twilio.rest import Client
 from datetime import datetime, timedelta
 import pandas as pd
 import numpy as np
@@ -48,19 +47,6 @@ if GROQ_API_KEY:
         print(f"WARNING: Groq failed to initialize: {e}")
 else:
     print("WARNING: GROQ_API_KEY not found. AI Chat will work in mock mode.")
-
-# ── TWILIO CONFIGURATION ─────────────────────────────
-TWILIO_SID = os.getenv("TWILIO_ACCOUNT_SID")
-TWILIO_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
-TWILIO_PHONE = os.getenv("TWILIO_PHONE_NUMBER")
-
-twilio_client = None
-if TWILIO_SID and TWILIO_TOKEN:
-    try:
-        twilio_client = Client(TWILIO_SID, TWILIO_TOKEN)
-        print("LOG: Twilio Client Initialized")
-    except Exception as e:
-        print(f"WARNING: Twilio failed to initialize: {e}")
 
 frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
@@ -426,22 +412,6 @@ The {sender_name} Team
             f.write(error_msg)
         print(f"EMAIL UNEXPECTED ERROR for {user_email}: {str(e)}")
 
-def send_whatsapp_notification(phone, first_name):
-    """Logs a WhatsApp notification request. (Real automation requires Twilio/API)"""
-    # Use absolute path for consistency
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    log_path = os.path.join(base_dir, "whatsapp_logs.txt")
-    
-    msg = f"Hi {first_name}, 🌿 Welcome to EcoTrack AI! Your journey to Net Zero starts now. Track your daily footprint and save the planet with us. 🌍"
-    
-    log_entry = f"\n[{datetime.now()}] WHATSAPP PENDING TO: {phone}\nMessage: {msg}\n{'-'*50}\n"
-    try:
-        with open(log_path, "a", encoding='utf-8') as f:
-            f.write(log_entry)
-        print("WHATSAPP: Registration alert logged for " + str(phone))
-    except Exception as e:
-        print(f"WHATSAPP LOG ERROR: {str(e)}")
-
 def send_otp_email(user_email, otp_code):
     """Triggers the OTP email sending process in a background thread."""
     thread = threading.Thread(target=_send_otp_email_sync, args=(user_email, otp_code))
@@ -601,8 +571,6 @@ def register():
         
         # Trigger Welcome Notifications
         send_welcome_email(email, user_doc["firstName"])
-        if user_doc["phone"]:
-            send_whatsapp_notification(user_doc["phone"], user_doc["firstName"])
         
         # seed_demo_data(user_id if not use_mongodb else ObjectId(user_id))
         
