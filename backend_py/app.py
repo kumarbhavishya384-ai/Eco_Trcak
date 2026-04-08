@@ -496,11 +496,13 @@ def send_otp():
             upsert=True
         )
 
-        # Send OTP via Backend SMTP (Reliable)
-        send_otp_email(email, otp)
-
-        print(f"OTP generated and sent to {email}")
-        return jsonify({"success": True, "message": f"OTP sent to {email}"})
+        # We now return the OTP to the frontend so it can be sent via EmailJS as requested.
+        print(f"OTP generated for {email} (Returning to frontend for EmailJS)")
+        return jsonify({
+            "success": True, 
+            "message": "OTP generated successfully", 
+            "otp": otp # Returning the code for EmailJS to pick up
+        })
 
     except Exception as e:
         print(f"Send OTP error: {e}")
@@ -569,8 +571,8 @@ def register():
         res = users_col.insert_one(user_doc)
         user_id = str(res.inserted_id)
         
-        # Trigger Welcome Notifications
-        send_welcome_email(email, user_doc["firstName"])
+        # Note: Welcome email is now handled by the Frontend using EmailJS.
+        # This keeps all delivery logic in one place as requested.
         
         # seed_demo_data(user_id if not use_mongodb else ObjectId(user_id))
         

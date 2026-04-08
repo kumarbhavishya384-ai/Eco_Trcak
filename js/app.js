@@ -362,7 +362,20 @@ async function sendOTP() {
             body: JSON.stringify({ email })
         });
 
-        if (!data.success) throw new Error(data.message || 'Backend failed to send OTP');
+        if (!data.success) throw new Error(data.message || 'Backend failed to generate OTP');
+
+        // ── SEND VIA EMAILJS ────────────────────────────────
+        // Using the public keys we just fetched from the backend config
+        if (typeof emailjs !== 'undefined') {
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_OTP_TEMPLATE, {
+                to_email: email,
+                otp_code: data.otp, // The code returned from backend
+                company_name: "EcoTrack AI"
+            });
+            console.log("OTP dispatched via EmailJS 📩");
+        } else {
+            throw new Error("Email Service not initialized. Please refresh.");
+        }
 
         // UI update
         document.getElementById('otpGroup').style.display = 'flex';
