@@ -35,12 +35,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         try { updateLevelProgress(allEntries); } catch (e) { console.error("Score Error:", e); }
         try { updateEmissionDisplay(); } catch (e) { console.error("Emissions Error:", e); }
         
-        // Safety Delay for Chart.js & Canvas mounting
-        setTimeout(() => {
-            console.log("LOG: Executing Chart Renders after safety delay...");
-            try { renderTrendChart(allEntries, 'week'); } catch (e) { console.error("Chart Error:", e); }
-            try { renderDonutChart(allEntries); } catch (e) { console.error("Donut Error:", e); }
-        }, 300);
+        // Advanced Retry Mechanism for Chart.js
+        let chartRetries = 0;
+        const tryCharts = () => {
+            if (typeof Chart !== 'undefined' && document.getElementById('trendChart')) {
+                console.log("LOG: Chart.js ready, rendering...");
+                try { renderTrendChart(allEntries, 'week'); } catch (e) { console.error("Chart Error:", e); }
+                try { renderDonutChart(allEntries); } catch (e) { console.error("Donut Error:", e); }
+            } else if (chartRetries < 5) {
+                chartRetries++;
+                console.warn(`LOG: Chart.js not ready, retry ${chartRetries}/5 in 500ms...`);
+                setTimeout(tryCharts, 500);
+            } else {
+                console.error("LOG: Chart.js failed to load after 5 retries.");
+            }
+        };
+        tryCharts();
 
         try { renderDashboardRecs(); } catch (e) { console.error("Recs Error:", e); }
         try { renderRecentActivity(allEntries); } catch (e) { console.error("Activity Error:", e); }
