@@ -56,12 +56,6 @@
       <a href="#ecoscore" data-i18n="l_eco">EcoScore</a>
     </div>
     <div class="nav-actions">
-      <div class="lang-toggle" style="margin-right: 15px; display: flex; gap: 5px; align-items: center;">
-        <button class="lang-btn" onclick="switchLanguage('en')" data-lang="en" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">EN</button>
-        <button class="lang-btn" onclick="switchLanguage('hi')" data-lang="hi" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">HI</button>
-        <button class="lang-btn" onclick="switchLanguage('bn')" data-lang="bn" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">BN</button>
-        <button class="lang-btn" onclick="switchLanguage('ta')" data-lang="ta" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">TA</button>
-      </div>
       <button class="btn-ghost" onclick="openModal('loginModal')" data-i18n="l_signin">Sign In</button>
       <button class="btn-primary-glow" onclick="openModal('registerModal')" data-i18n="l_getstart">Get Started Free</button>
     </div>
@@ -366,17 +360,6 @@
             <div class="strength-bar"></div>
             <div class="strength-bar"></div>
           </div>
-        </div>
-        <div class="form-group">
-          <label>Location</label>
-          <select id="regLocation">
-            <option value="Delhi">Delhi</option>
-            <option value="Mumbai">Mumbai</option>
-            <option value="Bangalore">Bangalore</option>
-            <option value="Chennai">Chennai</option>
-            <option value="Kolkata">Kolkata</option>
-            <option value="Other">Other</option>
-          </select>
         </div>
         <div id="regError" class="form-error" style="display:none"></div>
         <button type="submit" class="btn-form-submit">Create My Account &#128640;</button>

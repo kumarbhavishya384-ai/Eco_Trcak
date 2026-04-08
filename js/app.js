@@ -82,6 +82,48 @@ function getZoneFromState(stateName) {
     return null;
 }
 
+let detectedRegLocation = null;
+let detectedZoneData = null;
+
+// Auto-detect location for registration (Guest access)
+async function initRegistrationLocationDetection() {
+    console.log("📍 Initializing registration location detection...");
+    try {
+        // 1. Browser Geolocation (Most precise)
+        const pos = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 6000 });
+        });
+        const { latitude, longitude } = pos.coords;
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+        const data = await res.json();
+        const state = data.address.state || data.address.state_district || "Delhi";
+        
+        detectedRegLocation = state;
+        detectedZoneData = getZoneFromState(state);
+        console.log(`📍 Reg Location Detected (Geo): ${state}`);
+    } catch (err) {
+        console.warn("📍 Geolocation declined/failed, trying IP fallback...", err);
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            if (data.region) {
+                detectedRegLocation = data.region;
+                detectedZoneData = getZoneFromState(data.region);
+                console.log(`📍 Reg Location Detected (IP): ${data.region}`);
+            }
+        } catch (ipErr) {
+            console.error("📍 Final fallback to Delhi");
+            detectedRegLocation = "Delhi";
+            detectedZoneData = getZoneFromState("Delhi");
+        }
+    }
+}
+
+// Start detection immediately if on landing page
+if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('landing.html')) {
+    initRegistrationLocationDetection();
+}
+
 async function detectUserZone(force = false) {
     const user = getCurrentUser();
     if (!user) return;
@@ -399,7 +441,6 @@ async function handleRegister(e) {
     const lastName  = document.getElementById('regLastName').value.trim();
     const email     = document.getElementById('regEmail').value.trim();
     const password  = document.getElementById('regPassword').value;
-    const location  = document.getElementById('regLocation').value;
     const phone     = document.getElementById('regPhone').value.trim();
     const otpInput  = document.getElementById('regOTP').value.trim();
     const btn       = e.target.querySelector('button');
@@ -418,15 +459,19 @@ async function handleRegister(e) {
 
         btn.textContent = 'Creating Account...';
 
-        const zoneData = getZoneFromState(location);
+        // Use detected location or fallback to Delhi
+        const finalLocation = detectedRegLocation || "Delhi";
+        const finalZone = detectedZoneData || getZoneFromState("Delhi");
+
         const data = await apiFetch('/auth/register', {
             method: 'POST',
             body  : JSON.stringify({ 
-                firstName, lastName, email, phone, password, location,
-                state: location,
-                zone: zoneData ? zoneData.zone : null,
-                zone_ef: zoneData ? zoneData.ef : 0.82,
-                zone_avg: zoneData ? zoneData.avg : 5.2
+                firstName, lastName, email, phone, password, 
+                location: finalLocation,
+                state: finalLocation,
+                zone: finalZone ? finalZone.zone : null,
+                zone_ef: finalZone ? finalZone.ef : 0.82,
+                zone_avg: finalZone ? finalZone.avg : 5.2
             })
         });
 
