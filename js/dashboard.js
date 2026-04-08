@@ -10,6 +10,10 @@ if (typeof ALL_CHALLENGES === 'undefined') {
     window.ALL_CHALLENGES = [];
 }
 
+let allEntries = [];
+let trendChartInstance = null;
+let donutChartInstance = null;
+
 document.addEventListener('DOMContentLoaded', async () => {
     const user = getCurrentUser();
     if (!user) return;
