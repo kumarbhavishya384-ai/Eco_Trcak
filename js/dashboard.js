@@ -97,7 +97,7 @@ function updateLevelProgress(entries) {
     const score = user.ecoScore || (entries.length > 0 ? entries.reduce((s, e) => s + (e.ecoScore || 0), 0) : 0);
     
     let levelName = "Neophyte";
-    let levelIcon = "🌱";
+    let levelIcon = "\u{1F331}";
     let nextLevelName = "Intermediate";
     let nextLevelTarget = 1000;
     let progress = 0;
@@ -110,7 +110,7 @@ function updateLevelProgress(entries) {
         progress = ((score - 5000) / 5000) * 100;
     } else if (score >= 1000) {
         levelName = "Intermediate";
-        levelIcon = "🚀";
+        levelIcon = "\u{1F680}";
         nextLevelName = "Elite";
         nextLevelTarget = 5000;
         progress = ((score - 1000) / 4000) * 100;
@@ -142,7 +142,7 @@ function updateLevelProgress(entries) {
     // Update Status Labels based on score
     if (scoreTierBadge) {
         const ratingKey = score > 1000 ? "perf_exc" : (score > 500 ? "perf_good" : "perf_neo");
-        const ratingIcon = score > 1000 ? "ðŸ †" : (score > 500 ? "ðŸš€" : "ðŸŒ±");
+        const ratingIcon = score > 1000 ? "\u{1F3C6}" : (score > 500 ? "\u{1F680}" : "\u{1F331}");
         scoreTierBadge.textContent = t(ratingKey) + " " + ratingIcon;
         if (score > 0) scoreTierBadge.style.background = 'rgba(0, 212, 170, 0.15)';
     }
@@ -580,7 +580,7 @@ function renderRecentActivity(entries) {
     el.innerHTML = recent.map(e => `
       <div class="activity-item" style="display:flex; align-items:center; justify-content:space-between; padding:0.85rem 1rem; border-bottom:1px solid rgba(255,255,255,0.03);">
         <div style="display:flex; align-items:center; gap:1rem;">
-          <div style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; font-size:1.1rem;">ðŸ“</div>
+          <div style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; font-size:1.1rem;">\u{1F4CA}</div>
           <div>
             <div style="font-size:0.875rem; font-weight:600;">${t('log_data')}</div>
             <div style="font-size:0.72rem; color:var(--text-muted);">${formatDate(e.date)}</div>

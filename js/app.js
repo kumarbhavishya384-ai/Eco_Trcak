@@ -450,7 +450,7 @@ async function handleRegister(e) {
         errEl.textContent   = err.message;
         errEl.style.display = 'block';
         btn.disabled        = false;
-        btn.textContent     = 'Create My Account 🚀';
+        btn.textContent     = 'Create My Account \u{1F680}';
     }
 }
 
@@ -602,7 +602,7 @@ function updateEmissionFactors(user) {
     if (user && user.zone_ef) {
         EMISSION_FACTORS.electricity.gridFactor = user.zone_ef;
         EMISSION_FACTORS.transport.electric = user.zone_ef; // Assuming electric cars use grid factor
-        console.log(`💡 EMISSION FACTORS UPDATED for zone ${user.zone}: ${user.zone_ef} kg/kWh`);
+        console.log(`\u{1F4A1} EMISSION FACTORS UPDATED for zone ${user.zone}: ${user.zone_ef} kg/kWh`);
     } else {
         // Clear or default
         EMISSION_FACTORS.electricity.gridFactor = 0.82;
@@ -620,7 +620,7 @@ function updateEmissionFactors(user) {
 const REMINDER_DEFAULTS = {
     enabled    : false,
     time       : '20:00',
-    message    : "Don't forget to log your carbon footprint today! 🌍",
+    message    : "Don't forget to log your carbon footprint today! \u{1F30D}",
     permission : 'default',
     lastFired  : null
 };
@@ -741,7 +741,7 @@ async function enableDailyReminder(time, message) {
 
         scheduleReminderLoop();              // ✅ Keep fallback running too
 
-        showGlobalToast('🔔 Daily reminder set for ' + formatTime12h(s.time) + '!');
+        showGlobalToast('\u{1F514} Daily reminder set for ' + formatTime12h(s.time) + '!');
         return true;
 
     } else if (perm === 'denied') {
@@ -822,15 +822,15 @@ function scheduleReminderLoop() {
 // ── Fire reminder via postMessage to Service Worker ───
 function fireReminderFallback(settings) {
     const msgs = [
-        '🌱 Time to log your carbon footprint! Every entry helps the planet.',
-        '🌍 Daily check-in: How was your footprint today? Log it now!',
+        '\u{1F331} Time to log your carbon footprint! Every entry helps the planet.',
+        '\u{1F30D} Daily check-in: How was your footprint today? Log it now!',
         '♻️ Small steps matter! Log today\'s emissions and track your progress.',
-        '🌿 Your EcoScore is waiting! Log today\'s activities.',
-        '📊 Keep your streak alive — log your carbon footprint for today!'
+        '\u{1F33F} Your EcoScore is waiting! Log today\'s activities.',
+        '\u{1F4CA} Keep your streak alive — log your carbon footprint for today!'
     ];
     const body = settings.message || msgs[Math.floor(Math.random() * msgs.length)];
 
-    sendPushOrNotification('EcoTrack AI 🌿', body, 'ecotrack-daily-reminder');
+    sendPushOrNotification('EcoTrack AI \u{1F33F}', body, 'ecotrack-daily-reminder');
 
     if (window.location.pathname.includes('dashboard')) {
         showReminderBanner(body);
@@ -866,12 +866,12 @@ function showReminderBanner(message) {
     b.id    = 'ecoReminderBanner';
     b.innerHTML = `<div style="position:fixed;top:80px;right:1.5rem;z-index:9999;background:linear-gradient(135deg,rgba(0,212,170,0.15),rgba(10,15,30,0.95));border:1px solid rgba(0,212,170,0.4);border-radius:16px;padding:1rem 1.25rem;max-width:320px;width:calc(100vw - 3rem);box-shadow:0 8px 40px rgba(0,0,0,0.5);backdrop-filter:blur(20px);animation:slideInRight 0.4s ease;font-family:'Inter',sans-serif;">
         <div style="display:flex;align-items:flex-start;gap:.75rem;">
-            <span style="font-size:1.6rem;flex-shrink:0;">🔔</span>
+            <span style="font-size:1.6rem;flex-shrink:0;">\u{1F514}</span>
             <div style="flex:1;min-width:0;">
                 <div style="font-weight:700;font-size:.9rem;color:#F0F6FF;margin-bottom:.3rem;">Daily Reminder</div>
                 <div style="font-size:.82rem;color:#8B9BB4;line-height:1.5;">${message}</div>
                 <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;">
-                    <button onclick="window.location.href='calculator.html'" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;">📊 Log Now</button>
+                    <button onclick="window.location.href='calculator.html'" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;">\u{1F4CA} Log Now</button>
                     <button onclick="document.getElementById('ecoReminderBanner').remove()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.4rem .9rem;border-radius:8px;font-size:.78rem;cursor:pointer;">Later</button>
                 </div>
             </div>
@@ -898,7 +898,7 @@ async function openReminderSettings() {
         <div style="background:linear-gradient(135deg,rgba(10,20,40,.98),rgba(13,21,38,.98));border:1px solid rgba(0,212,170,.25);border-radius:20px;padding:2rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.6);font-family:'Inter',sans-serif;max-height:90vh;overflow-y:auto;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
                 <div style="display:flex;align-items:center;gap:.75rem;">
-                    <span style="font-size:1.8rem;">🔔</span>
+                    <span style="font-size:1.8rem;">\u{1F514}</span>
                     <div>
                         <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;color:#F0F6FF;margin:0;">Daily Reminder</h3>
                         <p style="font-size:.78rem;color:#8B9BB4;margin:0;">Get notified to log your footprint</p>
@@ -924,7 +924,7 @@ async function openReminderSettings() {
                 <div style="display:flex;gap:.5rem;flex-wrap:wrap;">${presets.map(([t, l]) => `<button onclick="document.getElementById('reminderTimeInput').value='${t}'" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.35rem .75rem;border-radius:8px;font-size:.75rem;cursor:pointer;font-family:'Inter',sans-serif;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='#8B9BB4'">${l}</button>`).join('')}</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:.75rem;">
-                <button onclick="handleSaveReminder()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.85rem;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🔔 Enable Daily Reminder</button>
+                <button onclick="handleSaveReminder()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.85rem;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">\u{1F514} Enable Daily Reminder</button>
                 ${isEnabled ? `<button onclick="handleDisableReminder()" style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:rgba(255,107,107,.8);padding:.7rem;border-radius:12px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🔕 Disable Reminder</button>` : ''}
                 <button onclick="handleTestReminder()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.7rem;border-radius:12px;font-size:.85rem;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🧪 Send Test Notification</button>
             </div>
@@ -1034,7 +1034,7 @@ const ALL_CHALLENGES = [
             '🚲 Can you cycle the last mile from the station?',
             `⏰ ${t('btn_leave')} 10 minutes early to catch the bus comfortably.`,
             '📱 Download your city\'s transit app for live updates.',
-            '🏆 Last day! You\'ve saved nearly 20 kg CO₂ this week!'
+            '\u{1F3C6} Last day! You\'ve saved nearly 20 kg CO₂ this week!'
         ]
     },
     {
@@ -1043,7 +1043,7 @@ const ALL_CHALLENGES = [
         category: 'electricity', difficulty: 'Hard', points: 250, days: 7, co2Saved: 25,
         tips: [
             '🪟 Open windows early morning for cool air.',
-            '🌿 Keep curtains closed during peak afternoon heat.',
+            '\u{1F33F} Keep curtains closed during peak afternoon heat.',
             '💧 A wet towel on your neck keeps you cool!',
             '🌙 Nights are cooler — use a fan instead of AC.',
             '🏠 Ceiling fans use 90% less electricity than AC.',
@@ -1069,7 +1069,7 @@ const ALL_CHALLENGES = [
             '🍲 Pressure cookers save 70% energy vs open pots.',
             '♨️ Batch-cook dal or rice for multiple meals.',
             '🌡️ Use lids on pots to retain heat.',
-            '⚡ Microwaves use 80% less energy for reheating.',
+            's Microwaves use 80% less energy for reheating.',
             '🎉 Challenge complete! Great job reducing kitchen emissions!'
         ]
     }
@@ -1113,7 +1113,7 @@ async function joinChallengeWithPermission(id) {
     };
 
     saveJoinedChallenges(joined);
-    showGlobalToast(`🎯 Joined "${challenge.title}"! Daily tips incoming 🔔`);
+    showGlobalToast(`\u{1F3AF} Joined "${challenge.title}"! Daily tips incoming \u{1F514}`);
     _fireChallengeNotif(challenge, joined[id]);
     scheduleChallengeReminders();
     renderChallengesWithNotifications();
@@ -1134,8 +1134,8 @@ function _fireChallengeNotif(challenge, state) {
     const left = challenge.days - day;
 
     const title = day === 0
-        ? `🎯 Challenge Started: ${challenge.title}!`
-        : left <= 1 ? `🏆 Final Day: ${challenge.title}` : `📅 Day ${day + 1}/${challenge.days}: ${challenge.title}`;
+        ? `\u{1F3AF} Challenge Started: ${challenge.title}!`
+        : left <= 1 ? `\u{1F3C6} Final Day: ${challenge.title}` : `📅 Day ${day + 1}/${challenge.days}: ${challenge.title}`;
 
     const body = `${tip} — ${left} day${left !== 1 ? 's' : ''} left, ${challenge.co2Saved}kg CO₂ to save!`;
 
@@ -1181,7 +1181,7 @@ function _showChallengeBanner(challenge, title, tip, dayNum, totalDays) {
 
 function _fireChallengeComplete(challenge) {
     sendPushOrNotification(
-        `🏆 Challenge Complete: ${challenge.title}!`,
+        `\u{1F3C6} Challenge Complete: ${challenge.title}!`,
         `Amazing! You saved ${challenge.co2Saved}kg CO₂ and earned +${challenge.points} points! 🎉`,
         `challenge-complete-${challenge.id}`
     );
@@ -1189,19 +1189,19 @@ function _fireChallengeComplete(challenge) {
     const overlay = document.createElement('div');
     overlay.innerHTML = `<div style="position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);z-index:10001;display:flex;align-items:center;justify-content:center;padding:1rem;" onclick="this.remove()">
         <div style="background:linear-gradient(135deg,rgba(10,20,40,.98),rgba(13,21,38,.98));border:1px solid rgba(0,212,170,.4);border-radius:24px;padding:2rem;max-width:360px;width:calc(100vw - 2rem);box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(0,212,170,.2);text-align:center;font-family:'Inter',sans-serif;animation:fadeIn .3s ease;" onclick="event.stopPropagation()">
-            <div style="font-size:3rem;margin-bottom:.75rem;">🏆</div>
+            <div style="font-size:3rem;margin-bottom:.75rem;">\u{1F3C6}</div>
             <h2 style="font-family:'Space Grotesk',sans-serif;color:#F0F6FF;margin-bottom:.5rem;">Challenge Complete!</h2>
             <p style="color:var(--primary);font-size:1.1rem;font-weight:700;margin-bottom:.5rem;">${challenge.icon} ${challenge.title}</p>
             <p style="color:#8B9BB4;font-size:.88rem;margin-bottom:1.25rem;line-height:1.5;">You saved <strong style="color:var(--primary)">${challenge.co2Saved} kg CO₂</strong> and earned <strong style="color:#FBBF24">+${challenge.points} points</strong>!</p>
             <div style="height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin-bottom:1.25rem;"></div>
             <div style="display:flex;gap:.75rem;justify-content:center;">
-                <button onclick="this.closest('[onclick]').remove()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.7rem 1.5rem;border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;">🎯 Join Another</button>
+                <button onclick="this.closest('[onclick]').remove()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.7rem 1.5rem;border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;">\u{1F3AF} Join Another</button>
                 <button onclick="this.closest('[onclick]').remove()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.7rem 1.25rem;border-radius:12px;font-size:.9rem;cursor:pointer;">Close</button>
             </div>
         </div>
     </div>`;
     document.body.appendChild(overlay);
-    showGlobalToast(`🏆 ${challenge.title} complete! +${challenge.points} pts`);
+    showGlobalToast(`\u{1F3C6} ${challenge.title} complete! +${challenge.points} pts`);
 }
 
 let _challengeInterval = null;
@@ -1274,7 +1274,7 @@ function renderChallengesWithNotifications(containerId) {
                         <span style="font-size:.7rem;color:#4A6080;">· ${ch.days} ${t('days')} · ${ch.co2Saved}kg CO₂</span>
                     </div>
                 </div>
-                ${isDone ? '<span style="font-size:1.2rem;" title="Completed">🏆</span>' : ''}
+                ${isDone ? '<span style="font-size:1.2rem;" title="Completed">\u{1F3C6}</span>' : ''}
             </div>
             <p style="font-size:.8rem;color:#8B9BB4;line-height:1.5;margin-bottom:.75rem;">${t('ch_desc_' + ch.id)}</p>
             ${isJoined ? `<div style="margin-bottom:.75rem;">
@@ -1286,16 +1286,16 @@ function renderChallengesWithNotifications(containerId) {
             <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
                 <span style="font-size:.75rem;color:#FBBF24;font-weight:600;">🌟 +${ch.points} ${t('pts')}</span>
                 <span style="font-size:.75rem;color:#4A6080;">·</span>
-                <span style="font-size:.75rem;color:var(--primary);font-weight:600;">🌍 ${ch.co2Saved}${t('kg_saved')}</span>
+                <span style="font-size:.75rem;color:var(--primary);font-weight:600;">\u{1F30D} ${ch.co2Saved}${t('kg_saved')}</span>
             </div>
             ${isDone
                 ? `<div style="background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">✅ Completed!</div>`
                 : isJoined
                     ? `<div style="display:flex;gap:.5rem;">
-                        <div style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">🔔 Active</div>
+                        <div style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">\u{1F514} Active</div>
                         <button onclick="leaveChallengeById('${ch.id}')" style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);border-radius:10px;padding:.5rem .75rem;font-size:.78rem;color:rgba(255,107,107,.7);cursor:pointer;">${t('btn_leave')}</button>
                     </div>`
-                    : `<button onclick="joinChallengeWithPermission('${ch.id}')" style="width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.6rem;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(0,212,170,.2);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">🎯 Join Challenge</button>`
+                    : `<button onclick="joinChallengeWithPermission('${ch.id}')" style="width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.6rem;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(0,212,170,.2);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">\u{1F3AF} Join Challenge</button>`
             }
         </div>`;
     }).join('');
@@ -1332,7 +1332,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function showGlobalToast(msg) {
     const toast     = document.createElement('div');
     toast.className = 'toast-notification';
-    toast.innerHTML = `<span style="font-size:1.2rem">🌿</span><span style="font-size:0.9rem">${msg}</span>`;
+    toast.innerHTML = `<span style="font-size:1.2rem">\u{1F33F}</span><span style="font-size:0.9rem">${msg}</span>`;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3500);
 }

@@ -31,7 +31,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item" id="nav-dashboard"><span class="nav-icon">📊</span><span
+            <a href="dashboard.html" class="nav-item" id="nav-dashboard"><span class="nav-icon">&#128202;</span><span
                     class="nav-label" data-i18n="nav_dashboard">Dashboard</span></a>
             <a href="report.html" class="nav-item" id="nav-report">
                 <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
@@ -39,11 +39,11 @@
 
             <a href="calculator.html" class="nav-item active" id="nav-calculator"><span class="nav-icon">🧮</span><span
                     class="nav-label" data-i18n="nav_calculator">Calculator</span></a>
-            <a href="history.html" class="nav-item" id="nav-history"><span class="nav-icon">📅</span><span
+            <a href="history.html" class="nav-item" id="nav-history"><span class="nav-icon">&#128197;</span><span
                     class="nav-label" data-i18n="nav_history">History</span></a>
             <a href="recommendations.html" class="nav-item" id="nav-recommendations"><span
                     class="nav-icon">💡</span><span class="nav-label" data-i18n="nav_insights">AI Insights</span></a>
-            <a href="leaderboard.html" class="nav-item" id="nav-leaderboard"><span class="nav-icon">🏆</span><span
+            <a href="leaderboard.html" class="nav-item" id="nav-leaderboard"><span class="nav-icon">&#127942;</span><span
                     class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span></a>
             <a href="offset.html" class="nav-item" id="nav-offset"><span class="nav-icon">🌲</span><span
                     class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
@@ -84,13 +84,13 @@
             <!-- Category Tabs -->
             <div class="calc-tabs">
                 <button class="calc-tab active" data-tab="transport" onclick="switchTab('transport', this)">
-                    <span>🚗</span> Transport
+                    <span>&#128663;</span> Transport
                 </button>
                 <button class="calc-tab" data-tab="electricity" onclick="switchTab('electricity', this)">
-                    <span>⚡</span> Electricity
+                    <span>s</span> Electricity
                 </button>
                 <button class="calc-tab" data-tab="food" onclick="switchTab('food', this)">
-                    <span>🍽️</span> Food
+                    <span>&#127869;</span> Food
                 </button>
             </div>
 
@@ -107,7 +107,7 @@
                 <!-- TRANSPORT PANEL -->
                 <div class="calc-panel active" id="panel-transport">
                     <div class="panel-header">
-                        <h2>🚗 Transport Emissions (Daily)</h2>
+                        <h2>&#128663; Transport Emissions (Daily)</h2>
                         <p data-i18n="transport_subtitle">Track your daily travel. Carbon = Distance × Emission Factor</p>
                     </div>
 
@@ -169,7 +169,7 @@
                         </div>
 
                         <div class="calc-result-box" id="transportResult">
-                            <span class="result-icon">🚗</span>
+                            <span class="result-icon">&#128663;</span>
                             <div class="result-content">
                                 <span class="result-val" id="transportCO2">0.00</span>
                                 <span class="result-unit">kg CO₂</span>
@@ -182,7 +182,7 @@
                 <!-- ELECTRICITY PANEL -->
                 <div class="calc-panel" id="panel-electricity">
                     <div class="panel-header">
-                        <h2>⚡ Electricity & Energy (Monthly)</h2>
+                        <h2>s Electricity & Energy (Monthly)</h2>
                         <p>India Grid: 0.82 kg/kWh. <b>Note:</b> Log this once a month. It will be hidden for the rest
                             of the month.</p>
                     </div>
@@ -263,7 +263,7 @@
                         </div>
 
                         <div class="calc-result-box" id="electricityResult">
-                            <span class="result-icon">⚡</span>
+                            <span class="result-icon">s</span>
                             <div class="result-content">
                                 <span class="result-val" id="electricityCO2">0.00</span>
                                 <span class="result-unit">kg CO₂</span>
@@ -276,7 +276,7 @@
                 <!-- FOOD PANEL -->
                 <div class="calc-panel" id="panel-food">
                     <div class="panel-header">
-                        <h2>🍽️ Food & Diet (Daily)</h2>
+                        <h2>&#127869; Food & Diet (Daily)</h2>
                         <p data-i18n="food_subtitle">Track your food impact today. Choose diet and enter dishes.</p>
                     </div>
 
@@ -326,7 +326,7 @@
                             <div id="scanStatus" style="margin-top: 0.75rem; font-size: 0.8rem; display: none;"></div>
                         </div>
 
-                        <h4 class="section-label">🍽️ What did you eat today?</h4>
+                        <h4 class="section-label">&#127869; What did you eat today?</h4>
                         <div class="dish-count-row"
                             style="display:flex; gap:10px; margin-bottom:1.5rem; align-items:flex-end">
                             <div class="input-group" style="flex:1">
@@ -345,7 +345,7 @@
                             style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:10px; margin-bottom:1.5rem">
                             <details>
                                 <summary style="cursor:pointer; font-size:0.85rem; color:var(--cyan); font-weight:600">
-                                    📊 View DashBoard Reference Table (kg CO₂/bowl)</summary>
+                                    &#128202; View DashBoard Reference Table (kg CO₂/bowl)</summary>
                                 <div style="max-height:150px; overflow-y:auto; margin-top:10px; font-size:0.8rem">
                                     <table style="width:100%; border-collapse:collapse">
                                         <thead style="position:sticky; top:0; background:#071525">
@@ -394,7 +394,7 @@
                         </div>
 
                         <div class="calc-result-box">
-                            <span class="result-icon">🍽️</span>
+                            <span class="result-icon">&#127869;</span>
                             <div class="result-content">
                                 <span class="result-val" id="foodCO2">0.00</span>
                                 <span class="result-unit">kg CO₂</span>
@@ -411,19 +411,19 @@
             <div class="calc-summary-bar">
                 <div class="summary-totals">
                     <div class="summary-cat">
-                        <span class="sumcat-icon">🚗</span>
+                        <span class="sumcat-icon">&#128663;</span>
                         <span class="sumcat-val" id="sum-transport">0.00</span>
                         <span class="sumcat-label">kg (Daily)</span>
                     </div>
                     <span class="sum-plus">+</span>
                     <div class="summary-cat">
-                        <span class="sumcat-icon">⚡</span>
+                        <span class="sumcat-icon">s</span>
                         <span class="sumcat-val" id="sum-electricity">0.00</span>
                         <span class="sumcat-label">kg (Monthly)</span>
                     </div>
                     <span class="sum-plus">+</span>
                     <div class="summary-cat">
-                        <span class="sumcat-icon">🍽️</span>
+                        <span class="sumcat-icon">&#127869;</span>
                         <span class="sumcat-val" id="sum-food">0.00</span>
                         <span class="sumcat-label">kg (Daily)</span>
                     </div>
