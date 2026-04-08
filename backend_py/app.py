@@ -741,7 +741,8 @@ def update_location():
 def get_entries():
     uid = request.user['_id']
     query = {"user": uid}
-    entries = entries_col.find(query)
+    entries_cursor = entries_col.find(query)
+    entries = list(entries_cursor) if use_mongodb else entries_cursor
     for e in entries:
         e['id'] = str(e.get('_id', ''))
         if '_id' in e: del e['_id']

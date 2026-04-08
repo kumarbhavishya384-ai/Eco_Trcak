@@ -7,7 +7,7 @@
 // ── Constants ─────────────────────────────────────────
 // ── API Detection ─────────────────────────────────────
 const _isLocal = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
-const RAILWAY_BACKEND = 'https://ecotrackai-production.up.railway.app/api';
+const RAILWAY_BACKEND = 'https://web-production-c50ca.up.railway.app/api';
 
 // Use local port 5050 if local, otherwise default to production Railway URL
 const API_BASE = _isLocal 
