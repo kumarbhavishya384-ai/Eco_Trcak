@@ -64,11 +64,15 @@
                     <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
                 </div>
             </div>
-            <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; gap: 0.5rem;">
+            <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
                 <button onclick="switchLanguage('en')" data-lang="en" class="lang-btn"
                     style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">EN</button>
                 <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
                     style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
+                <button onclick="switchLanguage('bn')" data-lang="bn" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">BN</button>
+                <button onclick="switchLanguage('ta')" data-lang="ta" class="lang-btn"
+                    style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">TA</button>
             </div>
             <button class="logout-btn" onclick="logout()" data-i18n="logout">⬡ Logout</button>
         </div>

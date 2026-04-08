@@ -51,13 +51,19 @@
       <span class="brand-name">EcoTrack <span class="brand-ai">AI</span></span>
     </div>
     <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#ecoscore">EcoScore</a>
+      <a href="#features" data-i18n="l_feat">Features</a>
+      <a href="#how-it-works" data-i18n="l_how">How It Works</a>
+      <a href="#ecoscore" data-i18n="l_eco">EcoScore</a>
     </div>
     <div class="nav-actions">
-      <button class="btn-ghost" onclick="openModal('loginModal')">Sign In</button>
-      <button class="btn-primary-glow" onclick="openModal('registerModal')">Get Started Free</button>
+      <div class="lang-toggle" style="margin-right: 15px; display: flex; gap: 5px; align-items: center;">
+        <button class="lang-btn" onclick="switchLanguage('en')" data-lang="en" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">EN</button>
+        <button class="lang-btn" onclick="switchLanguage('hi')" data-lang="hi" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">HI</button>
+        <button class="lang-btn" onclick="switchLanguage('bn')" data-lang="bn" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">BN</button>
+        <button class="lang-btn" onclick="switchLanguage('ta')" data-lang="ta" style="background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.25rem 0.5rem; border-radius:4px; font-size:0.75rem; cursor:pointer;">TA</button>
+      </div>
+      <button class="btn-ghost" onclick="openModal('loginModal')" data-i18n="l_signin">Sign In</button>
+      <button class="btn-primary-glow" onclick="openModal('registerModal')" data-i18n="l_getstart">Get Started Free</button>
     </div>
   </nav>
 
@@ -65,22 +71,22 @@
   <section class="hero-section">
     <div class="hero-badge reveal">
       <span class="badge-dot"></span>
-      AI-Powered Carbon Intelligence
+      <span data-i18n="l_hbadge">AI-Powered Carbon Intelligence</span>
     </div>
-    <h1 class="hero-title reveal">
+    <h1 class="hero-title reveal" data-i18n-html="l_htitle">
       Track Your <span class="gradient-text">Carbon Impact</span><br />
       Save The <span class="gradient-text-green">Planet</span>
     </h1>
-    <p class="hero-subtitle reveal">
+    <p class="hero-subtitle reveal" data-i18n-html="l_hsub">
       Advanced AI platform that calculates, predicts, and helps reduce your carbon emissions.<br />
-      Get your personalized <strong>EcoScore</strong> and smart recommendations instantly.
+      Get your personalized <strong data-i18n="l_eco">EcoScore</strong> and smart recommendations instantly.
     </p>
     <div class="hero-cta-group reveal">
       <button class="btn-hero-primary" onclick="openModal('registerModal')">
-        <span>🚀</span> Start Your EcoJourney
+        <span>🚀</span> <span data-i18n-html="l_start">Start Your EcoJourney</span>
       </button>
       <button class="btn-hero-secondary" onclick="openModal('loginModal')">
-        <span>▶</span> Watch Demo
+        <span>▶</span> <span data-i18n-html="l_demo">Watch Demo</span>
       </button>
     </div>
 
@@ -88,17 +94,17 @@
     <div class="hero-stats reveal">
       <div class="stat-card">
         <div class="stat-num" id="stat-users">12,847</div>
-        <div class="stat-label">Active EcoWarriors</div>
+        <div class="stat-label" data-i18n="l_stat1">Active EcoWarriors</div>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-card">
         <div class="stat-num">2.4M</div>
-        <div class="stat-label">kg CO₂ Tracked</div>
+        <div class="stat-label" data-i18n="l_stat2">kg CO₂ Tracked</div>
       </div>
       <div class="stat-divider"></div>
       <div class="stat-card">
         <div class="stat-num">98,209</div>
-        <div class="stat-label">Trees Equivalent Saved</div>
+        <div class="stat-label" data-i18n="l_stat3">Trees Equivalent Saved</div>
       </div>
     </div>
 
@@ -107,8 +113,8 @@
       <div class="card"
         style="width: 280px; padding: 1.5rem; transform: perspective(1000px) rotateX(10deg) rotateY(-10deg); box-shadow: 20px 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(0,212,170,0.2); border-color: rgba(0,212,170,0.3);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-          <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">YOUR ECOSCORE</span>
-          <span class="badge-live">LIVE</span>
+          <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary);" data-i18n="l_card1">YOUR ECOSCORE</span>
+          <span class="badge-live" data-i18n="l_live">LIVE</span>
         </div>
         <div style="text-align: center; margin: 1rem 0;">
           <div style="font-size: 3rem; font-weight: 900; font-family: 'Space Grotesk'; color: var(--primary);">742</div>
@@ -119,7 +125,7 @@
           <div style="width: 85%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent));">
           </div>
         </div>
-        <div style="font-size: 0.75rem; color: var(--text-secondary);">Excellent! You're an eco-champion.</div>
+        <div style="font-size: 0.75rem; color: var(--text-secondary);"><span data-i18n="l_card2">Excellent! You're an eco-champion.</span></div>
       </div>
     </div>
   </section>
@@ -127,44 +133,44 @@
   <!-- Feature Cards -->
   <section class="features-section" id="features">
     <div class="section-header">
-      <span class="section-badge">Core Modules</span>
-      <h2 class="section-title">Everything You Need to Go <span class="gradient-text-green">Green</span></h2>
+      <span class="section-badge" data-i18n="l_cmod">Core Modules</span>
+      <h2 class="section-title" data-i18n-html="l_cmodt">Everything You Need to Go <span class="gradient-text-green">Green</span></h2>
     </div>
     <div class="features-grid">
       <div class="feature-card card-glow-blue">
         <div class="feature-icon">⚡</div>
-        <h3>Smart Calculator</h3>
-        <p>Measure emissions from transport, electricity, food & shopping with India-specific emission factors</p>
+        <h3 data-i18n="l_f1t">Smart Calculator</h3>
+        <p data-i18n="l_f1d">Measure emissions from transport, electricity, food & shopping with India-specific emission factors</p>
         <div class="feature-tag">4 Categories</div>
       </div>
       <div class="feature-card card-glow-green">
         <div class="feature-icon">🤖</div>
-        <h3>AI Predictions</h3>
-        <p>Machine learning models predict your future carbon footprint and identify high-impact areas</p>
+        <h3 data-i18n="l_f2t">AI Predictions</h3>
+        <p data-i18n="l_f2d">Machine learning models predict your future carbon footprint and identify high-impact areas</p>
         <div class="feature-tag">ML Powered</div>
       </div>
       <div class="feature-card card-glow-purple">
         <div class="feature-icon">🏆</div>
-        <h3>EcoScore System</h3>
-        <p>Real-time 0-800 EcoScore rating system with personalized tips to improve your score</p>
+        <h3 data-i18n="l_f3t">EcoScore System</h3>
+        <p data-i18n="l_f3d">Real-time 0-800 EcoScore rating system with personalized tips to improve your score</p>
         <div class="feature-tag">Dynamic Score</div>
       </div>
       <div class="feature-card card-glow-orange">
         <div class="feature-icon">📊</div>
-        <h3>Analytics Dashboard</h3>
-        <p>Beautiful charts, trend analysis, and comparisons with community averages</p>
+        <h3 data-i18n="l_f4t">Analytics Dashboard</h3>
+        <p data-i18n="l_f4d">Beautiful charts, trend analysis, and comparisons with community averages</p>
         <div class="feature-tag">Real-time</div>
       </div>
       <div class="feature-card card-glow-teal">
         <div class="feature-icon">🌲</div>
-        <h3>Offset Calculator</h3>
-        <p>See exactly how many trees needed to offset your emissions and solar savings projections</p>
+        <h3 data-i18n="l_f5t">Offset Calculator</h3>
+        <p data-i18n="l_f5d">See exactly how many trees needed to offset your emissions and solar savings projections</p>
         <div class="feature-tag">Carbon Neutral</div>
       </div>
       <div class="feature-card card-glow-pink">
         <div class="feature-icon">🎯</div>
-        <h3>Campus Leaderboard</h3>
-        <p>Compete with friends and colleagues. NGO & CSR integration for corporate sustainability</p>
+        <h3 data-i18n="l_f6t">Campus Leaderboard</h3>
+        <p data-i18n="l_f6d">Compete with friends and colleagues. NGO & CSR integration for corporate sustainability</p>
         <div class="feature-tag">Community</div>
       </div>
     </div>
@@ -173,39 +179,39 @@
   <!-- How it Works -->
   <section class="how-section" id="how-it-works">
     <div class="section-header">
-      <span class="section-badge">How It Works</span>
-      <h2 class="section-title">Simple, Smart, <span class="gradient-text">Sustainable</span></h2>
+      <span class="section-badge" data-i18n="l_how">How It Works</span>
+      <h2 class="section-title" data-i18n-html="l_stitle">Simple, Smart, <span class="gradient-text">Sustainable</span></h2>
     </div>
     <div class="steps-container">
       <div class="step">
         <div class="step-num">01</div>
         <div class="step-content">
-          <h3>Create Profile</h3>
-          <p>Sign up and set your baseline — location, household size, lifestyle type</p>
+          <h3 data-i18n="l_s1t">Create Profile</h3>
+          <p data-i18n="l_s1d">Sign up and set your baseline — location, household size, lifestyle type</p>
         </div>
       </div>
       <div class="step-connector">→</div>
       <div class="step">
         <div class="step-num">02</div>
         <div class="step-content">
-          <h3>Log Activities</h3>
-          <p>Daily inputs for transport, energy use, food choices, and purchases</p>
+          <h3 data-i18n="l_s2t">Log Activities</h3>
+          <p data-i18n="l_s2d">Daily inputs for transport, energy use, food choices, and purchases</p>
         </div>
       </div>
       <div class="step-connector">→</div>
       <div class="step">
         <div class="step-num">03</div>
         <div class="step-content">
-          <h3>Get EcoScore</h3>
-          <p>AI analyzes your data and gives you an instant, actionable EcoScore</p>
+          <h3 data-i18n="l_s3t">Get EcoScore</h3>
+          <p data-i18n="l_s3d">AI analyzes your data and gives you an instant, actionable EcoScore</p>
         </div>
       </div>
       <div class="step-connector">→</div>
       <div class="step">
         <div class="step-num">04</div>
         <div class="step-content">
-          <h3>Reduce & Track</h3>
-          <p>Follow smart recommendations and watch your score improve over time</p>
+          <h3 data-i18n="l_s4t">Reduce & Track</h3>
+          <p data-i18n="l_s4d">Follow smart recommendations and watch your score improve over time</p>
         </div>
       </div>
     </div>
@@ -214,33 +220,33 @@
   <!-- EcoScore Section -->
   <section class="ecoscore-section" id="ecoscore">
     <div class="section-header">
-      <span class="section-badge">EcoScore System</span>
-      <h2 class="section-title">Where Do <span class="gradient-text-green">You</span> Stand?</h2>
+      <span class="section-badge" data-i18n="l_f3t">EcoScore System</span>
+      <h2 class="section-title" data-i18n-html="l_etitle">Where Do <span class="gradient-text-green">You</span> Stand?</h2>
     </div>
     <div class="ecoscore-grid">
       <div class="score-tier tier-red">
         <div class="tier-range">0 – 100</div>
         <div class="tier-icon">🔴</div>
-        <div class="tier-label">High Pollution</div>
-        <div class="tier-desc">Urgent action needed — your footprint is critically high</div>
+        <div class="tier-label" data-i18n="l_e1t">High Pollution</div>
+        <div class="tier-desc" data-i18n="l_e1d">Urgent action needed — your footprint is critically high</div>
       </div>
       <div class="score-tier tier-orange">
         <div class="tier-range">100 – 300</div>
         <div class="tier-icon">🟠</div>
-        <div class="tier-label">Moderate</div>
-        <div class="tier-desc">Room for significant improvement with targeted changes</div>
+        <div class="tier-label" data-i18n="l_e2t">Moderate</div>
+        <div class="tier-desc" data-i18n="l_e2d">Room for significant improvement with targeted changes</div>
       </div>
       <div class="score-tier tier-yellow">
         <div class="tier-range">300 – 600</div>
         <div class="tier-icon">🟡</div>
-        <div class="tier-label">Good</div>
-        <div class="tier-desc">You're on the right track — keep pushing forward!</div>
+        <div class="tier-label" data-i18n="l_e3t">Good</div>
+        <div class="tier-desc" data-i18n="l_e3d">You're on the right track — keep pushing forward!</div>
       </div>
       <div class="score-tier tier-green active-tier">
         <div class="tier-range">600 – 800</div>
         <div class="tier-icon">🟢</div>
-        <div class="tier-label">Eco Friendly</div>
-        <div class="tier-desc">Excellent! You're a true environmental champion</div>
+        <div class="tier-label" data-i18n="l_e4t">Eco Friendly</div>
+        <div class="tier-desc" data-i18n="l_e4d">Excellent! You're a true environmental champion</div>
       </div>
     </div>
   </section>
@@ -248,10 +254,10 @@
   <!-- Footer CTA -->
   <section class="cta-section">
     <div class="cta-card">
-      <h2>Ready to Make a <span class="gradient-text">Difference?</span></h2>
-      <p>Join thousands of eco-warriors tracking and reducing their carbon footprint every day</p>
+      <h2 data-i18n-html="l_cta1">Ready to Make a <span class="gradient-text">Difference?</span></h2>
+      <p data-i18n="l_cta2">Join thousands of eco-warriors tracking and reducing their carbon footprint every day</p>
       <button class="btn-hero-primary" onclick="openModal('registerModal')">
-        🌍 Join EcoTrack AI Now — It's Free
+        <span data-i18n="l_ctab">🌍 Join EcoTrack AI Now — It's Free</span>
       </button>
     </div>
   </section>
@@ -260,7 +266,7 @@
     <div class="footer-brand">
       <span>🌿</span> EcoTrack AI — Carbon Footprint Intelligence Platform
     </div>
-    <p>Built with ❤️ for a greener tomorrow | Carbon Formula: Emission = Activity × Emission Factor</p>
+    <p data-i18n="l_ft">Built with ❤️ for a greener tomorrow | Carbon Formula: Emission = Activity × Emission Factor</p>
   </footer>
 
   <!-- LOGIN MODAL -->
@@ -386,7 +392,7 @@
         </div>
 
         <p class="form-switch" style="margin-top: 1.5rem;">Already have an account? <a href="#"
-            onclick="switchModal('registerModal','loginModal')">Sign In</a></p>
+            onclick="switchModal('registerModal','loginModal')" data-i18n="l_signin">Sign In</a></p>
       </form>
     </div>
   </div>
@@ -447,6 +453,7 @@
       </form>
     </div>
   </div>
+  <script src="js/i18n.js"></script>
   <script src="js/app.js?v=1772902104"></script>
   <script src="js/landing.js?v=1772902104"></script>
 
