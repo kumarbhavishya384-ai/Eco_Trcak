@@ -338,17 +338,19 @@ function renderRegionalBenchmarks(user, currentEntries) {
 // â”€â”€ Trend Chart â€“ Enhanced Premium â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderTrendChart(entries, period = 'week') {
     const ctx = document.getElementById('trendChart');
-    if (!ctx) return;
+    if (!ctx || typeof Chart === 'undefined') return;
 
     let labels = [];
     let values = [];
     const now = new Date();
+    const L = localStorage.getItem('ecotrack_lang') || 'en';
+    const localeCode = L === 'hi' ? 'hi-IN' : (L === 'bn' ? 'bn-IN' : (L === 'ta' ? 'ta-IN' : 'en-US'));
 
     if (period === 'week') {
         for (let i = 6; i >= 0; i--) {
             const d = new Date(now); d.setDate(now.getDate() - i);
             const ds = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-            labels.push(d.toLocaleDateString('en-US', { weekday: 'short' }));
+            labels.push(d.toLocaleDateString(localeCode, { weekday: 'short' }));
             const entry = entries.find(e => e.date === ds);
             values.push(entry ? +entry.total.toFixed(2) : 0);
         }
@@ -364,7 +366,7 @@ function renderTrendChart(entries, period = 'week') {
         for (let i = 11; i >= 0; i--) {
             const d = new Date(now); d.setMonth(now.getMonth() - i);
             const monthStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-            labels.push(d.toLocaleDateString('en-US', { month: 'short' }));
+            labels.push(d.toLocaleDateString(localeCode, { month: 'short' }));
             const monthEntries = entries.filter(e => e.date.startsWith(monthStr));
             const avg = monthEntries.length > 0 ? monthEntries.reduce((s, e) => s + e.total, 0) / monthEntries.length : 0;
             values.push(+avg.toFixed(2));
@@ -372,6 +374,10 @@ function renderTrendChart(entries, period = 'week') {
     }
 
     if (trendChartInstance) trendChartInstance.destroy();
+
+    const chartEmptyState = document.getElementById('chartEmptyState');
+    const hasData = values.some(v => v > 0);
+    if (chartEmptyState) chartEmptyState.style.display = (hasData || entries.length > 0) ? 'none' : 'flex';
 
     const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(0, 212, 170, 0.2)');
@@ -382,7 +388,7 @@ function renderTrendChart(entries, period = 'week') {
         data: {
             labels,
             datasets: [{
-                label: 'Emissions',
+                label: t('emissions_label', 'Emissions'),
                 data: values,
                 borderColor: '#00D4AA',
                 backgroundColor: gradient,
@@ -407,7 +413,7 @@ function renderTrendChart(entries, period = 'week') {
                     padding: 12,
                     cornerRadius: 8,
                     displayColors: false,
-                    callbacks: { label: ctx => `${ctx.parsed.y.toFixed(2)} kg COâ‚‚e` }
+                    callbacks: { label: ctx => `${ctx.parsed.y.toFixed(2)} ${t('kg_co2e', 'kg COâ‚‚e')}` }
                 }
             },
             scales: {
@@ -436,7 +442,7 @@ async function updateChart(period, btn) {
 // â”€â”€ Donut Chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderDonutChart(entries) {
     const ctx = document.getElementById('donutChart');
-    if (!ctx) return;
+    if (!ctx || typeof Chart === 'undefined') return;
 
     const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
     const filtered = entries.filter(e => new Date(e.date) >= cutoff);
@@ -447,6 +453,12 @@ function renderDonutChart(entries) {
         Food: filtered.reduce((s, e) => s + (e.food || 0), 0)
     };
 
+    const labels = [
+        t('transport', 'Transport'),
+        t('electricity', 'Electricity'),
+        t('food', 'Food')
+    ];
+
     const colors = ['#3B82F6', '#FBBF24', '#00D4AA'];
 
     if (donutChartInstance) donutChartInstance.destroy();
@@ -454,7 +466,7 @@ function renderDonutChart(entries) {
     donutChartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: Object.keys(totals),
+            labels,
             datasets: [{
                 data: Object.values(totals).map(v => +v.toFixed(2)),
                 backgroundColor: colors,
