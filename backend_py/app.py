@@ -66,9 +66,19 @@ frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 # Allow both localhost and 127.0.0.1 to avoid common CORS networking issues
 CORS(app, resources={r"/api/*": {
-    "origins": ["http://localhost:8080", "http://127.0.0.1:8080", "https://inspiring-dango-b3bb97.netlify.app"],
+    "origins": [
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://inspiring-dango-b3bb97.netlify.app",
+        "https://web-production-c50ca.up.railway.app",
+        re.compile(r"https://.*\.up\.railway\.app"),  # All Railway subdomains
+        re.compile(r"https://.*\.netlify\.app"),       # All Netlify subdomains
+    ],
     "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    "allow_headers": ["Content-Type", "Authorization"]
+    "allow_headers": ["Content-Type", "Authorization"],
+    "supports_credentials": True
 }})
 
 print("--- EcoTrack AI Backend Initializing ---")
