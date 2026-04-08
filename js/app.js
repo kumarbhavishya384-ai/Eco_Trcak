@@ -15,24 +15,32 @@ const STORAGE_KEYS = {
     USER : 'ecotrack_user'
 };
 
-// ── EmailJS Configuration ─────────────────────────────
-const EMAILJS_PUBLIC_KEY      = 'grdE8hvT9O25mIPm0';
-const EMAILJS_SERVICE_ID      = 'ecotrack_service';
-const EMAILJS_OTP_TEMPLATE    = 'template_u2x005o';
-const EMAILJS_WELCOME_TEMPLATE = 'template_gunv9po';
+// ── EmailJS Configuration (Dynamic from Railway) ───────
+let EMAILJS_PUBLIC_KEY      = 'grdE8hvT9O25mIPm0'; 
+let EMAILJS_SERVICE_ID      = 'ecotrack_service';
+let EMAILJS_OTP_TEMPLATE    = 'template_u2x005o';
+let EMAILJS_WELCOME_TEMPLATE = 'template_gunv9po';
 
-// ── EmailJS Init ──────────────────────────────────────
-(function initEmailJS() {
+// ── Configuration Initialization ───────────────────────
+(async function initAppConfig() {
+    try {
+        const response = await fetch(`${API_BASE}/config`);
+        if (response.ok) {
+            const config = await response.json();
+            EMAILJS_PUBLIC_KEY = config.EMAILJS_PUBLIC_KEY || EMAILJS_PUBLIC_KEY;
+            EMAILJS_SERVICE_ID = config.EMAILJS_SERVICE_ID || EMAILJS_SERVICE_ID;
+            EMAILJS_OTP_TEMPLATE = config.EMAILJS_OTP_TEMPLATE || EMAILJS_OTP_TEMPLATE;
+            EMAILJS_WELCOME_TEMPLATE = config.EMAILJS_WELCOME_TEMPLATE || EMAILJS_WELCOME_TEMPLATE;
+            console.log('App Config Fetched from Cloud ☁️');
+        }
+    } catch (err) {
+        console.warn('Using default local config (Backend disconnected) 🔌');
+    }
+
+    // Initialize EmailJS with final key
     if (typeof emailjs !== 'undefined') {
         emailjs.init(EMAILJS_PUBLIC_KEY);
         console.log('EmailJS initialized ✅');
-    } else {
-        window.addEventListener('load', function () {
-            if (typeof emailjs !== 'undefined') {
-                emailjs.init(EMAILJS_PUBLIC_KEY);
-                console.log('EmailJS initialized ✅ (on load)');
-            }
-        });
     }
 })();
 

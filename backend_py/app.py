@@ -82,6 +82,17 @@ CORS(app, resources={r"/api/*": {
     "supports_credentials": True
 }})
 
+# ── PUBLIC CONFIGURATION ENDPOINT ─────────────────────
+# Allows the frontend to read EmailJS keys from Railway Environment Variables
+@app.route('/api/config', methods=['GET'])
+def get_public_config():
+    return jsonify({
+        "EMAILJS_PUBLIC_KEY": os.getenv("EMAILJS_PUBLIC_KEY", "grdE8hvT9O25mIPm0"),
+        "EMAILJS_SERVICE_ID": os.getenv("EMAILJS_SERVICE_ID", "ecotrack_service"),
+        "EMAILJS_OTP_TEMPLATE": os.getenv("EMAILJS_OTP_TEMPLATE", "template_u2x005o"),
+        "EMAILJS_WELCOME_TEMPLATE": os.getenv("EMAILJS_WELCOME_TEMPLATE", "template_gunv9po")
+    })
+
 print("--- EcoTrack AI Backend Initializing ---")
 
 # ── DATABASE SYSTEM (MongoDB Atlas with JSON Fallback) ───────
