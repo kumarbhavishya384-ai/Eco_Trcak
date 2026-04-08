@@ -80,7 +80,7 @@ function updateLevelProgress(entries) {
     const score = user.ecoScore || (entries.length > 0 ? entries.reduce((s, e) => s + (e.ecoScore || 0), 0) : 0);
     
     let levelName = "Neophyte";
-    let levelIcon = "ðŸŒ±";
+    let levelIcon = "🌱";
     let nextLevelName = "Intermediate";
     let nextLevelTarget = 1000;
     let progress = 0;
@@ -93,7 +93,7 @@ function updateLevelProgress(entries) {
         progress = ((score - 5000) / 5000) * 100;
     } else if (score >= 1000) {
         levelName = "Intermediate";
-        levelIcon = "ðŸš€";
+        levelIcon = "🚀";
         nextLevelName = "Elite";
         nextLevelTarget = 5000;
         progress = ((score - 1000) / 4000) * 100;
@@ -124,7 +124,7 @@ function updateLevelProgress(entries) {
 
     // Update Status Labels based on score
     if (scoreTierBadge) {
-        const scoreRating = score > 1000 ? "Excellent Performance ðŸŒ¿" : (score > 500 ? "Good Progress ðŸš€" : "Sustainability Neophyte ðŸŒ±");
+        const scoreRating = score > 1000 ? "Excellent Performance ðŸŒ¿" : (score > 500 ? "Good Progress 🚀" : "Sustainability Neophyte 🌱");
         scoreTierBadge.textContent = scoreRating;
         if (score > 0) scoreTierBadge.style.background = 'rgba(0, 212, 170, 0.15)';
     }
