@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Set date
     const dateEl = document.getElementById('currentDate');
     if (dateEl) {
-        dateEl.textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        // Date set by i18n.js
     }
 
     // Notifications and challenges initialized via initNotifications() in app.js
@@ -109,22 +109,22 @@ function updateLevelProgress(entries) {
     const scoreTierBadge = document.getElementById('scoreTierBadge');
     const scoreDesc = document.getElementById('scoreDesc');
 
-    if (badgeText) badgeText.textContent = levelName;
+    if (badgeText) badgeText.textContent = t("rank_" + levelName.toLowerCase());
     if (badgeIcon) badgeIcon.textContent = levelIcon;
     if (levelProgressFill) {
         setTimeout(() => {
             levelProgressFill.style.width = Math.min(100, Math.max(5, progress)) + '%';
         }, 800);
     }
-    if (nextLevelTargetEl) nextLevelTargetEl.textContent = `${Math.max(0, nextLevelTarget - score)} pts to go`;
-    if (levelNameEl) levelNameEl.innerHTML = `Next Rank: <span style="color: #fff;">${nextLevelName}</span>`;
+    if (nextLevelTargetEl) nextLevelTargetEl.textContent = `${Math.max(0, nextLevelTarget - score)} ${t("pts_to_go")}`;
+    if (levelNameEl) levelNameEl.innerHTML = `<span tabindex="0" data-i18n="next_rank">${t("next_rank")}</span> <span style="color: #fff;">${t("rank_" + nextLevelName.toLowerCase())}</span>`;
 
     // Update main score display
     animateNumber('ecoScoreDisplay', 0, score, 2000);
 
     // Update Status Labels based on score
     if (scoreTierBadge) {
-        const scoreRating = score > 1000 ? "Excellent Performance ðŸŒ¿" : (score > 500 ? "Good Progress 🚀" : "Sustainability Neophyte 🌱");
+        const scoreRating = score > 1000 ? t("perf_exc") + " 🏆" : (score > 500 ? t("perf_good") + " 🚀" : t("perf_neo") + " 🌱");
         scoreTierBadge.textContent = scoreRating;
         if (score > 0) scoreTierBadge.style.background = 'rgba(0, 212, 170, 0.15)';
     }

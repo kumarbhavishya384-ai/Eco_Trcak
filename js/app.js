@@ -487,7 +487,7 @@ function populateSidebar(user) {
     }
     
     if (nameEl)   nameEl.textContent   = `${user.firstName} ${user.lastName || ''}`;
-    if (scoreEl)  scoreEl.textContent  = `EcoScore: ${user.ecoScore !== undefined ? user.ecoScore : '--'}`;
+    if (scoreEl)  scoreEl.innerHTML  = `<span data-i18n="ecoscore_col">${t("ecoscore_col")}</span>: ${user.ecoScore !== undefined ? user.ecoScore : '--'}`;
 }
 
 // ── Data Handlers ─────────────────────────────────────
@@ -524,7 +524,8 @@ function getTodayDateStr() {
 
 function formatDate(dateStr) {
     const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    const loc = (typeof currentLang !== 'undefined' && currentLang === 'hi') ? 'hi-IN' : (typeof currentLang !== 'undefined' && currentLang === 'bn') ? 'bn-IN' : (typeof currentLang !== 'undefined' && currentLang === 'ta') ? 'ta-IN' : 'en-IN';
+      return d.toLocaleDateString(loc, { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 function formatCO2(val) { return Number(val).toFixed(2); }
@@ -575,9 +576,8 @@ function closeSidebar() {
             populateSidebar(user);
             const dateEl = document.getElementById('currentDate');
             if (dateEl) {
-                dateEl.textContent = new Date().toLocaleDateString('en-IN', {
-                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                });
+                const dateLoc = (typeof currentLang !== 'undefined' && currentLang === 'hi') ? 'hi-IN' : (typeof currentLang !== 'undefined' && currentLang === 'bn') ? 'bn-IN' : (typeof currentLang !== 'undefined' && currentLang === 'ta') ? 'ta-IN' : 'en-IN';
+              dateEl.textContent = new Date().toLocaleDateString(dateLoc, { weekday: 'long', month: 'long', day: 'numeric' });
             }
 
             try {

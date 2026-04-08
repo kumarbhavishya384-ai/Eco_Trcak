@@ -40,6 +40,22 @@ const translations = {
     l_ft: "Built with ❤️ for a greener tomorrow | Carbon Formula: Emission = Activity × Emission Factor",
 
     // Application Pages
+    acc_overview: "Account Overview",
+    daily_streak: "DAILY STREAK",
+    weekly_goal: "WEEKLY GOAL",
+    kg_co2e: "KG CO₂e",
+    next_rank: "Next Rank: ",
+    pts_to_go: "pts to go",
+    perf_exc: "Excellent Performance",
+    perf_good: "Good Progress",
+    perf_neo: "Sustainability Neophyte",
+    earned_pts_1: "You have earned ",
+    earned_pts_2: " EcoPoints! Keep logging daily activities.",
+    rank_neophyte: "Neophyte",
+    rank_intermediate: "Intermediate",
+    rank_elite: "Elite",
+    rank_grandmaster: "Grandmaster",
+    
     db_title: "Dashboard", your_ecoscore: "Your EcoScore", points: "POINTS", daily_streak: "DAILY STREAK",
     impact_breakdown: "Impact Breakdown", this_month: "This Month", transport_label: "TRANSPORTATION",
     electricity_label: "ELECTRICITY", diet_label: "DIET & MEALS", emission_analytics: "📈 Emission Analytics",
@@ -94,6 +110,22 @@ const translations = {
   },
 
   hi: {
+    
+    acc_overview: "खाता अवलोकन",
+    daily_streak: "दैनिक स्ट्रीक",
+    weekly_goal: "साप्ताहिक लक्ष्य",
+    kg_co2e: "KG CO₂e",
+    next_rank: "अगला रैंक: ",
+    pts_to_go: "अंक बाकी",
+    perf_exc: "उत्कृष्ट प्रदर्शन",
+    perf_good: "अच्छी प्रगति",
+    perf_neo: "पर्यावरण नवशिखिया",
+    earned_pts_1: "आपने ",
+    earned_pts_2: " ईको-अंक अर्जित किए हैं! लॉग करते रहें।",
+    rank_neophyte: "नवशिखिया",
+    rank_intermediate: "मध्यवर्ती",
+    rank_elite: "कुलीन",
+    rank_grandmaster: "ग्रैंडमास्टर",
     nav_dashboard: "डैशबोर्ड", nav_report: "रिपोर्ट डैशबोर्ड", nav_calculator: "कैलकुलेटर", nav_history: "इतिहास", nav_insights: "AI अंतर्दृष्टि", nav_leaderboard: "लीडरबोर्ड", nav_offset: "ऑफसेट टूल्स", nav_logout: "⬡ लॉगआउट",
     logout_btn: "लॉगआउट", realtime: "रियल-टाइम", log_data: "डेटा लॉग करें", log_today: "+ आज का डेटा लॉग करें", export_csv: "⬇ CSV निकास करें",
     
@@ -168,6 +200,22 @@ const translations = {
   },
 
   bn: {
+    
+    acc_overview: "অ্যাকাউন্ট ওভারভিউ",
+    daily_streak: "দৈনিক স্ট্রিক",
+    weekly_goal: "সাপ্তাহিক লক্ষ্য",
+    kg_co2e: "KG CO₂e",
+    next_rank: "পরবর্তী র‍্যাঙ্ক: ",
+    pts_to_go: "পয়েন্ট বাকি",
+    perf_exc: "দারুণ কর্মক্ষমতা",
+    perf_good: "ভালো অগ্রগতি",
+    perf_neo: "পরিবেশানুরাগী নবীন",
+    earned_pts_1: "আপনি ",
+    earned_pts_2: " ইকো-পয়েন্ট উপার্জন করেছেন! লগ করতে থাকুন।",
+    rank_neophyte: "নবীন",
+    rank_intermediate: "মধ্যবর্তী",
+    rank_elite: "এলিট",
+    rank_grandmaster: "গ্র্যান্ডমাস্টার",
     nav_dashboard: "ড্যাশবোর্ড", nav_report: "রিপোর্ট", nav_calculator: "ক্যালকুলেটর", nav_history: "ইতিহাস", nav_insights: "AI অন্তর্দৃষ্টি", nav_leaderboard: "লিডারবোর্ড", nav_offset: "অফসেট টুলস", nav_logout: "⬡ লগআউট",
     logout_btn: "লগআউট", realtime: "রিয়েল-টাইম", log_data: "তথ্য যুক্ত করুন", log_today: "+ আজকের তথ্য", export_csv: "⬇ CSV এক্সপোর্ট",
     
@@ -242,6 +290,22 @@ const translations = {
   },
 
   ta: {
+    
+    acc_overview: "கணக்கு மேலோட்டம்",
+    daily_streak: "தினசரி ஸ்ட்ரீக்",
+    weekly_goal: "வாராந்திர இலக்கு",
+    kg_co2e: "KG CO₂e",
+    next_rank: "அடுத்த தரவரிசை: ",
+    pts_to_go: "புள்ளிகள் மீதம்",
+    perf_exc: "சிறப்பான செயல்பாடு",
+    perf_good: "நல்ல முன்னேற்றம்",
+    perf_neo: "சுற்றுச்சூழல் புதியவர்",
+    earned_pts_1: "நீங்கள் ",
+    earned_pts_2: " இகோ-புள்ளிகள் பெற்றுள்ளீர்கள்! தொடர்ந்து பதிவு செய்யவும்.",
+    rank_neophyte: "புதியவர்",
+    rank_intermediate: "இடைநிலை",
+    rank_elite: "மேல்தட்டு",
+    rank_grandmaster: "கிராண்ட்மாஸ்டர்",
     nav_dashboard: "டாஷ்போர்டு", nav_report: "அறிக்கை", nav_calculator: "கால்குலேட்டர்", nav_history: "வரலாறு", nav_insights: "AI நுண்ணறிவு", nav_leaderboard: "லீடர்போர்டு", nav_offset: "ஆஃப்செட்", nav_logout: "⬡ வெளியேறு",
     logout_btn: "வெளியேறு", realtime: "நிகழ்நேரம்", log_data: "தரவை பதிவு செய்", log_today: "+ இன்று பதிவு செய்", export_csv: "⬇ CSV பதிவிறக்கு",
     

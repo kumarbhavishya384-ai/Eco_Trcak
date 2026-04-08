@@ -35,25 +35,25 @@
         </div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item active" id="nav-dashboard">
-                <span class="nav-icon">📊</span><span class="nav-label" data-i18n="dashboard">Dashboard</span>
+                <span class="nav-icon">📊</span><span class="nav-label" data-i18n="nav_dashboard">Dashboard</span>
             </a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="reports">Reports</span>
+                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Reports</span>
             </a>
             <a href="calculator.html" class="nav-item" id="nav-calculator">
-                <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="calculator">Calculator</span>
+                <span class="nav-icon">🧮</span><span class="nav-label" data-i18n="nav_calculator">Calculator</span>
             </a>
             <a href="history.html" class="nav-item" id="nav-history">
-                <span class="nav-icon">📅</span><span class="nav-label" data-i18n="history">History</span>
+                <span class="nav-icon">📅</span><span class="nav-label" data-i18n="nav_history">History</span>
             </a>
             <a href="recommendations.html" class="nav-item" id="nav-recommendations">
-                <span class="nav-icon">💡</span><span class="nav-label" data-i18n="aiInsights">AI Insights</span>
+                <span class="nav-icon">💡</span><span class="nav-label" data-i18n="nav_insights">AI Insights</span>
             </a>
             <a href="leaderboard.html" class="nav-item" id="nav-leaderboard">
-                <span class="nav-icon">🏆</span><span class="nav-label" data-i18n="leaderboard">Leaderboard</span>
+                <span class="nav-icon">🏆</span><span class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span>
             </a>
             <a href="offset.html" class="nav-item" id="nav-offset">
-                <span class="nav-icon">🌲</span><span class="nav-label" data-i18n="offsetTools">Offset Tools</span>
+                <span class="nav-icon">🌲</span><span class="nav-label" data-i18n="nav_offset">Offset Tools</span>
             </a>
         </nav>
         <div class="sidebar-footer">
@@ -61,7 +61,7 @@
                 <div class="user-avatar" id="sidebarAvatar">A</div>
                 <div class="user-info">
                     <div class="user-name" id="sidebarName">Loading...</div>
-                    <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
+                    <div class="user-score-badge" id="sidebarScore"><span data-i18n="ecoscore_col">EcoScore</span>: --</div>
                 </div>
             </div>
             <div class="lang-toggle" style="margin-bottom: 1rem; padding: 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
@@ -84,9 +84,9 @@
         <header class="topbar">
             <div class="topbar-left">
                 <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title" data-i18n="dashboardTitle" data-i18n="db_title">Dashboard</h1>
+                <h1 class="page-title"  data-i18n="db_title">Dashboard</h1>
                 <div class="live-indicator" style="margin-left: 1.5rem;">
-                    <span class="live-dot"></span> REAL-TIME
+                    <span class="live-dot"></span> <span class="status-badge" style="display:inline">REAL-TIME</span>
                 </div>
             </div>
             <div class="topbar-right">
@@ -111,7 +111,7 @@
                 </style>
 
                 <button class="btn-add-data" onclick="window.location.href='calculator.html'" style="margin-left: 1rem;">
-                    <span>+</span> Log Activity
+                    <span>+</span> Log Data
                 </button>
             </div>
         </header>
@@ -124,7 +124,7 @@
             <div class="card ecoscore-card reveal">
                 <div class="card-header">
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <h3 data-i18n="yourEcoScore" style="font-size: 1.5rem; letter-spacing: -0.02em;">Account Overview</h3>
+                        <h3 data-i18n="acc_overview" style="font-size: 1.5rem; letter-spacing: -0.02em;">Account Overview</h3>
                         <div class="score-level-badge" style="background: rgba(0, 212, 170, 0.1); color: var(--primary); margin-bottom: 0;">
                             <span id="levelBadgeIcon">🌱</span> <span id="levelBadgeText">Neophyte</span>
                             <span style="margin-left: 6px; cursor: help;" title="Your level increases as you log more sustainable activities and reduce your footprint.">ⓘ</span>
@@ -159,8 +159,8 @@
                         <!-- Level System Progress -->
                         <div class="level-progress-container">
                             <div class="level-info-header">
-                                <span class="level-name">Next Rank: <span style="color: #fff;">Intermediate</span></span>
-                                <span class="next-level-target">500 pts to go</span>
+                                <span class="level-name"><span data-i18n="next_rank">Next Rank:</span> <span style="color: #fff;">Intermediate</span></span>
+                                <span class="next-level-target"><span class="next-level-target">500 pts to go</span></span>
                             </div>
                             <div class="score-progress-bar" style="height: 10px;">
                                 <div class="score-fill" id="levelProgressFill" style="width: 25%"></div>
@@ -172,14 +172,14 @@
                             <div class="streak-widget" style="margin-top: 0; flex: 1;">
                                 <div class="streak-icon">🔥</div>
                                 <div class="streak-info">
-                                    <div class="streak-label">DAILY STREAK</div>
+                                    <div class="streak-label" data-i18n="daily_streak">DAILY STREAK</div>
                                     <div class="streak-count" style="font-size: 1.5rem;">0</div>
                                 </div>
                             </div>
                             <div class="streak-widget" style="margin-top: 0; flex: 1; border-color: var(--primary); background: rgba(0, 212, 170, 0.05);">
                                 <div class="streak-icon">🎯</div>
                                 <div class="streak-info">
-                                    <div class="streak-label">WEEKLY GOAL</div>
+                                    <div class="streak-label" data-i18n="weekly_goal">WEEKLY GOAL</div>
                                     <div class="streak-bar">
                                         <div class="streak-fill" style="width: 40%; background: var(--primary);"></div>
                                     </div>
@@ -193,11 +193,11 @@
             <!-- Total Emissions Card -->
             <div class="card emissions-summary-card reveal">
                 <div class="card-header">
-                    <h3 data-i18n="impactBreakdown" data-i18n="impact_breakdown">Impact Breakdown</h3>
+                    <h3 data-i18n="impact_breakdown">Impact Breakdown</h3>
                     <select class="period-select" id="emissionPeriod" onchange="updateEmissionDisplay()">
                         <option value="today">Today</option>
                         <option value="week">This Week</option>
-                        <option value="month" selected data-i18n="thisMonth" data-i18n="this_month">This Month</option>
+                        <option value="month" selected data-i18n="this_month">This Month</option>
                     </select>
                 </div>
                 <div class="emissions-total" id="emissionsTotal">
