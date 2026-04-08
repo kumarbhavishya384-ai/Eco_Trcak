@@ -5,10 +5,14 @@
    =================================================== */
 
 // ── Constants ─────────────────────────────────────────
+// ── API Detection ─────────────────────────────────────
 const _isLocal = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
-const API_BASE = _isLocal
-    ? 'http://localhost:5050/api'
-    : 'https://ecotrackai-production.up.railway.app/api';
+const RAILWAY_BACKEND = 'https://ecotrackai-production.up.railway.app/api';
+
+// Use local port 5050 if local, otherwise default to production Railway URL
+const API_BASE = _isLocal 
+    ? 'http://localhost:5050/api' 
+    : (window.location.hostname.includes('railway.app') ? '/api' : RAILWAY_BACKEND);
 
 const STORAGE_KEYS = {
     TOKEN: 'ecotrack_token',
