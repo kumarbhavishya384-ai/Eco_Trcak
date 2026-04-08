@@ -5,7 +5,8 @@
    =================================================== */
 
 // ── Constants ─────────────────────────────────────────
-const API_BASE = window.location.port === '8080'
+const _isLocal = ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
+const API_BASE = _isLocal
     ? 'http://localhost:5050/api'
     : 'https://ecotrackai-production.up.railway.app/api';
 
