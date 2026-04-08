@@ -31,10 +31,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.setItem('ecotrack_entries_cache', JSON.stringify(allEntries.slice(0, 50)));
 
         // 3. Update with real data
+        console.log("LOG: Data received, triggering renders...");
         try { updateLevelProgress(allEntries); } catch (e) { console.error("Score Error:", e); }
         try { updateEmissionDisplay(); } catch (e) { console.error("Emissions Error:", e); }
-        try { renderTrendChart(allEntries, 'week'); } catch (e) { console.error("Chart Error:", e); }
-        try { renderDonutChart(allEntries); } catch (e) { console.error("Donut Error:", e); }
+        
+        // Safety Delay for Chart.js & Canvas mounting
+        setTimeout(() => {
+            console.log("LOG: Executing Chart Renders after safety delay...");
+            try { renderTrendChart(allEntries, 'week'); } catch (e) { console.error("Chart Error:", e); }
+            try { renderDonutChart(allEntries); } catch (e) { console.error("Donut Error:", e); }
+        }, 300);
+
         try { renderDashboardRecs(); } catch (e) { console.error("Recs Error:", e); }
         try { renderRecentActivity(allEntries); } catch (e) { console.error("Activity Error:", e); }
         
