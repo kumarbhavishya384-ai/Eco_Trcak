@@ -1,4 +1,4 @@
-﻿/* ===================================================
+/* ===================================================
    EcoTrack AI â€“ Dashboard JS (dashboard.js)
    =================================================== */
 
@@ -10,10 +10,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const user = getCurrentUser();
     if (!user) return;
 
+    // 1. Initial Instant Render with local/empty data to avoid 'Analyzing' hang
     try {
-        allEntries = await getUserEntries();
+        const localEntries = JSON.parse(localStorage.getItem('ecotrack_entries_cache') || '[]');
+        updateLevelProgress(localEntries);
+    } catch (e) {}
 
-        // Initial renders (Wrapped in try-catch to prevent cascading failures)
+    try {
+        // 2. Background Fetch with Timeout
+        const fetchPromise = getUserEntries();
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000));
+        
+        allEntries = await Promise.race([fetchPromise, timeoutPromise]);
+        
+        // Cache for next fast load
+        localStorage.setItem('ecotrack_entries_cache', JSON.stringify(allEntries.slice(0, 50)));
+
+        // 3. Update with real data
         try { updateLevelProgress(allEntries); } catch (e) { console.error("Score Error:", e); }
         try { updateEmissionDisplay(); } catch (e) { console.error("Emissions Error:", e); }
         try { renderTrendChart(allEntries, 'week'); } catch (e) { console.error("Chart Error:", e); }
@@ -124,14 +137,15 @@ function updateLevelProgress(entries) {
 
     // Update Status Labels based on score
     if (scoreTierBadge) {
-        const scoreRating = score > 1000 ? t("perf_exc") + " 🏆" : (score > 500 ? t("perf_good") + " 🚀" : t("perf_neo") + " 🌱");
-        scoreTierBadge.textContent = scoreRating;
+        const ratingKey = score > 1000 ? "perf_exc" : (score > 500 ? "perf_good" : "perf_neo");
+        const ratingIcon = score > 1000 ? "ðŸ †" : (score > 500 ? "ðŸš€" : "ðŸŒ±");
+        scoreTierBadge.textContent = t(ratingKey) + " " + ratingIcon;
         if (score > 0) scoreTierBadge.style.background = 'rgba(0, 212, 170, 0.15)';
     }
     if (scoreDesc) {
         scoreDesc.textContent = score > 0 
-            ? `You have earned ${score} EcoPoints! Keep logging daily activities to climb the ranks.` 
-            : "Complete your first activity to see your environmental impact score.";
+            ? `${t("earned_pts_1")} ${score} ${t("earned_pts_2")}` 
+            : t("complete_first_act", "Complete your first activity to see your environmental impact score.");
     }
 
     // Arc animation

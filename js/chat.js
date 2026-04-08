@@ -38,11 +38,11 @@ class EcoChat {
 
         const style = document.createElement('style');
         style.textContent = `
-            .eco-chat-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 10001; font-family: 'Inter', sans-serif; }
-            .chat-toggle-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--primary); border: none; cursor: pointer; color: white; font-size: 1.5rem; box-shadow: 0 10px 25px rgba(0,212,170,0.3); transition: 0.3s; }
-            .chat-toggle-btn:hover { transform: scale(1.1) rotate(-5deg); filter: brightness(1.1); }
+            .eco-chat-container { position: fixed; bottom: 8rem; right: 2rem; z-index: 10001; font-family: 'Inter', sans-serif; }
+            .chat-toggle-btn { width: 65px; height: 65px; border-radius: 50%; background: var(--primary); border: 2px solid rgba(255,255,255,0.2); cursor: pointer; color: white; font-size: 1.8rem; box-shadow: 0 10px 30px rgba(0,212,170,0.4); transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+            .chat-toggle-btn:hover { transform: scale(1.1) rotate(-5deg); filter: brightness(1.1); box-shadow: 0 15px 40px rgba(0,212,170,0.6); }
             
-            .eco-chat-window { position: absolute; bottom: 80px; right: 0; width: 350px; height: 500px; background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.4); display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.3s ease-out; }
+            .eco-chat-window { position: absolute; bottom: 85px; right: 0; width: 370px; height: 550px; background: var(--card-bg); border-radius: 24px; border: 1px solid var(--border); box-shadow: 0 25px 60px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow: hidden; animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
             .eco-chat-window.hidden { display: none; }
             
             .chat-header { padding: 1.25rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; justify-content: space-between; align-items: center; color: white; }
