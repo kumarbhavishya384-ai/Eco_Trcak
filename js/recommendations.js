@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!getCurrentUser()) return;
 
     const grid = document.getElementById('recsFullGrid');
-    if (grid) grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem;"><div class="loading-spinner"></div><p style="margin-top:1rem; color:var(--text-secondary)">AI Recommender is analyzing your patterns live...</p></div>';
+    if (grid) grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 3rem;"><div class="loading-spinner"></div><p style="margin-top:1rem; color:var(--text-secondary)">${t('ai_analyzing')}</p></div>';
 
     try {
         const entries = await getUserEntries();
@@ -130,16 +130,16 @@ function renderRecsGrid(recs, state = 'active') {
             grid.innerHTML = `
                 <div class="hero-state" style="grid-column: 1 / -1; padding: 4rem; text-align: center; background: linear-gradient(135deg, rgba(34,197,94,0.05), rgba(6,182,212,0.05)); border-radius: 24px; border: 1px solid rgba(34,197,94,0.15);">
                     <div style="font-size: 4rem; margin-bottom: 1.5rem;">🌿🏅</div>
-                    <h2 style="color: #22c55e; margin-bottom: 1rem;">Elite Eco-Champion</h2>
-                    <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.6;">Our AI has analyzed your consumption and found you are already performing at peak sustainability levels! There are no recommendations because your footprint in all categories is remarkably low. Excellent work!</p>
+                    <h2 style="color: #22c55e; margin-bottom: 1rem;">${t('hero_title')}</h2>
+                    <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.6;">${t('hero_desc')} There are no recommendations because your footprint in all categories is remarkably low. Excellent work!</p>
                 </div>
             `;
         } else {
             grid.innerHTML = `
                 <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem; text-align: center; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.1);">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">💡</div>
-                    <h3 style="color: white; margin-bottom: 0.5rem;">No Personalized Insights Available</h3>
-                    <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">We need some data about your lifestyle to provide smart recommendations. Please use the calculator to log your daily activities.</p>
+                    <h3 style="color: white; margin-bottom: 0.5rem;">${t('no_insights_title')}</h3>
+                    <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">${t('no_insights_desc')} Please use the calculator to log your daily activities.</p>
                     <button class="btn-primary" onclick="window.location.href='calculator.html'" style="padding: 0.75rem 1.5rem; background: var(--accent-primary); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Get Started Now</button>
                 </div>
             `;
@@ -152,12 +152,12 @@ function renderRecsGrid(recs, state = 'active') {
         <div class="rec-full-header">
           <span style="font-size:1.5rem">${r.icon}</span>
           <div>
-            <div style="font-weight:700">${r.title}</div>
-            <div style="font-size:0.75rem;color:var(--text-muted)">${r.category}</div>
+            <div style="font-weight:700">${t('rec_title_' + r.id.trim())}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted)">${t(r.cat + '_label')}</div>
           </div>
         </div>
-        <div style="margin:0.75rem 0;font-size:0.85rem">${r.desc}</div>
-        <div style="color:#22c55e;font-weight:600;font-size:0.8rem">Potential Save: ${r.impact} kg CO₂</div>
+        <div style="margin:0.75rem 0;font-size:0.85rem">${t('rec_desc_' + r.id.trim())}</div>
+        <div style="color:#22c55e;font-weight:600;font-size:0.8rem">${t('potential_save')}: ${r.impact} kg CO₂</div>
       </div>
     `).join('');
 }
@@ -178,14 +178,14 @@ async function renderAICoach() {
     if (!el) return;
 
     try {
-        const data = await apiFetch('/ai/coach');
+        const data = await apiFetch(`/ai/coach?lang=${currentLang}`);
         if (data.success) {
             el.innerHTML = data.advice;
         } else {
             throw new Error(data.message);
         }
     } catch (err) {
-        el.innerHTML = `<p style="color:var(--danger)">⚠️ Failed to sync with EcoCoach AI. ${err.message}</p>`;
+        el.innerHTML = `<p style="color:var(--danger)">⚠️ ${t('coach_error', 'Failed to sync with EcoCoach AI.')} ${err.message}</p>`;
     }
 }
 

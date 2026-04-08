@@ -1032,7 +1032,7 @@ const ALL_CHALLENGES = [
         tips: [
             '🗺️ Plan your metro/bus route the night before.',
             '🚲 Can you cycle the last mile from the station?',
-            '⏰ Leave 10 minutes early to catch the bus comfortably.',
+            '⏰ ${t('btn_leave')} 10 minutes early to catch the bus comfortably.',
             '📱 Download your city\'s transit app for live updates.',
             '🏆 Last day! You\'ve saved nearly 20 kg CO₂ this week!'
         ]
@@ -1268,32 +1268,32 @@ function renderChallengesWithNotifications(containerId) {
             <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;">
                 <span style="font-size:2rem;flex-shrink:0;">${ch.icon}</span>
                 <div style="flex:1;min-width:0;">
-                    <div style="font-weight:700;font-size:.95rem;color:#F0F6FF;">${ch.title}</div>
+                    <div style="font-weight:700;font-size:.95rem;color:#F0F6FF;">${t('ch_title_' + ch.id)}</div>
                     <div style="display:flex;align-items:center;gap:.4rem;margin-top:.2rem;">
-                        <span style="font-size:.7rem;font-weight:700;color:${col};background:${col}18;padding:.15rem .5rem;border-radius:50px;">${ch.difficulty}</span>
-                        <span style="font-size:.7rem;color:#4A6080;">· ${ch.days} days · ${ch.co2Saved}kg CO₂</span>
+                        <span style="font-size:.7rem;font-weight:700;color:${col};background:${col}18;padding:.15rem .5rem;border-radius:50px;">${t('diff_' + ch.difficulty.toLowerCase())}</span>
+                        <span style="font-size:.7rem;color:#4A6080;">· ${ch.days} ${t('days')} · ${ch.co2Saved}kg CO₂</span>
                     </div>
                 </div>
                 ${isDone ? '<span style="font-size:1.2rem;" title="Completed">🏆</span>' : ''}
             </div>
-            <p style="font-size:.8rem;color:#8B9BB4;line-height:1.5;margin-bottom:.75rem;">${ch.desc}</p>
+            <p style="font-size:.8rem;color:#8B9BB4;line-height:1.5;margin-bottom:.75rem;">${t('ch_desc_' + ch.id)}</p>
             ${isJoined ? `<div style="margin-bottom:.75rem;">
-                <div style="display:flex;justify-content:space-between;font-size:.72rem;color:#4A6080;margin-bottom:.3rem;"><span>Day ${progress}/${ch.days}</span><span>${pct}%</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:.72rem;color:#4A6080;margin-bottom:.3rem;"><span>${t('day')} ${progress}/${ch.days}</span><span>${pct}%</span></div>
                 <div style="height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;">
                     <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--primary),#06FFA5);border-radius:3px;transition:width .5s;"></div>
                 </div>
             </div>` : ''}
             <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
-                <span style="font-size:.75rem;color:#FBBF24;font-weight:600;">🌟 +${ch.points} pts</span>
+                <span style="font-size:.75rem;color:#FBBF24;font-weight:600;">🌟 +${ch.points} ${t('pts')}</span>
                 <span style="font-size:.75rem;color:#4A6080;">·</span>
-                <span style="font-size:.75rem;color:var(--primary);font-weight:600;">🌍 ${ch.co2Saved}kg saved</span>
+                <span style="font-size:.75rem;color:var(--primary);font-weight:600;">🌍 ${ch.co2Saved}${t('kg_saved')}</span>
             </div>
             ${isDone
                 ? `<div style="background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">✅ Completed!</div>`
                 : isJoined
                     ? `<div style="display:flex;gap:.5rem;">
                         <div style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">🔔 Active</div>
-                        <button onclick="leaveChallengeById('${ch.id}')" style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);border-radius:10px;padding:.5rem .75rem;font-size:.78rem;color:rgba(255,107,107,.7);cursor:pointer;">Leave</button>
+                        <button onclick="leaveChallengeById('${ch.id}')" style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);border-radius:10px;padding:.5rem .75rem;font-size:.78rem;color:rgba(255,107,107,.7);cursor:pointer;">${t('btn_leave')}</button>
                     </div>`
                     : `<button onclick="joinChallengeWithPermission('${ch.id}')" style="width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.6rem;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(0,212,170,.2);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">🎯 Join Challenge</button>`
             }

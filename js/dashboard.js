@@ -464,7 +464,7 @@ function renderDonutChart(entries) {
         legendEl.innerHTML = Object.entries(totals).map(([name, val], i) =>
             `<div class="legend-item" style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-size:0.8rem; color:var(--text-secondary);">
                 <div style="width:10px; height:10px; border-radius:3px; background:${colors[i]}"></div>
-                <span style="flex:1">${name}</span>
+                <span style="flex:1">${t(name.toLowerCase())}</span>
                 <span style="color:var(--text-primary); font-weight:700;">${((val / total) * 100).toFixed(0)}%</span>
             </div>`
         ).join('');
@@ -523,11 +523,11 @@ async function renderDashboardRecs() {
         el.innerHTML = recs.slice(0, 4).map(r => `
             <div class="rec-card" onclick="window.location.href='recommendations.html'" style="cursor:pointer;">
                 <div class="rec-icon" style="font-size:1.8rem; margin-bottom:0.75rem;">${r.icon}</div>
-                <div class="rec-title" style="font-weight:700; margin-bottom:0.4rem; font-size:0.9rem;">${r.title}</div>
-                <div class="rec-desc" style="font-size:0.78rem; color:var(--text-secondary); line-height:1.4; margin-bottom:0.75rem;">${r.desc}</div>
+                <div class="rec-title" style="font-weight:700; margin-bottom:0.4rem; font-size:0.9rem;">${t('rec_title_' + r.id.trim())}</div>
+                <div class="rec-desc" style="font-size:0.78rem; color:var(--text-secondary); line-height:1.4; margin-bottom:0.75rem;">${t('rec_desc_' + r.id.trim())}</div>
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span class="rec-impact" style="font-size:0.72rem; font-weight:700; color:var(--primary); background:rgba(0,212,170,0.1); padding:0.2rem 0.6rem; border-radius:50px;">Save ${r.impact}kg</span>
-                    <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">${r.category}</span>
+                    <span class="rec-impact" style="font-size:0.72rem; font-weight:700; color:var(--primary); background:rgba(0,212,170,0.1); padding:0.2rem 0.6rem; border-radius:50px;">${t('save')} ${r.impact}kg</span>
+                    <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">${t(r.cat + '_label')}</span>
                 </div>
             </div>
         `).join('');
@@ -552,7 +552,7 @@ function renderRecentActivity(entries) {
         <div style="display:flex; align-items:center; gap:1rem;">
           <div style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; font-size:1.1rem;">ðŸ“</div>
           <div>
-            <div style="font-size:0.875rem; font-weight:600;">Data Logged</div>
+            <div style="font-size:0.875rem; font-weight:600;">${t('log_data')}</div>
             <div style="font-size:0.72rem; color:var(--text-muted);">${formatDate(e.date)}</div>
           </div>
         </div>

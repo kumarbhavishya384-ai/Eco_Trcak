@@ -4,7 +4,7 @@ class EcoChat {
     constructor() {
         this.isOpen = false;
         this.messages = [
-            { role: 'assistant', text: 'Hi! I am your EcoAssistant. You can tell me things like "I drove 15km in a petrol car today" or "I had a chicken biryani" and I will log it for you! 🌿' }
+            { role: 'assistant', text: t('chat_welcome_msg', 'Hi! I am your EcoAssistant. You can tell me things like "I drove 15km in a petrol car today" or "I had a chicken biryani" and I will log it for you! 🌿') }
         ];
         this.initUI();
     }
@@ -17,15 +17,15 @@ class EcoChat {
                         <div class="header-info">
                             <span class="bot-icon">🤖</span>
                             <div>
-                                <h4>EcoAssistant</h4>
-                                <span class="status-dot"></span> <small>Online</small>
+                                <h4>${t('chat_bot_name', 'EcoAssistant')}</h4>
+                                <span class="status-dot"></span> <small>${t('chat_online', 'Online')}</small>
                             </div>
                         </div>
                         <button onclick="ecoAssistant.toggle()" class="close-chat">×</button>
                     </div>
                     <div id="chatMessages" class="chat-messages"></div>
                     <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="How did you travel today?" onkeypress="if(event.key==='Enter') ecoAssistant.sendMessage()">
+                        <input type="text" id="chatInput" placeholder="${t('chat_placeholder', 'How did you travel today?')}" onkeypress="if(event.key==='Enter') ecoAssistant.sendMessage()">
                         <button onclick="ecoAssistant.startVoice()" class="voice-btn" title="Voice Input">🎤</button>
                         <button onclick="ecoAssistant.sendMessage()" class="send-btn">➔</button>
                     </div>
@@ -97,7 +97,7 @@ class EcoChat {
         try {
             const data = await apiFetch('/ai/chat', {
                 method: 'POST',
-                body: JSON.stringify({ message: text })
+                body: JSON.stringify({ message: text, lang: typeof currentLang !== 'undefined' ? currentLang : 'en' })
             });
 
             document.getElementById(loadingId).remove();
@@ -105,7 +105,7 @@ class EcoChat {
             if (data.success) {
                 this.addMessage('assistant', data.response);
                 if (data.autoLog) {
-                    showGlobalToast(`✅ AI Auto-Logged: ${data.detail}`);
+                    showGlobalToast(`✅ ${t('ai_autologged', 'AI Auto-Logged')}: ${data.detail}`);
                     // Trigger custom event for other components if needed
                     window.dispatchEvent(new CustomEvent('aiLogSync'));
                 }
@@ -149,15 +149,15 @@ class EcoChat {
 
     startVoice() {
         if (!('webkitSpeechRecognition' in window)) {
-            showGlobalToast("Voice recognition not supported in this browser.");
+            showGlobalToast(t('voice_not_supported', 'Voice recognition not supported in this browser.'));
             return;
         }
 
         const recognition = new webkitSpeechRecognition();
-        recognition.lang = 'en-IN';
+        recognition.lang = (typeof currentLang !== 'undefined' && currentLang === 'hi') ? 'hi-IN' : (typeof currentLang !== 'undefined' && currentLang === 'bn') ? 'bn-IN' : (typeof currentLang !== 'undefined' && currentLang === 'ta') ? 'ta-IN' : 'en-IN';
         recognition.onstart = () => {
             document.querySelector('.voice-btn').style.color = 'var(--primary)';
-            showGlobalToast("Listening... 🎤");
+            showGlobalToast(t('listening', 'Listening...') + ' 🎤');
         };
         recognition.onresult = (event) => {
             const text = event.results[0][0].transcript;

@@ -268,7 +268,7 @@
                 <div class="chart-wrapper">
                     <canvas id="trendChart"></canvas>
                     <div id="chartEmptyState" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); border-radius: 12px; display: none;">
-                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Your analytics will appear here after your first log.</p>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><span data-i18n="chart_empty_msg">Your analytics will appear here after your first log.</span></p>
                     </div>
                 </div>
             </div>
@@ -276,7 +276,7 @@
             <!-- Category Donut Chart -->
             <div class="card donut-card reveal">
                 <div class="card-header">
-                    <h3>Emissions Split</h3>
+                    <h3><span data-i18n="emissions_split">Emissions Split</span></h3>
                 </div>
                 <div class="chart-wrapper-small">
                     <canvas id="donutChart"></canvas>
@@ -287,28 +287,28 @@
             <!-- Quick Stats -->
             <div class="card quick-stats-card reveal">
                 <div class="card-header">
-                    <h3>Performance</h3>
+                    <h3><span data-i18n="performance">Performance</span></h3>
                 </div>
                 <div class="quick-stats-grid">
                     <div class="qstat">
                         <span class="qstat-icon">🌲</span>
                         <div class="qstat-val" id="treesNeeded">--</div>
-                        <div class="qstat-label">TREES NEEDED</div>
+                        <div class="qstat-label"><div class="qstat-label" data-i18n="trees_needed_label">TREES NEEDED</div></div>
                     </div>
                     <div class="qstat">
                         <span class="qstat-icon">☀️</span>
                         <div class="qstat-val" id="solarSavings">--</div>
-                        <div class="qstat-label">SOLAR GAIN</div>
+                        <div class="qstat-label"><div class="qstat-label" data-i18n="solar_gain_label">SOLAR GAIN</div></div>
                     </div>
                     <div class="qstat">
                         <span class="qstat-icon">🏆</span>
                         <div class="qstat-val" id="userRank">#--</div>
-                        <div class="qstat-label">CAMPUS RANK</div>
+                        <div class="qstat-label"><div class="qstat-label" data-i18n="campus_rank_label">CAMPUS RANK</div></div>
                     </div>
                     <div class="qstat">
                         <span class="qstat-icon">📉</span>
                         <div class="qstat-val" id="reductionPct">--</div>
-                        <div class="qstat-label">REDUCTION</div>
+                        <div class="qstat-label"><div class="qstat-label" data-i18n="reduction_label">REDUCTION</div></div>
                     </div>
                 </div>
             </div>
@@ -316,7 +316,7 @@
             <!-- Regional Benchmark Comparison (New Requirement) -->
             <div class="card regional-benchmark-card reveal" style="grid-column: span 1;">
                 <div class="card-header">
-                    <h3>Carbon Benchmarks</h3>
+                    <h3><span data-i18n="carbon_benchmarks">Carbon Benchmarks</span></h3>
                     <div id="userZoneBadge" class="badge-live" style="background:var(--primary); color:#000;">GLOBAL
                     </div>
                 </div>
@@ -332,8 +332,8 @@
                     <div class="benchmark-item" style="margin-bottom: 1.5rem;">
                         <div
                             style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
-                            <span style="color:var(--text-secondary);">vs India National Avg</span>
-                            <span style="font-weight:700;">5.2 kg/day</span>
+                            <span style="color:var(--text-secondary);"><span data-i18n="vs_india_national_avg">vs India National Avg</span></span>
+                            <span style="font-weight:700;"><span data-i18n="national_limit">5.2 kg/day</span></span>
                         </div>
                         <div
                             style="height:8px; background:rgba(255,255,255,0.05); border-radius:4px; position:relative; overflow:hidden;">
@@ -348,7 +348,7 @@
                     <div class="benchmark-item">
                         <div
                             style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-size:0.8rem;">
-                            <span style="color:var(--text-secondary);" id="zoneAvgLabel">vs Zone Average</span>
+                            <span style="color:var(--text-secondary);" id="zoneAvgLabel"><span data-i18n="vs_zone_avg">vs Zone Average</span></span>
                             <span style="font-weight:700;" id="zoneAvgVal">-- kg/day</span>
                         </div>
                         <div
@@ -367,24 +367,24 @@
                 </div>
             </div>
 
-            <!-- AI Recommendations Preview -->
+            <!-- <span data-i18n="ai_recommendations">AI Recommendations</span> Preview -->
             <div class="card recommendations-preview-card full-width reveal">
                 <div class="card-header">
                     <div style="display:flex; align-items:center; gap:0.75rem;">
                         <span style="font-size:1.5rem;">🤖</span>
-                        <h3>AI Recommendations</h3>
+                        <h3><span data-i18n="ai_recommendations">AI Recommendations</span></h3>
                     </div>
-                    <a href="recommendations.html" class="view-all-link">Full Report →</a>
+                    <a href="recommendations.html" class="view-all-link"><a href="recommendations.html" class="view-all-link" data-i18n="full_report">Full Report →</a></a>
                 </div>
                 <div class="recs-grid" id="dashboardRecs"></div>
             </div>
 
-            <!-- Active Challenges -->
+            <!-- <span data-i18n="active_challenges">Active Challenges</span> -->
             <div class="card challenges-card full-width reveal">
                 <div class="card-header">
                     <div style="display:flex; align-items:center; gap:0.75rem;">
                         <span style="font-size:1.5rem;">🔥</span>
-                        <h3>Active Challenges</h3>
+                        <h3><span data-i18n="active_challenges">Active Challenges</span></h3>
                     </div>
                 </div>
                 <div class="challenges-grid" id="dashboardChallenges">
@@ -395,8 +395,8 @@
             <!-- Recent Activity Table-style -->
             <div class="card activity-card full-width reveal">
                 <div class="card-header">
-                    <h3>Recent Global Activities</h3>
-                    <div class="badge-live">LIVE FEED</div>
+                    <h3><span data-i18n="recent_global_activities">Recent Global Activities</span></h3>
+                    <div class="badge-live"><span data-i18n="live_feed">LIVE FEED</span></div>
                 </div>
                 <div class="activity-list" id="activityList">
                     <div class="empty-state">Securely fetching your environmental logs...</div>

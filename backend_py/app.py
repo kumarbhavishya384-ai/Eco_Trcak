@@ -1146,6 +1146,7 @@ def resend_welcome():
 @app.route('/api/ai/coach', methods=['GET'])
 @token_required
 def get_ai_coach():
+    lang = request.args.get('lang', 'en')
     try:
         uid = request.user['_id']
         entries = list(entries_col.find({"user": uid})) if use_mongodb else entries_col.find({"user": uid})
@@ -1180,7 +1181,7 @@ def get_ai_coach():
         4. Keep your response under 150 words. Use bullet points for actions.
         5. If the user is doing great (below targets), congratulate them and give one 'pro' level tip.
         
-        Format your response in simple HTML (just paragraphs, bold text, and <ul>/<li>).
+        Format your response in simple HTML (just paragraphs, bold text, and <ul>/<li>). IMPORTANT: You MUST respond EXCLUSIVELY in the following language: {lang}. If lang is 'hi', use Hindi (Devanagari). If 'bn', use Bengali. If 'ta', use Tamil. If 'en', use English.
         """
         if ai_client:
             try:
@@ -1245,6 +1246,8 @@ def predict_footprint():
 @app.route('/api/ai/chat', methods=['POST'])
 @token_required
 def ai_chat():
+    data = request.json
+    lang = data.get('lang', 'en')
     try:
         data = request.json
         user_msg = data.get('message', '')
