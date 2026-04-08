@@ -337,8 +337,26 @@ function renderRegionalBenchmarks(user, currentEntries) {
 
 // â”€â”€ Trend Chart â€“ Enhanced Premium â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderTrendChart(entries, period = 'week') {
-    const ctx = document.getElementById('trendChart');
-    if (!ctx || typeof Chart === 'undefined') return;
+    console.log("LOG: Rendering Trend Chart for period:", period, "| Entries count:", (entries ? entries.length : 0));
+    const container = document.querySelector('.chart-wrapper');
+    if (!container || typeof Chart === 'undefined') {
+        console.warn("Chart.js missing or container not found");
+        return;
+    }
+
+    // Hard reset canvas to avoid context issues
+    let ctx = document.getElementById('trendChart');
+    if (ctx) {
+        if (trendChartInstance) trendChartInstance.destroy();
+        const parent = ctx.parentNode;
+        parent.removeChild(ctx);
+        const newCanvas = document.createElement('canvas');
+        newCanvas.id = 'trendChart';
+        parent.prepend(newCanvas);
+        ctx = newCanvas;
+    } else {
+        return;
+    }
 
     let labels = [];
     let values = [];
@@ -373,13 +391,14 @@ function renderTrendChart(entries, period = 'week') {
         }
     }
 
-    if (trendChartInstance) trendChartInstance.destroy();
-
     const chartEmptyState = document.getElementById('chartEmptyState');
     const hasData = values.some(v => v > 0);
     if (chartEmptyState) chartEmptyState.style.display = (hasData || entries.length > 0) ? 'none' : 'flex';
 
-    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+    if (!hasData && entries.length === 0) return;
+
+    const canvasCtx = ctx.getContext('2d');
+    const gradient = canvasCtx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, 'rgba(0, 212, 170, 0.2)');
     gradient.addColorStop(1, 'rgba(0, 212, 170, 0)');
 
@@ -413,7 +432,7 @@ function renderTrendChart(entries, period = 'week') {
                     padding: 12,
                     cornerRadius: 8,
                     displayColors: false,
-                    callbacks: { label: ctx => `${ctx.parsed.y.toFixed(2)} ${t('kg_co2e', 'kg COâ‚‚e')}` }
+                    callbacks: { label: ctx => `${ctx.parsed.y.toFixed(2)} ${t('kg_co2e', 'kg CO2e')}` }
                 }
             },
             scales: {
@@ -432,17 +451,34 @@ function renderTrendChart(entries, period = 'week') {
 }
 
 async function updateChart(period, btn) {
-    document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    // Use and refresh global entries
+    if (btn) {
+        document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    // Refresh global entries
     allEntries = await getUserEntries();
     renderTrendChart(allEntries, period);
 }
 
 // â”€â”€ Donut Chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderDonutChart(entries) {
-    const ctx = document.getElementById('donutChart');
-    if (!ctx || typeof Chart === 'undefined') return;
+    console.log("LOG: Rendering Donut Chart | Entries count:", (entries ? entries.length : 0));
+    const container = document.querySelector('.chart-wrapper-small');
+    if (!container || typeof Chart === 'undefined') return;
+
+    // Hard reset canvas to avoid context issues
+    let ctx = document.getElementById('donutChart');
+    if (ctx) {
+        if (donutChartInstance) donutChartInstance.destroy();
+        const parent = ctx.parentNode;
+        parent.removeChild(ctx);
+        const newCanvas = document.createElement('canvas');
+        newCanvas.id = 'donutChart';
+        parent.appendChild(newCanvas);
+        ctx = newCanvas;
+    } else {
+        return;
+    }
 
     const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
     const filtered = entries.filter(e => new Date(e.date) >= cutoff);
@@ -459,9 +495,7 @@ function renderDonutChart(entries) {
         t('food', 'Food')
     ];
 
-    const colors = ['#3B82F6', '#FBBF24', '#00D4AA'];
-
-    if (donutChartInstance) donutChartInstance.destroy();
+    const colors = ['#3B82F6', '#FBBF24', '#10B981'];
 
     donutChartInstance = new Chart(ctx, {
         type: 'doughnut',
