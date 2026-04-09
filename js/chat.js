@@ -30,8 +30,8 @@ class EcoChat {
                         <button onclick="ecoAssistant.sendMessage()" class="send-btn">Send</button>
                     </div>
                 </div>
-                <button id="chatToggleBtn" class="chat-toggle-btn" onclick="ecoAssistant.toggle()">
-                    <span class="toggle-icon">Chat</span>
+                <button id="chatToggleBtn" class="chat-toggle-btn" onclick="ecoAssistant.toggle()" aria-label="Open EcoAssistant">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </button>
             </div>
         `;

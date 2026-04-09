@@ -115,7 +115,7 @@ function switchTab(tab, btn) {
 
     const nextBtn = document.getElementById('nextTabBtn');
     if (idx === TABS.length - 1) {
-        nextBtn.textContent = '✅ Save Entry';
+        nextBtn.textContent = 'Save Entry';
         nextBtn.style.background = 'linear-gradient(135deg, #22c55e, #06b6d4)';
     } else {
         nextBtn.textContent = 'Next →';
@@ -363,7 +363,7 @@ async function saveEntry() {
         const toast = document.getElementById('successToast');
         if (toast) {
             toast.innerHTML = `
-                <span>✅</span>
+                <span></span>
                 <div>
                     <strong>Data Logged to MongoDB!</strong>
                     <p>New EcoScore: <strong style="color:#22c55e">${res.ecoScore}/800</strong></p>
@@ -377,7 +377,7 @@ async function saveEntry() {
     } catch (err) {
         showGlobalToast("Failed to save entry: " + err.message);
         btn.disabled = false;
-        btn.textContent = '✅ Save Entry';
+        btn.textContent = 'Save Entry';
     }
 }
 // ── AI Food Scanner ────────────────────────────────────
@@ -389,7 +389,7 @@ async function handleMealScan(event) {
     const scanBtn = document.getElementById('scanBtn');
 
     statusEl.style.display = 'block';
-    statusEl.innerHTML = '<span class="loading-spinner"></span> Analyzing your plate...';
+    statusEl.innerHTML = 'Analyzing your plate...';
     scanBtn.disabled = true;
 
     try {
@@ -404,20 +404,20 @@ async function handleMealScan(event) {
             });
 
             if (data.success) {
-                statusEl.innerHTML = `✅ Found: <strong>${data.items.join(', ')}</strong><br/>Est. Impact: <strong>${data.totalKg}kg CO₂e</strong>`;
+                statusEl.innerHTML = `Found: <strong>${data.items.join(', ')}</strong><br/>Est. Impact: <strong>${data.totalKg}kg CO₂e</strong>`;
 
                 // Auto-fill the food calculator if possible
                 // For simplicity, we'll just add the detected CO2 to the current food total
                 categoryTotals.food += data.totalKg;
                 updateSummaryBar();
-                showGlobalToast("AI identified your food and updated your impact! 🥗");
+                showGlobalToast("AI identified your food and updated your impact!");
             } else {
                 throw new Error(data.message);
             }
         };
         reader.readAsDataURL(file);
     } catch (err) {
-        statusEl.innerHTML = `<span style="color:var(--danger)">⚠️ AI analysis failed: ${err.message}</span>`;
+        statusEl.innerHTML = `<span style="color:var(--danger)">AI analysis failed: ${err.message}</span>`;
     } finally {
         scanBtn.disabled = false;
         event.target.value = ''; // Reset input

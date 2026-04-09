@@ -61,7 +61,9 @@
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">Menu</button>
+                <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
                 <h1 class="page-title" data-i18n="hist_title">Emission History</h1>
             </div>
             <div class="topbar-right">
@@ -74,22 +76,30 @@
             <!-- Summary Stats Row -->
             <div class="history-stats-row">
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">Stats</div>
+                    <div class="hist-stat-icon" style="display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
+                    </div>
                     <div class="hist-stat-val" id="hst-total">0</div>
                     <div class="hist-stat-label" data-i18n="total_entries">Total Entries</div>
                 </div>
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">Impact</div>
+                    <div class="hist-stat-icon" style="display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m16 12-4 4-4-4M12 8v8"></path></svg>
+                    </div>
                     <div class="hist-stat-val" id="hst-co2">0</div>
                     <div class="hist-stat-label" data-i18n="total_co2">Total kg CO₂</div>
                 </div>
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">Best</div>
+                    <div class="hist-stat-icon" style="display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                    </div>
                     <div class="hist-stat-val" id="hst-best">--</div>
                     <div class="hist-stat-label" data-i18n="best_day">Best Day</div>
                 </div>
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">Streak</div>
+                    <div class="hist-stat-icon" style="display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                    </div>
                     <div class="hist-stat-val" id="hst-streak">0</div>
                     <div class="hist-stat-label" data-i18n="logging_streak">Logging Streak</div>
                 </div>
@@ -152,13 +162,7 @@
         </div>
     </main>
 
-    <!-- Floating Scroll FAB -->
-    <div class="scroll-fab" id="scrollFab">
-        <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
-            title="Scroll to top">Up</button>
-        <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
-            title="Scroll down">Down</button>
-    </div>
+
     <script src="js/app.js"></script>
     <script src="js/history.js"></script>
 </body>

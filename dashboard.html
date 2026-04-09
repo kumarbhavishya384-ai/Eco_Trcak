@@ -86,7 +86,9 @@
         <!-- Top Bar -->
         <header class="topbar">
             <div class="topbar-left">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">Menu</button>
+                <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
                 <h1 class="page-title"  data-i18n="db_title">Dashboard</h1>
                 <div class="live-indicator" style="margin-left: 1.5rem;">
                     <span class="live-dot"></span> <span class="status-badge" style="display:inline">REAL-TIME</span>
@@ -98,7 +100,7 @@
                     onclick="openReminderSettings()"
                     style="display:inline-flex; background:rgba(255,255,255,0.05); border-radius:12px; border:1px solid rgba(255,255,255,0.1); padding:0.6rem; color:#fff; cursor:pointer; font-size:1.1rem; align-items:center; justify-content:center; transition:0.3s"
                     onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'"
-                    onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='#fff'">Notifications</button>
+                    onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='#fff'"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></button>
                 
                 <!-- Profile Dropdown -->
                 <div class="profile-dropdown-container" style="position:relative; margin-left: 8px;">
@@ -130,7 +132,9 @@
                         <h3 data-i18n="acc_overview" style="font-size: 1.5rem; letter-spacing: -0.02em;">Account Overview</h3>
                         <div class="score-level-badge" style="background: rgba(0, 212, 170, 0.1); color: var(--primary); margin-bottom: 0;">
                             <span id="levelBadgeIcon"></span> <span id="levelBadgeText">Neophyte</span>
-                            <span style="margin-left: 6px; cursor: help;" title="Your level increases as you log more sustainable activities and reduce your footprint.">Info</span>
+                            <span style="margin-left: 6px; cursor: help; display: inline-flex; align-items: center;" title="Your level increases as you log more sustainable activities and reduce your footprint.">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -363,8 +367,9 @@
                             </div>
                         </div>
                     </div>
-                    <p style="font-size:0.7rem; color:var(--text-muted); margin-top:1.25rem; line-height:1.4;">
-                        Tip: Your white marker relative to the bars shows your daily average performance.
+                    <p style="font-size:0.7rem; color:var(--text-muted); margin-top:1.25rem; line-height:1.4; display: flex; align-items: center; gap: 6px;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A5 5 0 0 0 8 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"></path><line x1="9" y1="18" x2="15" y2="18"></line><line x1="10" y1="22" x2="14" y2="22"></line></svg>
+                        Your white marker relative to the bars shows your daily average performance.
                     </p>
                 </div>
             </div>
@@ -406,13 +411,7 @@
         </div>
     </main>
 
-    <!-- Floating Scroll FAB -->
-    <div class="scroll-fab" id="scrollFab">
-        <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
-            title="Scroll to top">Up</button>
-        <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
-            title="Scroll down">Down</button>
-    </div>
+
 
     <script src="js/i18n.js?v=5.2"></script>
     <script src="js/app.js?v=5.2"></script>
