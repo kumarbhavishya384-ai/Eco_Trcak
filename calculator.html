@@ -29,23 +29,23 @@
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
+        <div class="sidebar-logo"><span class="logo-text">EcoTrack <b>AI</b></span></div>
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item" id="nav-dashboard"><span class="nav-icon">&#128202;</span><span
+            <a href="dashboard.html" class="nav-item" id="nav-dashboard"><span
                     class="nav-label" data-i18n="nav_dashboard">Dashboard</span></a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
+                <span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
             </a>
 
-            <a href="calculator.html" class="nav-item active" id="nav-calculator"><span class="nav-icon">🧮</span><span
+            <a href="calculator.html" class="nav-item active" id="nav-calculator"><span
                     class="nav-label" data-i18n="nav_calculator">Calculator</span></a>
-            <a href="history.html" class="nav-item" id="nav-history"><span class="nav-icon">&#128197;</span><span
+            <a href="history.html" class="nav-item" id="nav-history"><span
                     class="nav-label" data-i18n="nav_history">History</span></a>
             <a href="recommendations.html" class="nav-item" id="nav-recommendations"><span
-                    class="nav-icon">💡</span><span class="nav-label" data-i18n="nav_insights">AI Insights</span></a>
-            <a href="leaderboard.html" class="nav-item" id="nav-leaderboard"><span class="nav-icon">&#127942;</span><span
+                    class="nav-label" data-i18n="nav_insights">AI Insights</span></a>
+            <a href="leaderboard.html" class="nav-item" id="nav-leaderboard"><span
                     class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span></a>
-            <a href="offset.html" class="nav-item" id="nav-offset"><span class="nav-icon">🌲</span><span
+            <a href="offset.html" class="nav-item" id="nav-offset"><span
                     class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
         </nav>
         <div class="sidebar-footer">
@@ -62,14 +62,14 @@
                 <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
                     style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
             </div>
-            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </aside>
 
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">Menu</button>
                 <h1 class="page-title" data-i18n="calc_title">Carbon Calculator</h1>
             </div>
             <div class="topbar-right">
@@ -84,13 +84,13 @@
             <!-- Category Tabs -->
             <div class="calc-tabs">
                 <button class="calc-tab active" data-tab="transport" onclick="switchTab('transport', this)">
-                    <span>&#128663;</span> Transport
+                    Transport
                 </button>
                 <button class="calc-tab" data-tab="electricity" onclick="switchTab('electricity', this)">
-                    <span>s</span> Electricity
+                    Electricity
                 </button>
                 <button class="calc-tab" data-tab="food" onclick="switchTab('food', this)">
-                    <span>&#127869;</span> Food
+                    Food
                 </button>
             </div>
 
@@ -107,7 +107,7 @@
                 <!-- TRANSPORT PANEL -->
                 <div class="calc-panel active" id="panel-transport">
                     <div class="panel-header">
-                        <h2>&#128663; Transport Emissions (Daily)</h2>
+                        <h2>Transport Emissions (Daily)</h2>
                         <p data-i18n="transport_subtitle">Track your daily travel. Carbon = Distance × Emission Factor</p>
                     </div>
 
@@ -169,7 +169,7 @@
                         </div>
 
                         <div class="calc-result-box" id="transportResult">
-                            <span class="result-icon">&#128663;</span>
+                            <span class="result-icon"></span>
                             <div class="result-content">
                                 <span class="result-val" id="transportCO2">0.00</span>
                                 <span class="result-unit">kg CO₂</span>
@@ -182,7 +182,7 @@
                 <!-- ELECTRICITY PANEL -->
                 <div class="calc-panel" id="panel-electricity">
                     <div class="panel-header">
-                        <h2>s Electricity & Energy (Monthly)</h2>
+                        <h2>Electricity & Energy (Monthly)</h2>
                         <p>India Grid: 0.82 kg/kWh. <b>Note:</b> Log this once a month. It will be hidden for the rest
                             of the month.</p>
                     </div>
@@ -221,7 +221,7 @@
                             </div>
                         </div>
 
-                        <h4 class="section-label">🏠 Household Members</h4>
+                        <h4 class="section-label">Household Members</h4>
                         <div class="input-row">
                             <div class="input-group">
                                 <label data-i18n="family_members">Number of Family Members</label>
@@ -230,7 +230,7 @@
                             </div>
                             <div class="input-group" style="display:flex; align-items:flex-end; padding-bottom:4px">
                                 <p style="font-size:0.8rem; color:var(--text-muted); margin:0">
-                                    💡 The total household electricity emissions will be <strong>divided
+                                    Tip: The total household electricity emissions will be <strong>divided
                                         equally</strong> among all family members. Only your share will be saved.
                                 </p>
                             </div>
@@ -241,22 +241,22 @@
                             per day; we will calculate the monthly total.</p>
                         <div class="appliances-grid">
                             <div class="appliance-item">
-                                <span>🌡️ AC</span>
+                                <span>AC</span>
                                 <input type="number" id="acHours" placeholder="hrs" min="0" max="24"
                                     oninput="calcElectricity()" />
                             </div>
                             <div class="appliance-item">
-                                <span>🖥️ PC/Laptop</span>
+                                <span>PC/Laptop</span>
                                 <input type="number" id="pcHours" placeholder="hrs" min="0" max="24"
                                     oninput="calcElectricity()" />
                             </div>
                             <div class="appliance-item">
-                                <span>📺 TV</span>
+                                <span>TV</span>
                                 <input type="number" id="tvHours" placeholder="hrs" min="0" max="24"
                                     oninput="calcElectricity()" />
                             </div>
                             <div class="appliance-item">
-                                <span>🧺 Washing Machine</span>
+                                <span>Washing Machine</span>
                                 <input type="number" id="washHours" placeholder="cycles" min="0"
                                     oninput="calcElectricity()" />
                             </div>
@@ -276,7 +276,7 @@
                 <!-- FOOD PANEL -->
                 <div class="calc-panel" id="panel-food">
                     <div class="panel-header">
-                        <h2>&#127869; Food & Diet (Daily)</h2>
+                        <h2>Food & Diet (Daily)</h2>
                         <p data-i18n="food_subtitle">Track your food impact today. Choose diet and enter dishes.</p>
                     </div>
 
@@ -284,27 +284,27 @@
                         <h4 class="section-label">Diet Type</h4>
                         <div class="diet-selector">
                             <div class="diet-option" onclick="selectDiet('vegan', this)" id="diet-vegan">
-                                <span class="diet-icon">🥗</span>
+                                <span class="diet-icon"></span>
                                 <span class="diet-label">Vegan</span>
                                 <span class="diet-co2">0.0 kg</span>
                             </div>
                             <div class="diet-option" onclick="selectDiet('pure-veg', this)" id="diet-pure-veg">
-                                <span class="diet-icon">🥦</span>
+                                <span class="diet-icon"></span>
                                 <span class="diet-label">Pure Veg</span>
                                 <span class="diet-co2">0.0 kg</span>
                             </div>
                             <div class="diet-option" onclick="selectDiet('egg-veg', this)" id="diet-egg-veg">
-                                <span class="diet-icon">🥚</span>
+                                <span class="diet-icon"></span>
                                 <span class="diet-label">Veg with Egg</span>
                                 <span class="diet-co2">0.0 kg</span>
                             </div>
                             <div class="diet-option selected" onclick="selectDiet('omnivore', this)" id="diet-omnivore">
-                                <span class="diet-icon">🍖</span>
+                                <span class="diet-icon"></span>
                                 <span class="diet-label">Omnivore</span>
                                 <span class="diet-co2">0.0 kg</span>
                             </div>
                             <div class="diet-option" onclick="selectDiet('heavy-meat', this)" id="diet-heavy-meat">
-                                <span class="diet-icon">🥩</span>
+                                <span class="diet-icon"></span>
                                 <span class="diet-label">Heavy Meat</span>
                                 <span class="diet-co2">0.0 kg</span>
                             </div>
@@ -313,7 +313,7 @@
                         <!-- AI Photo Food Logger -->
                         <div class="ai-scan-box"
                             style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(0,212,170,0.05); border: 1px dashed var(--primary); border-radius: 12px; text-align: center;">
-                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📸</div>
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;"></div>
                             <h4 style="margin-bottom: 0.5rem; color: var(--primary);" data-i18n="ai_food_scanner">AI Food Scanner</h4>
                             <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Take a photo of
                                 your plate to auto-calculate its footprint.</p>
@@ -321,12 +321,12 @@
                                 onchange="handleMealScan(event)">
                             <button class="btn-primary" onclick="document.getElementById('mealImageInput').click()"
                                 id="scanBtn">
-                                📷 Scan My Meal
+                                Scan My Meal
                             </button>
                             <div id="scanStatus" style="margin-top: 0.75rem; font-size: 0.8rem; display: none;"></div>
                         </div>
 
-                        <h4 class="section-label">&#127869; What did you eat today?</h4>
+                        <h4 class="section-label">What did you eat today?</h4>
                         <div class="dish-count-row"
                             style="display:flex; gap:10px; margin-bottom:1.5rem; align-items:flex-end">
                             <div class="input-group" style="flex:1">
@@ -345,7 +345,7 @@
                             style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:10px; margin-bottom:1.5rem">
                             <details>
                                 <summary style="cursor:pointer; font-size:0.85rem; color:var(--cyan); font-weight:600">
-                                    &#128202; View DashBoard Reference Table (kg CO₂/bowl)</summary>
+                                    View DashBoard Reference Table (kg CO₂/bowl)</summary>
                                 <div style="max-height:150px; overflow-y:auto; margin-top:10px; font-size:0.8rem">
                                     <table style="width:100%; border-collapse:collapse">
                                         <thead style="position:sticky; top:0; background:#071525">
@@ -369,32 +369,32 @@
                         <h4 class="section-label">Other Impacts</h4>
                         <div class="input-row">
                             <div class="input-group">
-                                <label>🍚 Generic Rice (bowls)</label>
+                                <label>Generic Rice (bowls)</label>
                                 <input type="number" id="riceServings" placeholder="0" min="0" oninput="calcFood()" />
                             </div>
                             <div class="input-group">
-                                <label>🍞 Grains/Bread (servings)</label>
+                                <label>Grains/Bread (servings)</label>
                                 <input type="number" id="grainServings" placeholder="0" min="0" oninput="calcFood()" />
                             </div>
                             <div class="input-group">
-                                <label>🥕 Veggies/Fruits (cups)</label>
+                                <label>Veggies/Fruits (cups)</label>
                                 <input type="number" id="veggieServings" placeholder="0" min="0" oninput="calcFood()" />
                             </div>
                         </div>
                         <div class="input-row">
                             <div class="input-group">
-                                <label>🍎 Imported Fruits (items)</label>
+                                <label>Imported Fruits (items)</label>
                                 <input type="number" id="importServings" placeholder="0" min="0" oninput="calcFood()" />
                             </div>
                             <div class="input-group">
-                                <label>🗑️ Food Waste (kg)</label>
+                                <label>Food Waste (kg)</label>
                                 <input type="number" id="foodWaste" placeholder="0" min="0" step="0.1"
                                     oninput="calcFood()" />
                             </div>
                         </div>
 
                         <div class="calc-result-box">
-                            <span class="result-icon">&#127869;</span>
+                            <span class="result-icon"></span>
                             <div class="result-content">
                                 <span class="result-val" id="foodCO2">0.00</span>
                                 <span class="result-unit">kg CO₂</span>
@@ -411,19 +411,19 @@
             <div class="calc-summary-bar">
                 <div class="summary-totals">
                     <div class="summary-cat">
-                        <span class="sumcat-icon">&#128663;</span>
+                        <span class="sumcat-icon"></span>
                         <span class="sumcat-val" id="sum-transport">0.00</span>
                         <span class="sumcat-label">kg (Daily)</span>
                     </div>
                     <span class="sum-plus">+</span>
                     <div class="summary-cat">
-                        <span class="sumcat-icon">s</span>
+                        <span class="sumcat-icon"></span>
                         <span class="sumcat-val" id="sum-electricity">0.00</span>
                         <span class="sumcat-label">kg (Monthly)</span>
                     </div>
                     <span class="sum-plus">+</span>
                     <div class="summary-cat">
-                        <span class="sumcat-icon">&#127869;</span>
+                        <span class="sumcat-icon"></span>
                         <span class="sumcat-val" id="sum-food">0.00</span>
                         <span class="sumcat-label">kg (Daily)</span>
                     </div>
@@ -443,7 +443,7 @@
 
             <!-- Success Toast -->
             <div class="success-toast" id="successToast" style="display:none">
-                <span>✅</span>
+                <span></span>
                 <div>
                     <strong>Saved Successfully!</strong>
                     <p data-i18n="saved_msg">Your carbon data has been logged and EcoScore updated.</p>
@@ -457,9 +457,9 @@
     <!-- Floating Scroll FAB -->
     <div class="scroll-fab" id="scrollFab">
         <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
-            title="Scroll to top">&#8679;</button>
+            title="Scroll to top">Up</button>
         <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
-            title="Scroll down">&#8681;</button>
+            title="Scroll down">Down</button>
     </div>
     <script src="js/app.js"></script>
     <script src="js/calculator.js?v=4"></script>

@@ -51,23 +51,23 @@ function updateStatusBanner(avgTotal, limit, status) {
 
     if (status === 'good') {
         banner.className = 'status-banner status-good';
-        title.innerText = 'Good Situation 🌲';
+        title.innerText = 'Good Situation';
         desc.innerText = `Your daily baseline (${avgTotal.toFixed(2)} kg) is BELOW the national average limit of ${limit} kg. Keep it up!`;
-        icon.innerText = '✅';
+        icon.innerText = 'Info';
     } else {
         banner.className = 'status-banner status-danger';
-        title.innerText = 'Danger Situation ⚠️';
+        title.innerText = 'Danger Situation';
         desc.innerText = `Your daily baseline (${avgTotal.toFixed(2)} kg) is ABOVE the national average limit of ${limit} kg. Action required!`;
-        icon.innerText = '🔴';
+        icon.innerText = 'Alert';
     }
 }
 
 function updateMetricsList(data, targets, days = 30) {
     const list = document.getElementById('metricsList');
     const metrics = [
-        { label: 'Transport', val: data.transport, target: targets.transportDaily, icon: '🚗', period: 'Daily' },
-        { label: 'Electricity', val: data.electricity / days, target: targets.electricityMonthly / days, icon: '⚡', period: 'Daily' },
-        { label: 'Food', val: data.food, target: targets.foodDaily, icon: '🍽️', period: 'Daily' }
+        { label: 'Transport', val: data.transport, target: targets.transportDaily, icon: 'Transport', period: 'Daily' },
+        { label: 'Electricity', val: data.electricity / days, target: targets.electricityMonthly / days, icon: 'Energy', period: 'Daily' },
+        { label: 'Food', val: data.food, target: targets.foodDaily, icon: 'Food', period: 'Daily' }
     ];
 
     list.innerHTML = metrics.map(m => {
@@ -144,5 +144,5 @@ function showNoData() {
     banner.style.background = 'rgba(255, 255, 255, 0.05)';
     document.getElementById('statusTitle').innerText = 'No Data Available';
     document.getElementById('statusDesc').innerText = 'Please log your data in the Calculator to see your report.';
-    document.getElementById('statusIcon').innerText = '📊';
+    document.getElementById('statusIcon').innerText = 'Data';
 }

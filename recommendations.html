@@ -21,23 +21,23 @@
 
 
     <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
+        <div class="sidebar-logo"><span class="logo-text">EcoTrack <b>AI</b></span></div>
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span><span
+            <a href="dashboard.html" class="nav-item"><span
                     class="nav-label" data-i18n="nav_dashboard">Dashboard</span></a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
+                <span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
             </a>
 
-            <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span
+            <a href="calculator.html" class="nav-item"><span
                     class="nav-label" data-i18n="nav_calculator">Calculator</span></a>
-            <a href="history.html" class="nav-item"><span class="nav-icon">📅</span><span
+            <a href="history.html" class="nav-item"><span
                     class="nav-label" data-i18n="nav_history">History</span></a>
-            <a href="recommendations.html" class="nav-item active"><span class="nav-icon">💡</span><span
+            <a href="recommendations.html" class="nav-item active"><span
                     class="nav-label" data-i18n="nav_insights">AI Insights</span></a>
-            <a href="leaderboard.html" class="nav-item"><span class="nav-icon">🏆</span><span
+            <a href="leaderboard.html" class="nav-item"><span
                     class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span></a>
-            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
+            <a href="offset.html" class="nav-item"><span class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-mini-profile">
@@ -53,15 +53,15 @@
                 <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
                     style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
             </div>
-            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </aside>
 
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title" data-i18n="rec_title">🤖 AI Insights & Predictions</h1>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">Menu</button>
+                <h1 class="page-title" data-i18n="rec_title">AI Insights & Predictions</h1>
             </div>
         </header>
 
@@ -71,7 +71,7 @@
             <div class="card ai-coach-card full-width"
                 style="border-left: 5px solid var(--primary); margin-bottom: 2rem;">
                 <div class="card-header" style="justify-content: flex-start; gap: 1rem;">
-                    <span style="font-size: 2rem;">🤖</span>
+                    <span></span>
                     <div>
                         <h3 style="font-family: 'Space Grotesk'; font-size: 1.4rem;" data-i18n="ecocoach_title">EcoCoach AI Analysis</h3>
                         <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="ecocoach_sub">GPT-Powered Personalized Guidance</p>
@@ -87,7 +87,7 @@
             <!-- AI Prediction Summary -->
             <div class="card ai-prediction-card full-width">
                 <div class="ai-header-stripe">
-                    <div class="ai-brain-icon">🧠</div>
+                    <div class="ai-brain-icon"></div>
                     <div class="ai-header-text">
                         <h2 data-i18n="ai_carbon_analysis">Your AI Carbon Analysis</h2>
                         <p data-i18n="ml_model_note">Based on your activity patterns, our ML model predicts your future emissions</p>
@@ -101,7 +101,7 @@
                         <div class="pred-unit">kg CO₂</div>
                     </div>
                     <div class="prediction-block highlight">
-                        <div class="pred-label" data-i18n="ai_prediction">🤖 AI Prediction (Next Month)</div>
+                        <div class="pred-label" data-i18n="ai_prediction">AI Prediction (Next Month)</div>
                         <div class="pred-val" id="predNextMonth">Loading...</div>
                         <div class="pred-unit">kg CO₂</div>
                     </div>
@@ -119,16 +119,16 @@
             <!-- Smart Recommendations -->
             <div class="recs-section">
                 <div class="section-header-inline">
-                    <h2 data-i18n="smart_recs">💡 Smart Recommendations</h2>
+                    <h2 data-i18n="smart_recs">Smart Recommendations</h2>
                     <span class="rec-count" id="recCount">Loading...</span>
                 </div>
 
                 <div class="rec-filters">
                     <button class="rec-filter-btn active" onclick="filterRecs('all', this)">All</button>
-                    <button class="rec-filter-btn" onclick="filterRecs('transport', this)">🚗 Transport</button>
-                    <button class="rec-filter-btn" onclick="filterRecs('electricity', this)">⚡ Electricity</button>
-                    <button class="rec-filter-btn" onclick="filterRecs('food', this)">🍽️ Food</button>
-                    <button class="rec-filter-btn" onclick="filterRecs('high-impact', this)">🔥 High Impact</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('transport', this)">Transport</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('electricity', this)">Electricity</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('food', this)">Food</button>
+                    <button class="rec-filter-btn" onclick="filterRecs('high-impact', this)">High Impact</button>
                 </div>
 
                 <div class="recs-full-grid" id="recsFullGrid"></div>
@@ -137,7 +137,7 @@
             <!-- Behavioral Patterns -->
             <div class="card patterns-card full-width">
                 <div class="card-header">
-                    <h3 data-i18n="behavioral">📈 Behavioral Pattern Analysis</h3>
+                    <h3 data-i18n="behavioral">Behavioral Pattern Analysis</h3>
                 </div>
                 <div class="patterns-grid" id="patternsGrid"></div>
             </div>
@@ -145,7 +145,7 @@
             <!-- Challenge Section -->
             <div class="card challenges-card full-width">
                 <div class="card-header">
-                    <h3 data-i18n="eco_challenges">🎯 Eco Challenges</h3>
+                    <h3 data-i18n="eco_challenges">Eco Challenges</h3>
                     <span class="badge-new">NEW</span>
                 </div>
                 <div class="challenges-grid" id="challengesGrid"></div>
@@ -157,9 +157,9 @@
     <!-- Floating Scroll FAB -->
     <div class="scroll-fab" id="scrollFab">
         <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
-            title="Scroll to top">&#8679;</button>
+            title="Scroll to top">Up</button>
         <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
-            title="Scroll down">&#8681;</button>
+            title="Scroll down">Down</button>
     </div>
     <script src="js/app.js"></script>
     <script src="js/recommendations.js"></script>

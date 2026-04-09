@@ -35,16 +35,16 @@ let EMAILJS_WELCOME_TEMPLATE = 'template_gunv9po';
             EMAILJS_SERVICE_ID = config.EMAILJS_SERVICE_ID || EMAILJS_SERVICE_ID;
             EMAILJS_OTP_TEMPLATE = config.EMAILJS_OTP_TEMPLATE || EMAILJS_OTP_TEMPLATE;
             EMAILJS_WELCOME_TEMPLATE = config.EMAILJS_WELCOME_TEMPLATE || EMAILJS_WELCOME_TEMPLATE;
-            console.log('App Config Fetched from Cloud ☁️');
+            console.log('App Config Fetched from Cloud');
         }
     } catch (err) {
-        console.warn('Using default local config (Backend disconnected) 🔌');
+        console.warn('Using default local config (Backend disconnected)');
     }
 
     // Initialize EmailJS with final key
     if (typeof emailjs !== 'undefined') {
         emailjs.init(EMAILJS_PUBLIC_KEY);
-        console.log('EmailJS initialized ✅');
+        console.log('EmailJS initialized');
     }
 })();
 
@@ -52,14 +52,14 @@ let EMAILJS_WELCOME_TEMPLATE = 'template_gunv9po';
 async function runFederatedTraining() {
     const user = getCurrentUser();
     if (!user) return;
-    console.log("🧬 Starting Federated Learning training cycle...");
+    console.log("Starting Federated Learning training cycle...");
     const entries = await getUserEntries();
     if (entries.length < 3) return;
     const total = entries.reduce((s, e) => s + e.total, 0);
     const bias  = (total / entries.length) > 5.2 ? 0.05 : -0.05;
     setTimeout(() => {
-        console.log(`📡 Federated Update Sent: [Bias: ${bias.toFixed(4)}]`);
-        showGlobalToast("Privacy-Safe AI Model Updated! 🧬");
+        console.log(`Federated Update Sent: [Bias: ${bias.toFixed(4)}]`);
+        showGlobalToast("Privacy-Safe AI Model Updated!");
     }, 3000);
 }
 
@@ -87,7 +87,7 @@ let detectedZoneData = null;
 
 // Auto-detect location for registration (Guest access)
 async function initRegistrationLocationDetection() {
-    console.log("📍 Initializing registration location detection...");
+    console.log("Initializing registration location detection...");
     try {
         // 1. Browser Geolocation (Most precise)
         const pos = await new Promise((resolve, reject) => {
@@ -100,7 +100,7 @@ async function initRegistrationLocationDetection() {
         
         detectedRegLocation = state;
         detectedZoneData = getZoneFromState(state);
-        console.log(`📍 Reg Location Detected (Geo): ${state}`);
+        console.log(`Reg Location Detected (Geo): ${state}`);
     } catch (err) {
         console.warn("📍 Geolocation declined/failed, trying IP fallback...", err);
         try {
@@ -109,10 +109,10 @@ async function initRegistrationLocationDetection() {
             if (data.region) {
                 detectedRegLocation = data.region;
                 detectedZoneData = getZoneFromState(data.region);
-                console.log(`📍 Reg Location Detected (IP): ${data.region}`);
+                console.log(`Reg Location Detected (IP): ${data.region}`);
             }
         } catch (ipErr) {
-            console.error("📍 Final fallback to Delhi");
+            console.error("Final fallback to Delhi");
             detectedRegLocation = "Delhi";
             detectedZoneData = getZoneFromState("Delhi");
         }
@@ -129,7 +129,7 @@ async function detectUserZone(force = false) {
     if (!user) return;
     if (!force && user.zone) return; // Already detected
 
-    console.log("📍 Detecting user location for regional grid mapping...");
+    console.log("Detecting user location for regional grid mapping...");
     
     try {
         // 1. Try Browser Geolocation
@@ -143,7 +143,7 @@ async function detectUserZone(force = false) {
         const data = await res.json();
         const state = data.address.state || data.address.state_district;
         
-        console.log(`📍 Detected State: ${state}`);
+        console.log(`Detected State: ${state}`);
         const zoneData = getZoneFromState(state);
         if (zoneData) {
             await saveUserLocation(state, zoneData, latitude, longitude);
@@ -186,8 +186,8 @@ async function saveUserLocation(state, zoneData, lat, lon) {
         const user = getCurrentUser();
         const updatedUser = { ...user, ...payload };
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
-        console.log(`✅ User zone updated to ${zoneData.zone} (${zoneData.ef} kg/kWh)`);
-        showGlobalToast(`📍 Location detected: ${state} (${zoneData.zone} Grid)`);
+        console.log(`User zone updated to ${zoneData.zone} (${zoneData.ef} kg/kWh)`);
+        showGlobalToast(`Location detected: ${state} (${zoneData.zone} Grid)`);
     } catch (err) {
         console.error("Failed to save user location to backend", err);
     }
@@ -322,9 +322,9 @@ async function handleForgotPassword(e) {
             body  : JSON.stringify({ email })
         });
 
-        statusEl.innerHTML     = `<strong>Code Dispatched!</strong> ${data.message}<br><br><a href="#" onclick="switchModal('forgotPasswordModal','resetPasswordModal'); document.getElementById('finalResetEmail').value='${email}'" style="color:var(--primary); font-weight:700;">Proceed to Reset →</a>`;
+        statusEl.innerHTML     = `<strong>Code Dispatched!</strong> ${data.message}<br><br><a href="#" onclick="switchModal('forgotPasswordModal','resetPasswordModal'); document.getElementById('finalResetEmail').value='${email}'" style="color:var(--primary); font-weight:700;">Proceed to Reset</a>`;
         statusEl.style.display = 'block';
-        btn.textContent        = 'Check Email ✔️';
+        btn.textContent        = 'Check Email';
     } catch (err) {
         statusEl.textContent           = err.message;
         statusEl.style.display         = 'block';
@@ -332,7 +332,7 @@ async function handleForgotPassword(e) {
         statusEl.style.borderColor     = 'rgba(239, 68, 68, 0.2)';
         statusEl.style.color           = '#ef4444';
         btn.disabled                   = false;
-        btn.textContent                = 'Try Again 📧';
+        btn.textContent                = 'Try Again';
     }
 }
 
@@ -386,7 +386,7 @@ async function sendOTP() {
         }
 
         if (!emailPattern.test(email)) {
-            const msg = "❌ Please enter a valid email address (e.g., user@example.com)";
+            const msg = "Please enter a valid email address (e.g., user@example.com)";
             showGlobalToast(msg);
             if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
             return;
@@ -414,7 +414,7 @@ async function sendOTP() {
                 otp_code: data.otp, // The code returned from backend
                 company_name: "EcoTrack AI"
             });
-            console.log("OTP dispatched via EmailJS 📩");
+            console.log("OTP dispatched via EmailJS");
         } else {
             throw new Error("Email Service not initialized. Please refresh.");
         }
@@ -422,7 +422,7 @@ async function sendOTP() {
         // UI update
         document.getElementById('otpGroup').style.display = 'flex';
         btn.textContent = "Resend OTP";
-        showGlobalToast("✅ OTP sent to " + email + " — check your inbox!");
+        showGlobalToast("OTP sent to " + email + " — check your inbox!");
 
     } catch (err) {
         console.error('sendOTP error:', err);
@@ -495,7 +495,7 @@ async function handleRegister(e) {
         errEl.textContent   = err.message;
         errEl.style.display = 'block';
         btn.disabled        = false;
-        btn.textContent     = 'Create My Account \u{1F680}';
+        btn.textContent     = 'Create My Account';
     }
 }
 
@@ -576,9 +576,9 @@ function formatDate(dateStr) {
 function formatCO2(val) { return Number(val).toFixed(2); }
 
 function getScoreTier(score) {
-    if (score >= 50) return { tier: 'Good Carbon 🟢',   color: '#22c55e', bgColor: 'rgba(34,197,94,0.15)'  };
-    if (score >= 20) return { tier: 'Average Usage 🟡', color: '#eab308', bgColor: 'rgba(234,179,8,0.15)'  };
-    return              { tier: 'High Usage 🔴',    color: '#ef4444', bgColor: 'rgba(239,68,68,0.15)'   };
+    if (score >= 50) return { tier: 'Good Carbon',   color: '#22c55e', bgColor: 'rgba(34,197,94,0.15)'  };
+    if (score >= 20) return { tier: 'Average Usage', color: '#eab308', bgColor: 'rgba(234,179,8,0.15)'  };
+    return              { tier: 'High Usage',    color: '#ef4444', bgColor: 'rgba(239,68,68,0.15)'   };
 }
 
 // ── Modal & UI Controls ───────────────────────────────
@@ -733,7 +733,7 @@ async function registerPeriodicSync() {
         const reg = await navigator.serviceWorker.ready;
 
         if (!('periodicSync' in reg)) {
-            console.warn('⚠️ Periodic Sync not supported. Using setInterval fallback.');
+            console.warn('Periodic Sync not supported. Using setInterval fallback.');
             return;
         }
 
@@ -745,9 +745,9 @@ async function registerPeriodicSync() {
             await reg.periodicSync.register('ecotrack-daily-reminder', {
                 minInterval: 60 * 60 * 1000  // Browser checks at most every 1 hour
             });
-            console.log('✅ Periodic Sync registered — notifications work even when tab is closed!');
+            console.log('Periodic Sync registered — notifications work even when tab is closed!');
         } else {
-            console.warn('⚠️ Periodic Sync permission denied. Using setInterval fallback.');
+            console.warn('Periodic Sync permission denied. Using setInterval fallback.');
         }
     } catch (err) {
         console.warn('Periodic Sync registration failed:', err);
@@ -786,13 +786,13 @@ async function enableDailyReminder(time, message) {
 
         scheduleReminderLoop();              // ✅ Keep fallback running too
 
-        showGlobalToast('\u{1F514} Daily reminder set for ' + formatTime12h(s.time) + '!');
+        showGlobalToast('Daily reminder set for ' + formatTime12h(s.time) + '!');
         return true;
 
     } else if (perm === 'denied') {
         s.enabled = false;
         await saveReminderSettings(s);
-        showGlobalToast('❌ Notifications blocked. Allow them in browser settings.');
+        showGlobalToast('Notifications blocked. Allow them in browser settings.');
         return false;
     }
 
@@ -818,7 +818,7 @@ async function disableDailyReminder() {
         _reminderInterval = null;
     }
 
-    showGlobalToast('🔕 Daily reminder disabled.');
+    showGlobalToast('Daily reminder disabled.');
 }
 
 // ── setInterval Fallback Loop (tab must be open) ──────
@@ -867,15 +867,15 @@ function scheduleReminderLoop() {
 // ── Fire reminder via postMessage to Service Worker ───
 function fireReminderFallback(settings) {
     const msgs = [
-        '\u{1F331} Time to log your carbon footprint! Every entry helps the planet.',
-        '\u{1F30D} Daily check-in: How was your footprint today? Log it now!',
-        '♻️ Small steps matter! Log today\'s emissions and track your progress.',
-        '\u{1F33F} Your EcoScore is waiting! Log today\'s activities.',
-        '\u{1F4CA} Keep your streak alive — log your carbon footprint for today!'
+        'Time to log your carbon footprint! Every entry helps the planet.',
+        'Daily check-in: How was your footprint today? Log it now!',
+        'Small steps matter! Log today\'s emissions and track your progress.',
+        'Your EcoScore is waiting! Log today\'s activities.',
+        'Keep your streak alive — log your carbon footprint for today!'
     ];
     const body = settings.message || msgs[Math.floor(Math.random() * msgs.length)];
 
-    sendPushOrNotification('EcoTrack AI \u{1F33F}', body, 'ecotrack-daily-reminder');
+    sendPushOrNotification('EcoTrack AI', body, 'ecotrack-daily-reminder');
 
     if (window.location.pathname.includes('dashboard')) {
         showReminderBanner(body);
@@ -911,12 +911,12 @@ function showReminderBanner(message) {
     b.id    = 'ecoReminderBanner';
     b.innerHTML = `<div style="position:fixed;top:80px;right:1.5rem;z-index:9999;background:linear-gradient(135deg,rgba(0,212,170,0.15),rgba(10,15,30,0.95));border:1px solid rgba(0,212,170,0.4);border-radius:16px;padding:1rem 1.25rem;max-width:320px;width:calc(100vw - 3rem);box-shadow:0 8px 40px rgba(0,0,0,0.5);backdrop-filter:blur(20px);animation:slideInRight 0.4s ease;font-family:'Inter',sans-serif;">
         <div style="display:flex;align-items:flex-start;gap:.75rem;">
-            <span style="font-size:1.6rem;flex-shrink:0;">\u{1F514}</span>
+            <span style="font-size:1.6rem;flex-shrink:0;"></span>
             <div style="flex:1;min-width:0;">
                 <div style="font-weight:700;font-size:.9rem;color:#F0F6FF;margin-bottom:.3rem;">Daily Reminder</div>
                 <div style="font-size:.82rem;color:#8B9BB4;line-height:1.5;">${message}</div>
                 <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap;">
-                    <button onclick="window.location.href='calculator.html'" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;">\u{1F4CA} Log Now</button>
+                    <button onclick="window.location.href='calculator.html'" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.4rem .9rem;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;">Log Now</button>
                     <button onclick="document.getElementById('ecoReminderBanner').remove()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.4rem .9rem;border-radius:8px;font-size:.78rem;cursor:pointer;">Later</button>
                 </div>
             </div>
@@ -935,7 +935,7 @@ async function openReminderSettings() {
     const s         = await getReminderSettings();
     const isEnabled = s.enabled && Notification.permission === 'granted';
     const isDenied  = Notification.permission === 'denied';
-    const presets   = [['08:00','Morning ☀️'],['12:00','Noon 🌤️'],['18:00','Evening 🌆'],['20:00','Night 🌙'],['22:00','Late 🌚']];
+    const presets   = [['08:00','Morning'],['12:00','Noon'],['18:00','Evening'],['20:00','Night'],['22:00','Late']];
 
     const m     = document.createElement('div');
     m.id        = 'reminderModal';
@@ -943,7 +943,7 @@ async function openReminderSettings() {
         <div style="background:linear-gradient(135deg,rgba(10,20,40,.98),rgba(13,21,38,.98));border:1px solid rgba(0,212,170,.25);border-radius:20px;padding:2rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.6);font-family:'Inter',sans-serif;max-height:90vh;overflow-y:auto;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
                 <div style="display:flex;align-items:center;gap:.75rem;">
-                    <span style="font-size:1.8rem;">\u{1F514}</span>
+                    <span style="font-size:1.8rem;"></span>
                     <div>
                         <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;color:#F0F6FF;margin:0;">Daily Reminder</h3>
                         <p style="font-size:.78rem;color:#8B9BB4;margin:0;">Get notified to log your footprint</p>
@@ -953,9 +953,9 @@ async function openReminderSettings() {
             </div>
             <div style="background:${isEnabled ? 'rgba(0,212,170,.08)' : 'rgba(255,255,255,.04)'};border:1px solid ${isEnabled ? 'rgba(0,212,170,.3)' : 'rgba(255,255,255,.08)'};border-radius:12px;padding:.9rem 1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.75rem;">
                 <div style="width:10px;height:10px;border-radius:50%;flex-shrink:0;background:${isEnabled ? 'var(--primary)' : '#4A6080'};${isEnabled ? 'box-shadow:0 0 8px var(--primary);' : ''}"></div>
-                <span style="font-size:.85rem;color:${isEnabled ? 'var(--primary)' : '#8B9BB4'};font-weight:600;">${isEnabled ? '✅ Active — fires at ' + formatTime12h(s.time) + ' (even when tab is closed)' : '⭕ Reminder Disabled'}</span>
+                <span style="font-size:.85rem;color:${isEnabled ? 'var(--primary)' : '#8B9BB4'};font-weight:600;">${isEnabled ? 'Active — fires at ' + formatTime12h(s.time) + ' (even when tab is closed)' : 'Reminder Disabled'}</span>
             </div>
-            ${isDenied ? '<div style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.75rem 1rem;margin-bottom:1.25rem;font-size:.8rem;color:#fca5a5;line-height:1.5;">⚠️ Notifications are <b>blocked</b>. Go to browser Settings → Site Settings → Notifications → Allow.</div>' : ''}
+            ${isDenied ? '<div style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.75rem 1rem;margin-bottom:1.25rem;font-size:.8rem;color:#fca5a5;line-height:1.5;">Notifications are <b>blocked</b>. Go to browser Settings → Site Settings → Notifications → Allow.</div>' : ''}
             <div style="margin-bottom:1.1rem;">
                 <label style="display:block;font-size:.82rem;font-weight:600;color:#8B9BB4;margin-bottom:.5rem;">REMINDER TIME</label>
                 <input type="time" id="reminderTimeInput" value="${s.time}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#F0F6FF;border-radius:12px;padding:.75rem 1rem;font-size:1rem;font-family:'Inter',sans-serif;outline:none;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
@@ -969,9 +969,9 @@ async function openReminderSettings() {
                 <div style="display:flex;gap:.5rem;flex-wrap:wrap;">${presets.map(([t, l]) => `<button onclick="document.getElementById('reminderTimeInput').value='${t}'" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.35rem .75rem;border-radius:8px;font-size:.75rem;cursor:pointer;font-family:'Inter',sans-serif;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='#8B9BB4'">${l}</button>`).join('')}</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:.75rem;">
-                <button onclick="handleSaveReminder()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.85rem;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">\u{1F514} Enable Daily Reminder</button>
-                ${isEnabled ? `<button onclick="handleDisableReminder()" style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:rgba(255,107,107,.8);padding:.7rem;border-radius:12px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🔕 Disable Reminder</button>` : ''}
-                <button onclick="handleTestReminder()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.7rem;border-radius:12px;font-size:.85rem;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">🧪 Send Test Notification</button>
+                <button onclick="handleSaveReminder()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.85rem;border-radius:12px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">Enable Daily Reminder</button>
+                ${isEnabled ? `<button onclick="handleDisableReminder()" style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:rgba(255,107,107,.8);padding:.7rem;border-radius:12px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">Disable Reminder</button>` : ''}
+                <button onclick="handleTestReminder()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.7rem;border-radius:12px;font-size:.85rem;cursor:pointer;font-family:'Inter',sans-serif;width:100%;">Send Test Notification</button>
             </div>
         </div>
     </div>`;
@@ -981,7 +981,7 @@ async function openReminderSettings() {
 async function handleSaveReminder() {
     const time = document.getElementById('reminderTimeInput').value;
     const msg  = document.getElementById('reminderMsgInput').value.trim();
-    if (!time) { showGlobalToast('⚠️ Please select a time.'); return; }
+    if (!time) { showGlobalToast('Please select a time.'); return; }
     const ok   = await enableDailyReminder(time, msg || REMINDER_DEFAULTS.message);
     if (ok) document.getElementById('reminderModal').remove();
 }
@@ -994,13 +994,13 @@ async function handleDisableReminder() {
 async function handleTestReminder() {
     if (Notification.permission !== 'granted') {
         const p = await Notification.requestPermission();
-        if (p !== 'granted') { showGlobalToast('❌ Please allow notifications first.'); return; }
+        if (p !== 'granted') { showGlobalToast('Please allow notifications first.'); return; }
         const s     = await getReminderSettings();
         s.permission = 'granted';
         await saveReminderSettings(s);
     }
-    fireReminderFallback({ ...await getReminderSettings(), message: '🧪 Test: This is your EcoTrack daily reminder! It works!' });
-    showGlobalToast('✅ Test notification sent!');
+    fireReminderFallback({ ...await getReminderSettings(), message: 'Test: This is your EcoTrack daily reminder! It works!' });
+    showGlobalToast('Test notification sent!');
 }
 
 // ── Init Notifications ────────────────────────────────
@@ -1057,65 +1057,65 @@ const CHALLENGES_KEY = 'ecotrack_challenges';
 
 const ALL_CHALLENGES = [
     {
-        id: 'plant_based_week', icon: '🥦', title: 'Plant-Based Week',
+        id: 'plant_based_week', icon: '', title: 'Plant-Based Week',
         desc: 'Eat only plant-based meals for 7 days. Reduces food emissions by up to 50%.',
         category: 'food', difficulty: 'Easy', points: 150, days: 7, co2Saved: 14,
         tips: [
-            '🥗 Try dal, sabzi, or tofu stir-fry tonight!',
-            '🍎 Fruits make a great snack instead of packaged food.',
-            '🌽 Indian cuisine is naturally rich in plant-based options!',
-            '🧆 Chana masala is a perfect high-protein plant meal.',
-            '🥕 Prep veggies the night before to make cooking easier.',
-            '🌾 Try millet or quinoa instead of white rice.',
-            '🎉 Final day! You\'ve almost completed the Plant-Based Week!'
+            'Try dal, sabzi, or tofu stir-fry tonight!',
+            'Fruits make a great snack instead of packaged food.',
+            'Indian cuisine is naturally rich in plant-based options!',
+            'Chana masala is a perfect high-protein plant meal.',
+            'Prep veggies the night before to make cooking easier.',
+            'Try millet or quinoa instead of white rice.',
+            'Final day! You\'ve almost completed the Plant-Based Week!'
         ]
     },
     {
-        id: 'public_transport', icon: '🚌', title: 'Public Transport Only',
+        id: 'public_transport', icon: '', title: 'Public Transport Only',
         desc: 'Use only public transport, cycle or walk for 5 days.',
         category: 'transport', difficulty: 'Medium', points: 200, days: 5, co2Saved: 20,
         tips: [
-            '🗺️ Plan your metro/bus route the night before.',
-            '🚲 Can you cycle the last mile from the station?',
-            `⏰ ${t('btn_leave')} 10 minutes early to catch the bus comfortably.`,
-            '📱 Download your city\'s transit app for live updates.',
-            '\u{1F3C6} Last day! You\'ve saved nearly 20 kg CO₂ this week!'
+            'Plan your metro/bus route the night before.',
+            'Cycle the last mile from the station?',
+            `${t('btn_leave')} 10 minutes early to catch the bus comfortably.`,
+            'Download your city\'s transit app for live updates.',
+            'Last day! You\'ve saved nearly 20 kg CO₂ this week!'
         ]
     },
     {
-        id: 'no_ac_week', icon: '🌬️', title: 'AC-Free Week',
+        id: 'no_ac_week', icon: '', title: 'AC-Free Week',
         desc: 'Avoid using air conditioning for 7 days. Use fans and natural ventilation.',
         category: 'electricity', difficulty: 'Hard', points: 250, days: 7, co2Saved: 25,
         tips: [
-            '🪟 Open windows early morning for cool air.',
-            '\u{1F33F} Keep curtains closed during peak afternoon heat.',
-            '💧 A wet towel on your neck keeps you cool!',
-            '🌙 Nights are cooler — use a fan instead of AC.',
-            '🏠 Ceiling fans use 90% less electricity than AC.',
-            '🌊 Take a cool shower before bed.',
-            '🎊 Final day! You completed the AC-Free Week!'
+            'Open windows early morning for cool air.',
+            'Keep curtains closed during peak afternoon heat.',
+            'A wet towel on your neck keeps you cool!',
+            'Nights are cooler — use a fan instead of AC.',
+            'Ceiling fans use 90% less electricity than AC.',
+            'Take a cool shower before bed.',
+            'Final day! You completed the AC-Free Week!'
         ]
     },
     {
-        id: 'zero_waste', icon: '♻️', title: '3-Day Zero Waste',
+        id: 'zero_waste', icon: '', title: '3-Day Zero Waste',
         desc: 'Produce zero non-recyclable waste for 3 days.',
         category: 'food', difficulty: 'Easy', points: 100, days: 3, co2Saved: 6,
         tips: [
-            '🛍️ Carry a cloth bag today — refuse plastic bags.',
-            '💧 Refill your water bottle instead of buying plastic.',
-            '🥡 Bring a tiffin box for lunch instead of disposables!'
+            'Carry a cloth bag today — refuse plastic bags.',
+            'Refill your water bottle instead of buying plastic.',
+            'Bring a tiffin box for lunch instead of disposables!'
         ]
     },
     {
-        id: 'efficient_cooking', icon: '☀️', title: 'Efficient Cooking Week',
+        id: 'efficient_cooking', icon: '', title: 'Efficient Cooking Week',
         desc: 'Use pressure cooker or batch-cook to cut kitchen emissions for 5 days.',
         category: 'electricity', difficulty: 'Easy', points: 120, days: 5, co2Saved: 10,
         tips: [
-            '🍲 Pressure cookers save 70% energy vs open pots.',
-            '♨️ Batch-cook dal or rice for multiple meals.',
-            '🌡️ Use lids on pots to retain heat.',
-            's Microwaves use 80% less energy for reheating.',
-            '🎉 Challenge complete! Great job reducing kitchen emissions!'
+            'Pressure cookers save 70% energy vs open pots.',
+            'Batch-cook dal or rice for multiple meals.',
+            'Use lids on pots to retain heat.',
+            'Microwaves use 80% less energy for reheating.',
+            'Challenge complete! Great job reducing kitchen emissions!'
         ]
     }
 ];
@@ -1137,12 +1137,12 @@ async function joinChallengeWithPermission(id) {
 
     const joined = getJoinedChallenges();
     if (joined[id] && !joined[id].completed) {
-        showGlobalToast('✅ Already joined!');
+        showGlobalToast('Already joined!');
         return;
     }
 
     if ('Notification' in window && Notification.permission === 'default') {
-        showGlobalToast('📬 Allow notifications to get daily challenge tips!');
+        showGlobalToast('Allow notifications to get daily challenge tips!');
         await Notification.requestPermission();
     }
 
@@ -1158,7 +1158,7 @@ async function joinChallengeWithPermission(id) {
     };
 
     saveJoinedChallenges(joined);
-    showGlobalToast(`\u{1F3AF} Joined "${challenge.title}"! Daily tips incoming \u{1F514}`);
+    showGlobalToast(`Joined "${challenge.title}"! Daily tips incoming`);
     _fireChallengeNotif(challenge, joined[id]);
     scheduleChallengeReminders();
     renderChallengesWithNotifications();
@@ -1168,7 +1168,7 @@ function leaveChallengeById(id) {
     const joined = getJoinedChallenges();
     delete joined[id];
     saveJoinedChallenges(joined);
-    showGlobalToast('🔕 Left the challenge.');
+    showGlobalToast('Left the challenge.');
     renderChallengesWithNotifications();
 }
 
@@ -1179,8 +1179,8 @@ function _fireChallengeNotif(challenge, state) {
     const left = challenge.days - day;
 
     const title = day === 0
-        ? `\u{1F3AF} Challenge Started: ${challenge.title}!`
-        : left <= 1 ? `\u{1F3C6} Final Day: ${challenge.title}` : `📅 Day ${day + 1}/${challenge.days}: ${challenge.title}`;
+        ? `Challenge Started: ${challenge.title}!`
+        : left <= 1 ? `Final Day: ${challenge.title}` : `Day ${day + 1}/${challenge.days}: ${challenge.title}`;
 
     const body = `${tip} — ${left} day${left !== 1 ? 's' : ''} left, ${challenge.co2Saved}kg CO₂ to save!`;
 
@@ -1226,27 +1226,27 @@ function _showChallengeBanner(challenge, title, tip, dayNum, totalDays) {
 
 function _fireChallengeComplete(challenge) {
     sendPushOrNotification(
-        `\u{1F3C6} Challenge Complete: ${challenge.title}!`,
-        `Amazing! You saved ${challenge.co2Saved}kg CO₂ and earned +${challenge.points} points! 🎉`,
+        `Challenge Complete: ${challenge.title}!`,
+        `Amazing! You saved ${challenge.co2Saved}kg CO₂ and earned +${challenge.points} points!`,
         `challenge-complete-${challenge.id}`
     );
 
     const overlay = document.createElement('div');
     overlay.innerHTML = `<div style="position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);z-index:10001;display:flex;align-items:center;justify-content:center;padding:1rem;" onclick="this.remove()">
         <div style="background:linear-gradient(135deg,rgba(10,20,40,.98),rgba(13,21,38,.98));border:1px solid rgba(0,212,170,.4);border-radius:24px;padding:2rem;max-width:360px;width:calc(100vw - 2rem);box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(0,212,170,.2);text-align:center;font-family:'Inter',sans-serif;animation:fadeIn .3s ease;" onclick="event.stopPropagation()">
-            <div style="font-size:3rem;margin-bottom:.75rem;">\u{1F3C6}</div>
+            <div style="font-size:3rem;margin-bottom:.75rem;"></div>
             <h2 style="font-family:'Space Grotesk',sans-serif;color:#F0F6FF;margin-bottom:.5rem;">Challenge Complete!</h2>
-            <p style="color:var(--primary);font-size:1.1rem;font-weight:700;margin-bottom:.5rem;">${challenge.icon} ${challenge.title}</p>
+            <p style="color:var(--primary);font-size:1.1rem;font-weight:700;margin-bottom:.5rem;">${challenge.title}</p>
             <p style="color:#8B9BB4;font-size:.88rem;margin-bottom:1.25rem;line-height:1.5;">You saved <strong style="color:var(--primary)">${challenge.co2Saved} kg CO₂</strong> and earned <strong style="color:#FBBF24">+${challenge.points} points</strong>!</p>
             <div style="height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin-bottom:1.25rem;"></div>
             <div style="display:flex;gap:.75rem;justify-content:center;">
-                <button onclick="this.closest('[onclick]').remove()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.7rem 1.5rem;border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;">\u{1F3AF} Join Another</button>
+                <button onclick="this.closest('[onclick]').remove()" style="background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.7rem 1.5rem;border-radius:12px;font-size:.9rem;font-weight:700;cursor:pointer;">Join Another</button>
                 <button onclick="this.closest('[onclick]').remove()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#8B9BB4;padding:.7rem 1.25rem;border-radius:12px;font-size:.9rem;cursor:pointer;">Close</button>
             </div>
         </div>
     </div>`;
     document.body.appendChild(overlay);
-    showGlobalToast(`\u{1F3C6} ${challenge.title} complete! +${challenge.points} pts`);
+    showGlobalToast(`${challenge.title} complete! +${challenge.points} pts`);
 }
 
 let _challengeInterval = null;
@@ -1319,7 +1319,7 @@ function renderChallengesWithNotifications(containerId) {
                         <span style="font-size:.7rem;color:#4A6080;">· ${ch.days} ${t('days')} · ${ch.co2Saved}kg CO₂</span>
                     </div>
                 </div>
-                ${isDone ? '<span style="font-size:1.2rem;" title="Completed">\u{1F3C6}</span>' : ''}
+                </div>
             </div>
             <p style="font-size:.8rem;color:#8B9BB4;line-height:1.5;margin-bottom:.75rem;">${t('ch_desc_' + ch.id)}</p>
             ${isJoined ? `<div style="margin-bottom:.75rem;">
@@ -1329,18 +1329,18 @@ function renderChallengesWithNotifications(containerId) {
                 </div>
             </div>` : ''}
             <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
-                <span style="font-size:.75rem;color:#FBBF24;font-weight:600;">🌟 +${ch.points} ${t('pts')}</span>
+                <span style="font-size:.75rem;color:#FBBF24;font-weight:600;">+${ch.points} ${t('pts')}</span>
                 <span style="font-size:.75rem;color:#4A6080;">·</span>
-                <span style="font-size:.75rem;color:var(--primary);font-weight:600;">\u{1F30D} ${ch.co2Saved}${t('kg_saved')}</span>
+                <span style="font-size:.75rem;color:var(--primary);font-weight:600;">${ch.co2Saved}${t('kg_saved')}</span>
             </div>
             ${isDone
-                ? `<div style="background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">✅ Completed!</div>`
+                ? `<div style="background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">Completed!</div>`
                 : isJoined
                     ? `<div style="display:flex;gap:.5rem;">
-                        <div style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">\u{1F514} Active</div>
+                        <div style="flex:1;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.2);border-radius:10px;padding:.5rem;text-align:center;font-size:.8rem;font-weight:700;color:var(--primary);">Active</div>
                         <button onclick="leaveChallengeById('${ch.id}')" style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.2);border-radius:10px;padding:.5rem .75rem;font-size:.78rem;color:rgba(255,107,107,.7);cursor:pointer;">${t('btn_leave')}</button>
                     </div>`
-                    : `<button onclick="joinChallengeWithPermission('${ch.id}')" style="width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.6rem;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(0,212,170,.2);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">\u{1F3AF} Join Challenge</button>`
+                    : `<button onclick="joinChallengeWithPermission('${ch.id}')" style="width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;color:#fff;padding:.6rem;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(0,212,170,.2);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">Join Challenge</button>`
             }
         </div>`;
     }).join('');
@@ -1377,7 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function showGlobalToast(msg) {
     const toast     = document.createElement('div');
     toast.className = 'toast-notification';
-    toast.innerHTML = `<span style="font-size:1.2rem">\u{1F33F}</span><span style="font-size:0.9rem">${msg}</span>`;
+    toast.innerHTML = `<span style="font-size:0.9rem">${msg}</span>`;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3500);
 }

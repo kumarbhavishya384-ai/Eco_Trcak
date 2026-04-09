@@ -405,21 +405,20 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <span>🛡️</span>
             <div class="logo-text"><b>EcoTrack</b> Admin</div>
         </div>
         <div class="sidebar-nav">
             <a href="#" class="nav-item active" id="side-overview" onclick="switchAdminTab('overview'); return false;">
-                <span class="nav-icon">📊</span><span class="nav-label">Overview</span>
+                <span class="nav-label">Overview</span>
             </a>
             <a href="#" class="nav-item" id="side-users" onclick="switchAdminTab('users'); return false;">
-                <span class="nav-icon">👥</span><span class="nav-label">Manage Users</span>
+                <span class="nav-label">Manage Users</span>
             </a>
             <a href="#" class="nav-item" id="side-emails" onclick="switchAdminTab('emails'); return false;">
-                <span class="nav-icon">📧</span><span class="nav-label">Email Templates</span>
+                <span class="nav-label">Email Templates</span>
             </a>
             <a href="#" class="nav-item">
-                <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
+                <span class="nav-label">Settings</span>
             </a>
         </div>
         <div class="sidebar-footer">
@@ -427,10 +426,10 @@
                 <div class="user-avatar" id="sidebarAvatar">AD</div>
                 <div class="user-info">
                     <div class="user-name" id="sidebarName">Admin</div>
-                    <div class="user-score-badge" style="color: var(--warning);">🛡️ Full Access</div>
+                    <div class="user-score-badge" style="color: var(--warning);">Full Access</div>
                 </div>
             </div>
-            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </aside>
 
@@ -438,11 +437,11 @@
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">Menu</button>
                 <h1 class="page-title">Employee Portal</h1>
                 <div class="breadcrumb"
                     style="font-size:0.78rem; color:var(--text-muted); margin-left:1rem; display:flex; align-items:center; gap:0.4rem;">
-                    <span>Home</span> <span>›</span> <span style="color:var(--primary)">Admin</span>
+                    <span>Home</span> <span>/</span> <span style="color:var(--primary)">Admin</span>
                 </div>
             </div>
             <div class="topbar-right">
@@ -452,7 +451,7 @@
                 <div class="current-date" id="currentDate"></div>
                 <button class="btn-ghost" onclick="logout()"
                     style="padding:0.4rem 0.8rem; font-size:0.78rem; border-color:rgba(255, 107, 107, 0.3); color:rgba(255, 107, 107, 0.8); height:34px; display:inline-flex; align-items:center; gap:4px;">
-                    ⬡ Logout
+                    Logout
                 </button>
             </div>
         </header>
@@ -462,7 +461,7 @@
             <div class="admin-header">
                 <h2
                     style="font-family:'Space Grotesk'; font-size: 1.75rem; margin-bottom: 0.4rem; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                    Employee Control Center 🛠️
+                    Employee Control Center
                 </h2>
                 <p style="color:var(--text-secondary); font-size:0.9rem;">Monitor platform growth, manage users, and
                     oversee system health in real-time.</p>
@@ -470,10 +469,9 @@
 
             <!-- Tab Navigation -->
             <div class="admin-tabs">
-                <button class="admin-tab-btn active" onclick="switchAdminTab('overview')" id="tab-overview">📊
-                    Overview</button>
-                <button class="admin-tab-btn" onclick="switchAdminTab('users')" id="tab-users">👥 Manage Users</button>
-                <button class="admin-tab-btn" onclick="switchAdminTab('emails')" id="tab-emails">📧 Email
+                <button class="admin-tab-btn active" onclick="switchAdminTab('overview')" id="tab-overview">Overview</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('users')" id="tab-users">Manage Users</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('emails')" id="tab-emails">Email
                     Templates</button>
             </div>
 
@@ -482,19 +480,19 @@
                 <!-- Stats Grid -->
                 <div class="admin-stats-grid">
                     <div class="stat-card-admin">
-                        <span class="stat-admin-icon">👥</span>
+                        <span class="stat-admin-icon"></span>
                         <div class="stat-admin-val" id="totalUsers">--</div>
                         <div class="stat-admin-label">Total Users</div>
-                        <div class="stat-trend trend-up">↑ Growing</div>
+                        <div class="stat-trend trend-up">Growing</div>
                     </div>
                     <div class="stat-card-admin">
-                        <span class="stat-admin-icon">📝</span>
+                        <span class="stat-admin-icon"></span>
                         <div class="stat-admin-val" id="totalEntries">--</div>
                         <div class="stat-admin-label">Total Entries</div>
-                        <div class="stat-trend trend-up">↑ Active</div>
+                        <div class="stat-trend trend-up">Active</div>
                     </div>
                     <div class="stat-card-admin">
-                        <span class="stat-admin-icon">💚</span>
+                        <span class="stat-admin-icon"></span>
                         <div class="stat-admin-val" id="systemHealth" style="font-size:1.6rem;">Healthy</div>
                         <div class="stat-admin-label">System Health</div>
                         <div class="health-indicator">
@@ -504,21 +502,21 @@
                         </div>
                     </div>
                     <div class="stat-card-admin">
-                        <span class="stat-admin-icon">⚡</span>
+                        <span class="stat-admin-icon"></span>
                         <div class="stat-admin-val" id="uptime">99.9%</div>
                         <div class="stat-admin-label">Server Uptime</div>
-                        <div class="stat-trend trend-up">↑ Excellent</div>
+                        <div class="stat-trend trend-up">Excellent</div>
                     </div>
                 </div>
 
                 <!-- Recent Activities Table -->
                 <div class="activity-table-card">
                     <div class="activity-table-header">
-                        <h3>🔔 Recent Global Activities</h3>
+                        <h3>Recent Global Activities</h3>
                         <div style="display:flex; gap:0.75rem; align-items:center;">
                             <div class="badge-live">Live Feed</div>
                             <button class="btn-ghost" style="font-size:0.78rem; padding:0.3rem 0.9rem;"
-                                onclick="refreshStats()">↻ Refresh</button>
+                                onclick="refreshStats()">Refresh</button>
                         </div>
                     </div>
                     <table class="activity-table">
@@ -533,7 +531,7 @@
                         <tbody id="activityLog">
                             <tr>
                                 <td colspan="4" style="padding:2.5rem; text-align:center; color:var(--text-muted);">
-                                    <span style="font-size:1.5rem; display:block; margin-bottom:0.5rem;">📡</span>
+                                    <span style="font-size:1.5rem; display:block; margin-bottom:0.5rem;"></span>
                                     Tracking active sessions...
                                 </td>
                             </tr>
@@ -546,9 +544,9 @@
             <div id="section-users" style="display:none">
                 <div class="activity-table-card">
                     <div class="activity-table-header">
-                        <h3>👥 Registered Platform Users</h3>
+                        <h3>Registered Platform Users</h3>
                         <button class="btn-ghost" onclick="fetchAdminUsers()"
-                            style="font-size:0.78rem; padding:0.3rem 0.9rem;">↻ Refresh List</button>
+                            style="font-size:0.78rem; padding:0.3rem 0.9rem;">Refresh List</button>
                     </div>
                     <div class="users-table-wrap">
                         <table class="activity-table">
@@ -574,13 +572,13 @@
             <div id="section-emails" style="display:none">
                 <div class="card">
                     <div class="card-header">
-                        <h3>📧 Welcome Email Template</h3>
+                        <h3>Welcome Email Template</h3>
                         <span class="badge-live">Active</span>
                     </div>
                     <div
                         style="background:rgba(0,212,170,0.04); padding:1.5rem; border-radius:var(--radius-sm); margin-top:1rem; border:1px solid rgba(0,212,170,0.12);">
                         <p style="color:var(--primary); font-weight:700; margin-bottom:0.75rem; font-size:0.9rem;">
-                            📬 Subject: Welcome to EcoTrack AI – Your Journey to Net Zero Starts Now!
+                            Subject: Welcome to EcoTrack AI – Your Journey to Net Zero Starts Now!
                         </p>
                         <div style="color:var(--text-secondary); font-size:0.88rem; line-height:1.7; white-space: pre-wrap;"
                             id="emailPreview">Hi [First Name],
@@ -593,16 +591,16 @@
                             • Receive AI-powered insights to save costs and carbon.
                             • Compare your progress with friends on the leaderboard.
 
-                            Let's make a positive impact on the planet, together. 🌿
+                            Let's make a positive impact on the planet, together.
 
                             Best regards,
                             The EcoTrack AI Admin Team</div>
                     </div>
                     <div style="margin-top:1.5rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
                         <button class="btn-primary-glow"
-                            onclick="showGlobalToast('Template editing restricted to Super-Admin.')">✏️ Edit
+                            onclick="showGlobalToast('Template editing restricted to Super-Admin.')">Edit
                             Template</button>
-                        <button class="btn-ghost" onclick="sendTestEmailDirectly()">📤 Send Manual Welcome</button>
+                        <button class="btn-ghost" onclick="sendTestEmailDirectly()">Send Manual Welcome</button>
                     </div>
                 </div>
             </div>
@@ -730,7 +728,7 @@
         async function fetchAdminUsers() {
             const tbody = document.getElementById('userTableBody');
             tbody.innerHTML = `<tr><td colspan="6" style="padding:2rem; text-align:center; color:var(--text-muted);">
-                <span style="font-size:1.5rem; display:block; margin-bottom:0.5rem;">⏳</span>Loading users from database...
+                <span style="font-size:1.5rem; display:block; margin-bottom:0.5rem;"></span>Loading users from database...
             </td></tr>`;
             try {
                 const data = await apiFetch('/admin/users');
@@ -738,7 +736,7 @@
 
                 if (!data.success) {
                     tbody.innerHTML = `<tr><td colspan="6" style="padding:2rem; text-align:center; color:var(--danger);">
-                        ❌ Server error: ${data.message || 'Unknown error'}
+                        Server error: ${data.message || 'Unknown error'}
                     </td></tr>`;
                     return;
                 }
@@ -788,12 +786,12 @@
                         <td style="font-size:0.78rem; color:var(--text-muted);">${joinedStr}</td>
                         <td style="text-align:right;">
                             <div style="display:flex; gap:8px; justify-content:flex-end; align-items:center; flex-wrap:wrap;">
-                                ${phone ? `<a href="https://wa.me/${phone.replace(/\D/g,'')}?text=Hi%20${encodeURIComponent(firstName)},%20Welcome%20to%20EcoTrack%20AI!%20🌿" target="_blank" style="text-decoration:none;font-size:1.1rem;" title="Chat on WhatsApp">💬</a>` : ''}
-                                <button onclick="resendWelcome('${email}','${firstName}')" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:1rem;" title="Resend Welcome Email">📧</button>
+                                ${phone ? `<a href="https://wa.me/${phone.replace(/\D/g,'')}?text=Hi%20${encodeURIComponent(firstName)},%20Welcome%20to%20EcoTrack%20AI!%20" target="_blank" style="text-decoration:none;font-size:1.1rem;" title="Chat on WhatsApp">Chat</a>` : ''}
+                                <button onclick="resendWelcome('${email}','${firstName}')" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:1rem;" title="Resend Welcome Email">Email</button>
                                 <button onclick="changeRole('${uid}','${role}')" style="background:none;border:none;color:var(--warning);cursor:pointer;font-size:0.75rem;padding:3px 8px;border-radius:8px;border:1px solid rgba(255,179,71,0.3);" title="Toggle Role">
-                                    ${role === 'admin' ? '👤 Make User' : '🔑 Make Admin'}
+                                    ${role === 'admin' ? 'Make User' : 'Make Admin'}
                                 </button>
-                                <button onclick="deleteUser('${uid}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.1rem;" title="Delete User">🗑️</button>
+                                <button onclick="deleteUser('${uid}')" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:1.1rem;" title="Delete User">Delete</button>
                             </div>
                         </td>
                     `;
@@ -807,7 +805,7 @@
             } catch (err) {
                 console.error('[Admin] fetchAdminUsers error:', err);
                 tbody.innerHTML = `<tr><td colspan="6" style="padding:2rem; text-align:center; color:var(--danger);">
-                    ❌ Failed to load users: ${err.message}<br>
+                    Failed to load users: ${err.message}<br>
                     <small style="color:var(--text-muted); margin-top:0.5rem; display:block;">Check browser console for details.</small>
                 </td></tr>`;
             }
@@ -822,13 +820,13 @@
                     body: JSON.stringify({ role: newRole })
                 });
                 if (data.success) {
-                    showGlobalToast(`✅ Role changed to ${newRole}`);
+                    showGlobalToast(`Role changed to ${newRole}`);
                     fetchAdminUsers();
                 } else {
-                    showGlobalToast('❌ ' + (data.message || 'Failed to change role'));
+                    showGlobalToast('' + (data.message || 'Failed to change role'));
                 }
             } catch (err) {
-                showGlobalToast('❌ Error: ' + err.message);
+                showGlobalToast('' + err.message);
             }
         }
 
@@ -837,35 +835,35 @@
             try {
                 const data = await apiFetch(`/admin/users/${uid}`, { method: 'DELETE' });
                 if (data.success) {
-                    showGlobalToast("✅ User deleted successfully.");
+                    showGlobalToast("User deleted successfully.");
                     fetchAdminUsers();
                 }
             } catch (err) {
-                showGlobalToast("❌ Error deleting user: " + err.message);
+                showGlobalToast("Error deleting user: " + err.message);
             }
         }
 
         async function resendWelcome(email, firstName) {
-            showGlobalToast(`📤 Resending welcome to ${firstName}...`);
+            showGlobalToast(`Resending welcome to ${firstName}...`);
             try {
                 const data = await apiFetch('/admin/resend-welcome', {
                     method: 'POST',
                     body: JSON.stringify({ email, firstName })
                 });
                 if (data.success) {
-                    showGlobalToast(`✅ Welcome letter sent to ${email}`);
+                    showGlobalToast(`Welcome letter sent to ${email}`);
                 }
             } catch (err) {
-                showGlobalToast("❌ Failed: " + err.message);
+                showGlobalToast("Failed: " + err.message);
             }
         }
 
         function sendTestEmailDirectly() {
             const email = prompt("Enter user email to send welcome letter to:");
             if (!email) return;
-            showGlobalToast(`📤 Sending personalized welcome to ${email}...`);
+            showGlobalToast(`Sending personalized welcome to ${email}...`);
             setTimeout(() => {
-                showGlobalToast("✅ Success: Personalized email dispatched via SMTP.");
+                showGlobalToast("Success: Personalized email dispatched via SMTP.");
             }, 1000);
         }
     </script>

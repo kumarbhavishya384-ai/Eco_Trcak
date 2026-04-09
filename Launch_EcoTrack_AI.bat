@@ -1,7 +1,7 @@
 @echo off
 title Launching EcoTrack AI...
 echo ===================================================
-echo   🌿 EcoTrack AI - Starting Systems 🌿
+echo   EcoTrack AI - Starting Systems
 echo ===================================================
 echo.
 
@@ -67,8 +67,8 @@ start http://localhost:8080
 
 echo.
 echo ===================================================
-echo   🚀 App is LIVE at http://localhost:8080
-echo   ⚠️  Keep the two command windows open!
+echo   App is LIVE at http://localhost:8080
+echo   Attention: Keep the two command windows open!
 echo ===================================================
 echo   Backend window  → Flask API logs
 echo   Frontend window → HTTP server logs

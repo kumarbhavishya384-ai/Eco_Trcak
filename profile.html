@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2300d4aa%22/><path d=%22M30 70 L50 30 L70 70 M40 50 L60 50%22 stroke=%22white%22 stroke-width=%228%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css" />
@@ -22,30 +22,29 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
-            <span style="filter: drop-shadow(0 0 8px var(--primary));">🌿</span>
             <span class="logo-text">EcoTrack <b>AI</b></span>
         </div>
         <nav class="sidebar-nav">
             <a href="dashboard.html" class="nav-item" id="nav-dashboard">
-                <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+                <span class="nav-label">Dashboard</span>
             </a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label">Reports</span>
+                <span class="nav-label">Reports</span>
             </a>
             <a href="calculator.html" class="nav-item" id="nav-calculator">
-                <span class="nav-icon">🧮</span><span class="nav-label">Calculator</span>
+                <span class="nav-label">Calculator</span>
             </a>
             <a href="history.html" class="nav-item" id="nav-history">
-                <span class="nav-icon">📅</span><span class="nav-label">History</span>
+                <span class="nav-label">History</span>
             </a>
             <a href="recommendations.html" class="nav-item" id="nav-recommendations">
-                <span class="nav-icon">💡</span><span class="nav-label">AI Insights</span>
+                <span class="nav-label">AI Insights</span>
             </a>
             <a href="leaderboard.html" class="nav-item" id="nav-leaderboard">
-                <span class="nav-icon">🏆</span><span class="nav-label">Leaderboard</span>
+                <span class="nav-label">Leaderboard</span>
             </a>
             <a href="offset.html" class="nav-item" id="nav-offset">
-                <span class="nav-icon">🌲</span><span class="nav-label" data-i18n="offsetTools">Offset Tools</span>
+                <span class="nav-label" data-i18n="offsetTools">Offset Tools</span>
             </a>
         </nav>
         <div class="sidebar-footer">
@@ -56,7 +55,7 @@
                     <div class="user-score-badge" id="sidebarScore">EcoScore: --</div>
                 </div>
             </div>
-            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </aside>
 
@@ -64,7 +63,7 @@
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">Menu</button>
                 <h1 class="page-title">Profile Settings</h1>
             </div>
             <div class="topbar-right">
@@ -87,7 +86,7 @@
                     <div class="profile-header">
                         <div class="avatar-upload-wrapper">
                             <label for="profilePicInput" class="avatar-upload-container" id="avatarPreviewContainer">
-                                <span class="avatar-placeholder" id="avatarPlaceholderInitial">👤</span>
+                                <span class="avatar-placeholder" id="avatarPlaceholderInitial"></span>
                                 <img id="avatarPreviewImage" src="" alt="Profile Picture" />
                                 <div class="upload-overlay">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -110,7 +109,7 @@
                                 fetching data...
                             </p>
                             <div class="modern-badge">
-                                <span>🌱</span> <span id="profileEcoScoreDisplay">EcoScore: 0</span>
+                                <span id="profileEcoScoreDisplay">EcoScore: 0</span>
                             </div>
                         </div>
                     </div>

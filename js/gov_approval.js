@@ -1,12 +1,12 @@
 // ECOTRACK AI – Government Approval Dashboard Logic
 
 const APPROVALS_DATA = [
-    { field: 'Transport & E-Mobility', status: 'verified', icon: '🚗', updated: 'Jan 2024' },
-    { field: 'Renewable Energy Integration', status: 'verified', icon: '⚡', updated: 'Feb 2024' },
-    { field: 'Agriculture & Sustainable Food', status: 'verified', icon: '🍽️', updated: 'Mar 2024' },
-    { field: 'Industrial Emission Limits', status: 'verified', icon: '🏭', updated: 'Mar 2024' },
-    { field: 'Waste Management & Circularity', status: 'pending', icon: '♻️', updated: 'Feb 2024' },
-    { field: 'Carbon Offsetting Framework', status: 'verified', icon: '🌳', updated: 'Jan 2024' }
+    { field: 'Transport & E-Mobility', status: 'verified', icon: 'Transport', updated: 'Jan 2024' },
+    { field: 'Renewable Energy Integration', status: 'verified', icon: 'Energy', updated: 'Feb 2024' },
+    { field: 'Agriculture & Sustainable Food', status: 'verified', icon: 'Food', updated: 'Mar 2024' },
+    { field: 'Industrial Emission Limits', status: 'verified', icon: 'Industry', updated: 'Mar 2024' },
+    { field: 'Waste Management & Circularity', status: 'pending', icon: 'Waste', updated: 'Feb 2024' },
+    { field: 'Carbon Offsetting Framework', status: 'verified', icon: 'Offset', updated: 'Jan 2024' }
 ];
 
 const REFERRAL_LINKS = [
@@ -27,52 +27,52 @@ const VERIFIED_FACTORS = [
     { category: 'CNG (Transport)', factor: '2.66', unit: 'kg CO₂/kg', source: 'IGL Verification' },
     { category: 'Public Transport (Bus)', factor: '0.08', unit: 'kg CO₂/km/person', source: 'TERI Reports' },
     // CERTIFIED DISH BENCHMARKS (GLOBAL RESEARCH)
-    { category: '🥣 Dal Tadka', factor: '0.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥗 Mixed Veg', factor: '0.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍚 Rajma Chawal', factor: '0.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍲 Khichdi', factor: '0.7', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍛 Vegetable Biryani', factor: '0.9', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🧆 Idli Sambhar', factor: '0.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥣 Poha', factor: '0.4', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥘 Gobi Manchurian', factor: '0.7', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍆 Baingan Bharta', factor: '0.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥘 Bhindi Masala', factor: '0.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍝 Pasta Arabiata', factor: '0.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥗 Salad Bowl', factor: '0.3', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍜 Veg Noodles', factor: '0.9', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍚 Veg Fried Rice', factor: '1.0', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥞 Sada Dosa', factor: '0.6', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🥣 Dal Makhani', factor: '1.2', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🧀 Paneer Butter Masala', factor: '2.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🧀 Palak Paneer', factor: '2.3', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥘 Chole Bhature', factor: '1.3', unit: 'kg CO₂/plate', source: 'P&N / IPCC / FAO' },
-    { category: '🫓 Aloo Paratha', factor: '1.0', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🧀 Matar Paneer', factor: '2.4', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🧆 Malai Kofta', factor: '2.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🧀 Handi Paneer', factor: '2.4', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍕 Margherita Pizza', factor: '1.0', unit: 'kg CO₂/slice', source: 'P&N / IPCC / FAO' },
-    { category: '🍔 Veg Burger', factor: '1.5', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🥪 Sandwich', factor: '0.9', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🥞 Masala Dosa', factor: '1.7', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🥚 Egg Curry', factor: '1.1', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥚 Egg Biryani', factor: '1.3', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥚 Omelette', factor: '0.8', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🥚 Boiled Eggs', factor: '0.5', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🍗 Butter Chicken', factor: '3.0', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍗 Chicken Biryani', factor: '2.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥩 Mutton Curry', factor: '6.0', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🐟 Fish Curry', factor: '2.2', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍗 Chicken Tikka', factor: '2.3', unit: 'kg CO₂/plate', source: 'P&N / IPCC / FAO' },
-    { category: '🥩 Mutton Biryani', factor: '6.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍗 Chicken Korma', factor: '3.2', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🐟 Fish Fry', factor: '2.4', unit: 'kg CO₂/plate', source: 'P&N / IPCC / FAO' },
-    { category: '🍤 Prawns Masala', factor: '3.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🥩 Keema Matar', factor: '5.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍗 Chicken Curry', factor: '2.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍕 Chicken Pizza', factor: '3.0', unit: 'kg CO₂/slice', source: 'P&N / IPCC / FAO' },
-    { category: '🍔 Chicken Burger', factor: '2.7', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
-    { category: '🍜 Chicken Noodles', factor: '2.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
-    { category: '🍚 Chicken Fried Rice', factor: '2.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' }
+    { category: 'Dal Tadka', factor: '0.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Mixed Veg', factor: '0.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Rajma Chawal', factor: '0.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Khichdi', factor: '0.7', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Vegetable Biryani', factor: '0.9', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Idli Sambhar', factor: '0.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Poha', factor: '0.4', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Gobi Manchurian', factor: '0.7', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Baingan Bharta', factor: '0.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Bhindi Masala', factor: '0.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Pasta Arabiata', factor: '0.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Salad Bowl', factor: '0.3', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Veg Noodles', factor: '0.9', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Veg Fried Rice', factor: '1.0', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Sada Dosa', factor: '0.6', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Dal Makhani', factor: '1.2', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Paneer Butter Masala', factor: '2.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Palak Paneer', factor: '2.3', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Chole Bhature', factor: '1.3', unit: 'kg CO₂/plate', source: 'P&N / IPCC / FAO' },
+    { category: 'Aloo Paratha', factor: '1.0', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Matar Paneer', factor: '2.4', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Malai Kofta', factor: '2.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Handi Paneer', factor: '2.4', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Margherita Pizza', factor: '1.0', unit: 'kg CO₂/slice', source: 'P&N / IPCC / FAO' },
+    { category: 'Veg Burger', factor: '1.5', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Sandwich', factor: '0.9', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Masala Dosa', factor: '1.7', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Egg Curry', factor: '1.1', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Egg Biryani', factor: '1.3', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Omelette', factor: '0.8', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Boiled Eggs', factor: '0.5', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Butter Chicken', factor: '3.0', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Biryani', factor: '2.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Mutton Curry', factor: '6.0', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Fish Curry', factor: '2.2', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Tikka', factor: '2.3', unit: 'kg CO₂/plate', source: 'P&N / IPCC / FAO' },
+    { category: 'Mutton Biryani', factor: '6.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Korma', factor: '3.2', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Fish Fry', factor: '2.4', unit: 'kg CO₂/plate', source: 'P&N / IPCC / FAO' },
+    { category: 'Prawns Masala', factor: '3.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Keema Matar', factor: '5.5', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Curry', factor: '2.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Pizza', factor: '3.0', unit: 'kg CO₂/slice', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Burger', factor: '2.7', unit: 'kg CO₂/item', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Noodles', factor: '2.6', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' },
+    { category: 'Chicken Fried Rice', factor: '2.8', unit: 'kg CO₂/bowl', source: 'P&N / IPCC / FAO' }
 ];
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -102,7 +102,7 @@ function renderApprovals() {
                 </div>
             </div>
             <div class="approval-status status-${appr.status}">
-                ${appr.status === 'verified' ? '✅ Approved' : '⏳ Under Review'}
+                ${appr.status === 'verified' ? 'Approved' : 'Under Review'}
             </div>
         </div>
     `).join('');
@@ -143,7 +143,7 @@ function renderReferralLinks() {
         <div class="card" style="background:rgba(255,255,255,0.02); padding:1.2rem; border:1px solid var(--border);">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem">
                 <span class="feature-tag" style="background:rgba(34,197,94,0.1); color:var(--green); font-size:0.7rem">${ref.type}</span>
-                <button onclick="copyToClipboard('${ref.link}', ${idx})" id="copyBtn-${idx}" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.8rem;" title="Copy Link">📋 Copy</button>
+                <button onclick="copyToClipboard('${ref.link}', ${idx})" id="copyBtn-${idx}" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:0.8rem;" title="Copy Link">Copy</button>
             </div>
             <h4 style="margin-bottom:0.4rem; color:var(--text-primary)">${ref.title}</h4>
             <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.4; margin-bottom:1rem">${ref.desc}</p>
@@ -158,7 +158,7 @@ function copyToClipboard(text, id) {
     navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById(`copyBtn-${id}`);
         const original = btn.innerHTML;
-        btn.innerHTML = '✅ Copied!';
+        btn.innerHTML = 'Copied!';
         btn.style.color = 'var(--green)';
         setTimeout(() => {
             btn.innerHTML = original;

@@ -6,7 +6,7 @@ async function startTripTracking() {
         return;
     }
 
-    showGlobalToast("Initializing Auto-Trip Detection... 🛰️");
+    showGlobalToast("Initializing Auto-Trip Detection...");
 
     // Simulate detecting a trip after permission is granted
     navigator.geolocation.getCurrentPosition(async (pos) => {
@@ -25,7 +25,7 @@ function detectStoredTrip(km, mode) {
     const confirmTrip = confirm(`EcoTrack detected a ${km}km trip via ${mode}. Would you like to log this to your footprint?`);
     if (confirmTrip) {
         // This would call the calculator logic to save
-        showGlobalToast(`Logged ${km}km ${mode} trip automatically! 🌍`);
+        showGlobalToast(`Logged ${km}km ${mode} trip automatically!`);
     }
 }
 
@@ -36,7 +36,7 @@ function initAutoLogUI() {
         const btn = document.createElement('div');
         btn.className = 'nav-item';
         btn.innerHTML = `
-            <span class="nav-icon">🛰️</span>
+            <span class="nav-icon">Auto</span>
             <span class="nav-text">Enable Auto-Log</span>
         `;
         btn.onclick = startTripTracking;

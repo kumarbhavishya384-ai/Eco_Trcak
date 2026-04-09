@@ -21,23 +21,24 @@
 
 
     <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo"><span>🌿</span><span class="logo-text">EcoTrack <b>AI</b></span></div>
+        <div class="sidebar-logo"><span class="logo-text">EcoTrack <b>AI</b></span></div>
         <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><span class="nav-icon">📊</span><span
+            <a href="dashboard.html" class="nav-item" id="nav-dashboard"><span
                     class="nav-label" data-i18n="nav_dashboard">Dashboard</span></a>
             <a href="report.html" class="nav-item" id="nav-report">
-                <span class="nav-icon">📜</span><span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
+                <span class="nav-label" data-i18n="nav_report">Report Dashboard</span>
             </a>
 
-            <a href="calculator.html" class="nav-item"><span class="nav-icon">🧮</span><span
+            <a href="calculator.html" class="nav-item" id="nav-calculator"><span
                     class="nav-label" data-i18n="nav_calculator">Calculator</span></a>
-            <a href="history.html" class="nav-item active"><span class="nav-icon">📅</span><span
+            <a href="history.html" class="nav-item active" id="nav-history"><span
                     class="nav-label" data-i18n="nav_history">History</span></a>
-            <a href="recommendations.html" class="nav-item"><span class="nav-icon">💡</span><span class="nav-label">AI
-                    Insights</span></a>
-            <a href="leaderboard.html" class="nav-item"><span class="nav-icon">🏆</span><span
+            <a href="recommendations.html" class="nav-item" id="nav-recommendations"><span
+                    class="nav-label" data-i18n="nav_insights">AI Insights</span></a>
+            <a href="leaderboard.html" class="nav-item" id="nav-leaderboard"><span
                     class="nav-label" data-i18n="nav_leaderboard">Leaderboard</span></a>
-            <a href="offset.html" class="nav-item"><span class="nav-icon">🌲</span><span class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
+            <a href="offset.html" class="nav-item" id="nav-offset"><span
+                    class="nav-label" data-i18n="nav_offset">Offset Tools</span></a>
         </nav>
         <div class="sidebar-footer">
             <div class="user-mini-profile">
@@ -53,18 +54,18 @@
                 <button onclick="switchLanguage('hi')" data-lang="hi" class="lang-btn"
                     style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.3rem 0.6rem; border-radius: 8px; cursor: pointer; transition:0.2s;">HI</button>
             </div>
-            <button class="logout-btn" onclick="logout()">⬡ Logout</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
     </aside>
 
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
-                <h1 class="page-title" data-i18n="hist_title">📅 Emission History</h1>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">Menu</button>
+                <h1 class="page-title" data-i18n="hist_title">Emission History</h1>
             </div>
             <div class="topbar-right">
-                <button class="btn-export" onclick="exportHistory()" data-i18n="export_csv">⬇ Export CSV</button>
+                <button class="btn-export" onclick="exportHistory()" data-i18n="export_csv">Export CSV</button>
             </div>
         </header>
 
@@ -73,22 +74,22 @@
             <!-- Summary Stats Row -->
             <div class="history-stats-row">
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">📈</div>
+                    <div class="hist-stat-icon">Stats</div>
                     <div class="hist-stat-val" id="hst-total">0</div>
                     <div class="hist-stat-label" data-i18n="total_entries">Total Entries</div>
                 </div>
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">🌍</div>
+                    <div class="hist-stat-icon">Impact</div>
                     <div class="hist-stat-val" id="hst-co2">0</div>
                     <div class="hist-stat-label" data-i18n="total_co2">Total kg CO₂</div>
                 </div>
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">📉</div>
+                    <div class="hist-stat-icon">Best</div>
                     <div class="hist-stat-val" id="hst-best">--</div>
                     <div class="hist-stat-label" data-i18n="best_day">Best Day</div>
                 </div>
                 <div class="card hist-stat-card">
-                    <div class="hist-stat-icon">🔥</div>
+                    <div class="hist-stat-icon">Streak</div>
                     <div class="hist-stat-val" id="hst-streak">0</div>
                     <div class="hist-stat-label" data-i18n="logging_streak">Logging Streak</div>
                 </div>
@@ -114,7 +115,7 @@
                 <div class="card-header">
                     <h3 data-i18n="all_entries">All Entries</h3>
                     <div class="history-search-wrap">
-                        <input type="text" class="history-search" id="historySearch" placeholder="🔍 Search by date..."
+                        <input type="text" class="history-search" id="historySearch" placeholder="Search by date..."
                             oninput="filterHistory()" />
                         <select class="period-select" id="histCategoryFilter" onchange="filterHistory()">
                             <option value="all" data-i18n="all_categories">All Categories</option>
@@ -130,9 +131,9 @@
                         <thead>
                             <tr>
                                 <th data-i18n="date_col">Date</th>
-                                <th data-i18n="transport_col">🚗 Transport</th>
-                                <th data-i18n="electricity_col">⚡ Electricity</th>
-                                <th data-i18n="food_col">🍽️ Food</th>
+                                <th data-i18n="transport_col">Transport</th>
+                                <th data-i18n="electricity_col">Electricity</th>
+                                <th data-i18n="food_col">Food</th>
                                 <th data-i18n="total_co2_col">Total CO₂</th>
                                 <th data-i18n="ecoscore_col">EcoScore</th>
                                 <th data-i18n="action_col">Action</th>
@@ -154,9 +155,9 @@
     <!-- Floating Scroll FAB -->
     <div class="scroll-fab" id="scrollFab">
         <button class="scroll-btn scroll-top-btn" id="scrollTopBtn" onclick="scrollMainTo('top')"
-            title="Scroll to top">&#8679;</button>
+            title="Scroll to top">Up</button>
         <button class="scroll-btn scroll-down-btn" id="scrollDownBtn" onclick="scrollMainTo('down')"
-            title="Scroll down">&#8681;</button>
+            title="Scroll down">Down</button>
     </div>
     <script src="js/app.js"></script>
     <script src="js/history.js"></script>

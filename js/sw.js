@@ -64,7 +64,7 @@ self.addEventListener('message', e => {
     if (e.data.type === 'SHOW_REMINDER') {
         // Called from setInterval fallback in app.js
         self.registration.showNotification(
-            e.data.title || 'EcoTrack AI 🌿',
+            e.data.title || 'EcoTrack AI',
             {
                 body    : e.data.body    || "Don't forget to log your carbon footprint!",
                 icon    : '/logo.png',
@@ -72,7 +72,7 @@ self.addEventListener('message', e => {
                 tag     : e.data.tag    || 'ecotrack-reminder',
                 renotify: true,
                 actions : [
-                    { action: 'open',    title: '📊 Log Now' },
+                    { action: 'open',    title: 'Log Now' },
                     { action: 'dismiss', title: 'Later'      }
                 ],
                 data: { url: '/calculator.html' }
@@ -82,7 +82,7 @@ self.addEventListener('message', e => {
 
     if (e.data.type === 'SHOW_CHALLENGE') {
         self.registration.showNotification(
-            e.data.title || 'EcoTrack Challenge 🎯',
+            e.data.title || 'EcoTrack Challenge',
             {
                 body    : e.data.body || 'Check your active challenge!',
                 icon    : '/logo.png',
@@ -90,7 +90,7 @@ self.addEventListener('message', e => {
                 tag     : e.data.tag  || 'ecotrack-challenge',
                 renotify: true,
                 actions : [
-                    { action: 'open',    title: '🎯 View Challenge' },
+                    { action: 'open',    title: 'View Challenge' },
                     { action: 'dismiss', title: 'Later'             }
                 ],
                 data: { url: '/recommendations.html' }
@@ -118,7 +118,7 @@ async function checkAndFireReminder() {
     if (!isWithinWindow(hhmm, settings.time, 5)) return;
 
     // ✅ Fire the notification
-    await self.registration.showNotification('EcoTrack AI 🌿', {
+    await self.registration.showNotification('EcoTrack AI', {
         body    : settings.message || "Don't forget to log your carbon footprint today!",
         icon    : '/logo.png',
         badge   : '/logo.png',
@@ -126,7 +126,7 @@ async function checkAndFireReminder() {
         renotify: true,
         vibrate : [200, 100, 200],
         actions : [
-            { action: 'open',    title: '📊 Log Now' },
+            { action: 'open',    title: 'Log Now' },
             { action: 'dismiss', title: 'Later'      }
         ],
         data: { url: '/calculator.html' }
@@ -228,14 +228,14 @@ self.addEventListener('notificationclick', e => {
 self.addEventListener('push', e => {
     const d = e.data ? e.data.json() : {};
     e.waitUntil(
-        self.registration.showNotification(d.title || 'EcoTrack AI 🌿', {
+        self.registration.showNotification(d.title || 'EcoTrack AI', {
             body    : d.body  || "Don't forget to log your carbon footprint!",
             icon    : '/logo.png',
             badge   : '/logo.png',
             tag     : d.tag   || 'ecotrack-push',
             renotify: true,
             actions : [
-                { action: 'open',    title: '📊 Open App' },
+                { action: 'open',    title: 'Open App' },
                 { action: 'dismiss', title: 'Later'       }
             ],
             data: { url: d.url || '/calculator.html' }

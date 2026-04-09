@@ -118,20 +118,20 @@ function updateLevelProgress(entries) {
     const score = user.ecoScore || (entries.length > 0 ? entries.reduce((s, e) => s + (e.ecoScore || 0), 0) : 0);
     
     let levelName = "Neophyte";
-    let levelIcon = "\u{1F331}";
+    let levelIcon = "";
     let nextLevelName = "Intermediate";
     let nextLevelTarget = 1000;
     let progress = 0;
 
     if (score >= 5000) {
         levelName = "Elite";
-        levelIcon = "ðŸ†";
+        levelIcon = "";
         nextLevelName = "Grandmaster";
         nextLevelTarget = 10000;
         progress = ((score - 5000) / 5000) * 100;
     } else if (score >= 1000) {
         levelName = "Intermediate";
-        levelIcon = "\u{1F680}";
+        levelIcon = "";
         nextLevelName = "Elite";
         nextLevelTarget = 5000;
         progress = ((score - 1000) / 4000) * 100;
@@ -163,8 +163,8 @@ function updateLevelProgress(entries) {
     // Update Status Labels based on score
     if (scoreTierBadge) {
         const ratingKey = score > 1000 ? "perf_exc" : (score > 500 ? "perf_good" : "perf_neo");
-        const ratingIcon = score > 1000 ? "\u{1F3C6}" : (score > 500 ? "\u{1F680}" : "\u{1F331}");
-        scoreTierBadge.textContent = t(ratingKey) + " " + ratingIcon;
+        const ratingIcon = "";
+        scoreTierBadge.textContent = t(ratingKey);
         if (score > 0) scoreTierBadge.style.background = 'rgba(0, 212, 170, 0.15)';
     }
     if (scoreDesc) {
@@ -185,7 +185,7 @@ function updateLevelProgress(entries) {
     }
 }
 
-// â”€â”€ Emissions Breakdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// --------------------------- Emissions Breakdown ---------------------------
 function renderEmissionBreakdown(entries) {
     updateEmissionDisplay(entries);
 }
@@ -211,7 +211,7 @@ function updateEmissionDisplay(entriesOverride) {
 
     const totals = { transport: 0, electricity: 0, food: 0 };
 
-    // Transport & food are daily values â€” sum them normally
+    // Transport & food are daily values — sum them normally
     filtered.forEach(e => {
         totals.transport += (+e.transport || 0);
         totals.food += (+e.food || 0);
@@ -356,7 +356,7 @@ function renderRegionalBenchmarks(user, currentEntries) {
     if (zoneMarker) zoneMarker.style.left = Math.min((userDailyAvg / scaleMax * 100), 99) + '%';
 }
 
-// â”€â”€ Trend Chart â€“ Enhanced Premium â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ------------------- Trend Chart – Enhanced Premium -------------------
 function renderTrendChart(entries, period = 'week') {
     console.log("LOG: Rendering Trend Chart for period:", period, "| Entries count:", (entries ? entries.length : 0));
     const container = document.querySelector('.chart-wrapper');
@@ -481,7 +481,7 @@ async function updateChart(period, btn) {
     renderTrendChart(allEntries, period);
 }
 
-// â”€â”€ Donut Chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// --------------------------- Donut Chart ---------------------------
 function renderDonutChart(entries) {
     console.log("LOG: Rendering Donut Chart | Entries count:", (entries ? entries.length : 0));
     const container = document.querySelector('.chart-wrapper-small');
@@ -556,7 +556,7 @@ function renderDonutChart(entries) {
     }
 }
 
-// â”€â”€ Quick Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// --------------------------- Quick Stats ---------------------------
 async function renderQuickStats(user, entries, period = 'month') {
     const totalCO2 = entries.reduce((s, e) => s + e.total, 0);
 
@@ -583,7 +583,7 @@ async function renderQuickStats(user, entries, period = 'month') {
         const prevWeekAvg = allEntries.slice(7, 14).reduce((s, e) => s + e.total, 0) / 7;
         const pct = prevWeekAvg > 0 ? ((prevWeekAvg - lastWeekAvg) / prevWeekAvg * 100) : 0;
         if (recentEl) {
-            recentEl.textContent = (pct >= 0 ? 'â†“' : 'â†‘') + Math.abs(pct).toFixed(0) + '%';
+            recentEl.textContent = (pct >= 0 ? '↓' : '↑') + Math.abs(pct).toFixed(0) + '%';
             recentEl.style.color = pct >= 0 ? 'var(--primary)' : 'var(--danger)';
         }
     } else {
@@ -591,7 +591,7 @@ async function renderQuickStats(user, entries, period = 'month') {
     }
 }
 
-// â”€â”€ Recommendations Preview â€“ Enhanced â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ------------------- Recommendations Preview – Enhanced -------------------
 async function renderDashboardRecs() {
     const el = document.getElementById('dashboardRecs');
     if (!el) return;
@@ -621,7 +621,7 @@ async function renderDashboardRecs() {
     }
 }
 
-// â”€â”€ Recent Activity â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// --------------------------- Recent Activity ---------------------------
 function renderRecentActivity(entries) {
     const el = document.getElementById('activityList');
     if (!el) return;
@@ -635,7 +635,7 @@ function renderRecentActivity(entries) {
     el.innerHTML = recent.map(e => `
       <div class="activity-item" style="display:flex; align-items:center; justify-content:space-between; padding:0.85rem 1rem; border-bottom:1px solid rgba(255,255,255,0.03);">
         <div style="display:flex; align-items:center; gap:1rem;">
-          <div style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; font-size:1.1rem;">\u{1F4CA}</div>
+          <div style="width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; font-size:1.1rem;"> </div>
           <div>
             <div style="font-size:0.875rem; font-weight:600;">${t('log_data')}</div>
             <div style="font-size:0.72rem; color:var(--text-muted);">${formatDate(e.date)}</div>

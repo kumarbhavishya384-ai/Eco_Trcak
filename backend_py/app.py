@@ -271,7 +271,7 @@ def _send_welcome_email_sync(user_email, first_name):
     except (ValueError, TypeError):
         smtp_port = 465
 
-    subject = f"🌿 Welcome to {sender_name} – Let's Go Green Together!"
+    subject = f"Welcome to {sender_name} – Let's Go Green Together!"
 
     # ── Beautiful HTML email body ──────────────────────────
     html_body = f"""
@@ -285,7 +285,7 @@ def _send_welcome_email_sync(user_email, first_name):
             <!-- Header -->
             <tr>
               <td style="background:linear-gradient(135deg,#0d4f3a,#0a3d5c);padding:40px 30px;text-align:center;">
-                <div style="font-size:42px">🌿</div>
+                <div style="font-size:42px"></div>
                 <h1 style="color:#ffffff;margin:12px 0 6px;font-size:26px;font-weight:800;">Welcome to {sender_name}!</h1>
                 <p style="color:#a0d4b5;margin:0;font-size:15px;">Your personal carbon footprint tracker</p>
               </td>
@@ -295,31 +295,31 @@ def _send_welcome_email_sync(user_email, first_name):
               <td style="padding:35px 40px;">
                 <p style="color:#c8e6c9;font-size:17px;margin:0 0 15px;">Hi <strong style="color:#4ade80;">{first_name}</strong>,</p>
                 <p style="color:#94a3b8;font-size:15px;line-height:1.7;margin:0 0 25px;">
-                  Welcome aboard! 🎉 You've taken the first step toward understanding and reducing your carbon footprint.
+                  Welcome aboard! You've taken the first step toward understanding and reducing your carbon footprint.
                   Here's what you can do with <strong style="color:#22d3ee;">{sender_name}</strong>:
                 </p>
                 <table width="100%" cellpadding="0" cellspacing="0">
                   <tr>
                     <td style="background:#0d2a40;border-radius:12px;padding:18px 20px;margin-bottom:12px;border-left:4px solid #22c55e;">
-                      <p style="margin:0;color:#e2e8f0;font-size:14px;">🚗 <strong>Track Daily Transport</strong> – Car, bus, metro, flights</p>
+                      <p style="margin:0;color:#e2e8f0;font-size:14px;"><strong>Track Daily Transport</strong> – Car, bus, metro, flights</p>
                     </td>
                   </tr>
                   <tr><td height="10"></td></tr>
                   <tr>
                     <td style="background:#0d2a40;border-radius:12px;padding:18px 20px;border-left:4px solid #06b6d4;">
-                      <p style="margin:0;color:#e2e8f0;font-size:14px;">⚡ <strong>Log Monthly Electricity</strong> – Bills, LPG, appliances</p>
+                      <p style="margin:0;color:#e2e8f0;font-size:14px;"><strong>Log Monthly Electricity</strong> – Bills, LPG, appliances</p>
                     </td>
                   </tr>
                   <tr><td height="10"></td></tr>
                   <tr>
                     <td style="background:#0d2a40;border-radius:12px;padding:18px 20px;border-left:4px solid #f59e0b;">
-                      <p style="margin:0;color:#e2e8f0;font-size:14px;">🤖 <strong>Get AI Insights</strong> – Personalized tips to save CO₂ &amp; money</p>
+                      <p style="margin:0;color:#e2e8f0;font-size:14px;"><strong>Get AI Insights</strong> – Personalized tips to save CO₂ &amp; money</p>
                     </td>
                   </tr>
                   <tr><td height="10"></td></tr>
                   <tr>
                     <td style="background:#0d2a40;border-radius:12px;padding:18px 20px;border-left:4px solid #a855f7;">
-                      <p style="margin:0;color:#e2e8f0;font-size:14px;">🏆 <strong>Climb the Leaderboard</strong> – Compete &amp; inspire others</p>
+                      <p style="margin:0;color:#e2e8f0;font-size:14px;"><strong>Climb the Leaderboard</strong> – Compete &amp; inspire others</p>
                     </td>
                   </tr>
                 </table>
@@ -327,11 +327,11 @@ def _send_welcome_email_sync(user_email, first_name):
                   <a href="https://inspiring-dango-b3bb97.netlify.app/dashboard.html"
                      style="background:linear-gradient(135deg,#22c55e,#06b6d4);color:#fff;text-decoration:none;
                             padding:14px 36px;border-radius:50px;font-size:16px;font-weight:700;display:inline-block;">
-                    🌍 Start Tracking Now
+                    Start Tracking Now
                   </a>
                 </div>
                 <p style="color:#64748b;font-size:13px;text-align:center;margin:0;">
-                  Together, let's make a greener planet. 🌱
+                  Together, let's make a greener planet.
                 </p>
               </td>
             </tr>
@@ -427,7 +427,7 @@ def _send_otp_email_sync(user_email, otp_code):
     smtp_pass_raw = os.getenv("SMTP_PASS", "")
     smtp_pass    = smtp_pass_raw.replace(" ", "").strip() if smtp_pass_raw else ""
 
-    subject = f"🔐 Your OTP for {sender_name}"
+    subject = f"Your OTP for {sender_name}"
 
     html_body = f"""
     <!DOCTYPE html>
@@ -1043,12 +1043,12 @@ def get_recommendations():
     thresholds = {"transport": 4.0, "electricity": 3.0, "food": 5.0}
     
     all_tips = [
-        {"id": "solar", "title": "Install Solar Panels", "desc": "Rooftop solar can offset 80-90% of your home electricity emissions.", "impact": 25, "category": "⚡ Electricity", "cat": "electricity", "icon": "☀️"},
-        {"id": "beef", "title": "Reduce Beef Consumption", "desc": "Beef has 7x higher emissions than chicken. Try legumes instead.", "impact": 15, "category": "🍽️ Food", "cat": "food", "icon": "🥗"},
-        {"id": "transit", "title": "Switch to Public Transport", "desc": "Replace car trips with bus/metro 3x/week to cut transport emissions.", "impact": 12, "category": "🚗 Transport", "cat": "transport", "icon": "🚌"},
-        {"id": "meatless", "title": "Go Meatless on Mondays", "desc": "One meat-free day per week reduces your food footprint by ~10%.", "impact": 6, "category": "🍽️ Food", "cat": "food", "icon": "🌱"},
-        {"id": "ac", "title": "Optimal AC Temp", "desc": "Set AC to 24°C instead of 18°C. Every degree higher saves 6% energy.", "impact": 8, "category": "⚡ Electricity", "cat": "electricity", "icon": "🌡️"},
-        {"id": "cycling", "title": "Cycling to Campus", "desc": "Cycle for short trips (<3km) to zero your transport footprint.", "impact": 10, "category": "🚗 Transport", "cat": "transport", "icon": "🚲"}
+        {"id": "solar", "title": "Install Solar Panels", "desc": "Rooftop solar can offset 80-90% of your home electricity emissions.", "impact": 25, "category": "Electricity", "cat": "electricity", "icon": ""},
+        {"id": "beef", "title": "Reduce Beef Consumption", "desc": "Beef has 7x higher emissions than chicken. Try legumes instead.", "impact": 15, "category": "Food", "cat": "food", "icon": ""},
+        {"id": "transit", "title": "Switch to Public Transport", "desc": "Replace car trips with bus/metro 3x/week to cut transport emissions.", "impact": 12, "category": "Transport", "cat": "transport", "icon": ""},
+        {"id": "meatless", "title": "Go Meatless on Mondays", "desc": "One meat-free day per week reduces your food footprint by ~10%.", "impact": 6, "category": "Food", "cat": "food", "icon": ""},
+        {"id": "ac", "title": "Optimal AC Temp", "desc": "Set AC to 24°C instead of 18°C. Every degree higher saves 6% energy.", "impact": 8, "category": "Electricity", "cat": "electricity", "icon": ""},
+        {"id": "cycling", "title": "Cycling to Campus", "desc": "Cycle for short trips (<3km) to zero your transport footprint.", "impact": 10, "category": "Transport", "cat": "transport", "icon": ""}
     ]
     
     recs = []

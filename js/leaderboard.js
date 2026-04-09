@@ -66,7 +66,7 @@ function renderLeaderboardList(data) {
         const isMe = person.isMe;
         const tier = getScoreTier(person.score);
         const rankClass = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
-        const rankEmoji = rank === 1 ? '🏆' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : rank;
+        const rankEmoji = rank;
         const initials = person.name.split(' ').map(n => n[0]).join('').toUpperCase();
 
         return `
@@ -98,7 +98,7 @@ function renderGroupLeaderboard(groups) {
     list.innerHTML = groups.map((g, idx) => `
         <div class="lb-row">
             <div class="lb-rank-num">${idx + 1}</div>
-            <div class="lb-avatar" style="background: var(--primary); color:white">🏛️</div>
+            <div class="lb-avatar" style="background: var(--primary); color:white"></div>
             <div class="lb-name-wrap">
                 <div class="lb-name">${g.name}</div>
                 <div class="lb-location">${g.members} Members active</div>
@@ -154,7 +154,7 @@ async function generateShareCard() {
     ctx.textAlign = 'center';
 
     ctx.font = 'bold 120px Inter, sans-serif';
-    ctx.fillText('🏆 EcoChampion', 540, 300);
+    ctx.fillText('EcoChampion', 540, 300);
 
     ctx.font = '40px Inter, sans-serif';
     ctx.fillText('This month, I reduced my footprint by 23%', 540, 400);
@@ -167,7 +167,7 @@ async function generateShareCard() {
 
     // Watermark
     ctx.font = 'bold 60px Inter, sans-serif';
-    ctx.fillText(`🌿 @${user.firstName.toLowerCase()}_ecotrack`, 540, 950);
+    ctx.fillText(`@${user.firstName.toLowerCase()}_ecotrack`, 540, 950);
 
     ctx.font = '30px Inter, sans-serif';
     ctx.fillText('Powered by EcoTrack AI', 540, 1000);
@@ -186,16 +186,16 @@ function renderNGOTab() {
     const grid = document.getElementById('ngoGrid');
     if (!grid) return;
     const ngoOrgs = [
-        { icon: '🌳', name: 'Green India Foundation', tag: 'Reforestation', members: 1240, co2: '52k kg' },
-        { icon: '☀️', name: 'Solar Warriors', tag: 'Renewable', members: 890, co2: '38k kg' },
-        { icon: '🏭', name: 'CSR CleanAir', tag: 'Corporate', members: 3200, co2: '1.2M kg' }
+        { icon: '', name: 'Green India Foundation', tag: 'Reforestation', members: 1240, co2: '52k kg' },
+        { icon: '', name: 'Solar Warriors', tag: 'Renewable', members: 890, co2: '38k kg' },
+        { icon: '', name: 'CSR CleanAir', tag: 'Corporate', members: 3200, co2: '1.2M kg' }
     ];
     grid.innerHTML = ngoOrgs.map(org => `
     <div class="ngo-card">
       <div class="ngo-icon">${org.icon}</div>
       <div class="ngo-name">${org.name}</div>
       <div class="ngo-tag">${org.tag}</div>
-      <button class="ngo-partner-btn" onclick="showGlobalToast('Joined ${org.name}!')">🤝 Join Partner</button>
+      <button class="ngo-partner-btn" onclick="showGlobalToast('Joined ${org.name}!')">Join Partner</button>
     </div>
   `).join('');
 }
@@ -205,15 +205,15 @@ function renderBadges(user) {
     const grid = document.getElementById('badgesGrid');
     if (!grid) return;
     const badges = [
-        { icon: '🌱', name: 'First Step', desc: 'Logged your first entry', earned: true },
-        { icon: '🏆', name: 'EcoChampion', desc: 'EcoScore above 600', earned: user.ecoScore >= 600 },
-        { icon: '🌍', name: 'Earth Defender', desc: 'Tracked regularly', earned: true }
+        { icon: '', name: 'First Step', desc: 'Logged your first entry', earned: true },
+        { icon: '', name: 'EcoChampion', desc: 'EcoScore above 600', earned: user.ecoScore >= 600 },
+        { icon: '', name: 'Earth Defender', desc: 'Tracked regularly', earned: true }
     ];
     grid.innerHTML = badges.map(b => `
     <div class="badge-item ${b.earned ? 'earned' : 'locked'}">
       <div class="badge-icon">${b.icon}</div>
       <div class="badge-name">${b.name}</div>
-      ${b.earned ? '✅ Earned' : '🔒 Locked'}
+      ${b.earned ? 'Earned' : 'Locked'}
     </div>
   `).join('');
 }

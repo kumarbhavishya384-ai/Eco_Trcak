@@ -69,7 +69,7 @@ function calcTrees() {
     const visualEl = document.getElementById('treeVisual');
     if (visualEl) {
         const displayCount = Math.min(treesNeeded, 50);
-        visualEl.textContent = '🌳'.repeat(displayCount) + (treesNeeded > 50 ? ` +${treesNeeded - 50} more` : '');
+        visualEl.textContent = '. '.repeat(displayCount) + (treesNeeded > 50 ? ` +${treesNeeded - 50} more` : '');
     }
 
     // Extra info
@@ -78,9 +78,9 @@ function calcTrees() {
         const area = (treesNeeded * 4).toFixed(0); // ~4 m² per tree
         const cost = (treesNeeded * 250).toLocaleString('en-IN'); // ₹250 avg planting cost
         extraEl.innerHTML = `
-      🌍 Requires ~${area} m² of land &nbsp;|&nbsp;
-      💰 Est. planting cost: ₹${cost}<br/>
-      📅 Full offset in: ${Math.ceil(kg / treeAbsorption * 12)} months per tree
+      Requires ~${area} m² of land &nbsp;|&nbsp;
+      Est. planting cost: ₹${cost}<br/>
+      Full offset in: ${Math.ceil(kg / treeAbsorption * 12)} months per tree
     `;
     } else if (extraEl) {
         extraEl.textContent = 'Enter CO₂ amount to calculate trees needed.';
@@ -130,9 +130,9 @@ function calcSolar() {
     const paybackEl = document.getElementById('solarPayback');
     if (paybackEl) {
         paybackEl.innerHTML = `
-      💰 System cost: ₹${systemCostRs.toLocaleString('en-IN', { maximumFractionDigits: 0 })}<br/>
-      ⏱️ Payback period: <strong style="color:#22c55e">${paybackYears} years</strong><br/>
-      ${panelCapacityKw > 0 ? `📐 ${panelCapacityKw.toFixed(2)} kW system fits on your roof` : ''}
+      System cost: ₹${systemCostRs.toLocaleString('en-IN', { maximumFractionDigits: 0 })}<br/>
+      Payback period: <strong style="color:#22c55e">${paybackYears} years</strong><br/>
+      ${panelCapacityKw > 0 ? `${panelCapacityKw.toFixed(2)} kW system fits on your roof` : ''}
     `;
     }
 }
@@ -167,32 +167,32 @@ function renderNGOPartners() {
 
     const partners = [
         {
-            icon: '🌳', name: 'Green India Foundation',
+            icon: '', name: 'Green India Foundation',
             desc: 'Plant native trees across India with GPS-verified tracking. Each tree comes with a certificate.',
             tag: 'Reforestation', ctaPrice: '₹250/tree'
         },
         {
-            icon: '☀️', name: 'Solar Warriors India',
+            icon: '', name: 'Solar Warriors India',
             desc: 'Fund solar installations for rural schools & hospitals. 100% accountability via satellite imagery.',
             tag: 'Solar Energy', ctaPrice: '₹500/panel'
         },
         {
-            icon: '♻️', name: 'Waste Warriors',
+            icon: '', name: 'Waste Warriors',
             desc: 'Support verified waste management initiatives that prevent methane emissions at landfills.',
             tag: 'Waste Management', ctaPrice: '₹200/month'
         },
         {
-            icon: '🐄', name: 'Climate Smart Agriculture',
+            icon: '', name: 'Climate Smart Agriculture',
             desc: 'Help farmers adopt low-emission practices. Verified by third-party auditors.',
             tag: 'Agriculture', ctaPrice: '₹350/month'
         },
         {
-            icon: '🌊', name: 'Mangrove Alliance',
+            icon: '', name: 'Mangrove Alliance',
             desc: 'Restore coastal mangroves that sequester 5x more carbon than tropical forests.',
             tag: 'Blue Carbon', ctaPrice: '₹300/plant'
         },
         {
-            icon: '🏭', name: "India CSR Network",
+            icon: '', name: "India CSR Network",
             desc: 'Corporate Social Responsibility carbon offset network for businesses and institutions.',
             tag: 'Corporate / CSR', ctaPrice: 'Custom'
         }
@@ -205,7 +205,7 @@ function renderNGOPartners() {
       <div class="ngo-tag">${p.tag}</div>
       <div class="ngo-desc">${p.desc}</div>
       <div style="font-size:0.8rem;color:var(--green);font-weight:700;margin-bottom:0.75rem">${p.ctaPrice}</div>
-      <button class="ngo-partner-btn" onclick="partnerWithNGO('${p.name}', this)">🤝 Offset Now</button>
+      <button class="ngo-partner-btn" onclick="partnerWithNGO('${p.name}', this)">Offset Now</button>
     </div>
   `).join('');
 }
@@ -213,24 +213,24 @@ function renderNGOPartners() {
 async function partnerWithNGO(name, btn) {
     const originalText = btn.textContent;
     btn.disabled = true;
-    btn.textContent = '⛓️ Minting on Polygon...';
+    btn.textContent = 'Minting on Polygon...';
 
     // Simulate Blockchain Latency
     await new Promise(r => setTimeout(r, 2000));
 
     const txHash = '0x' + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
 
-    btn.textContent = '✅ Verified on Chain!';
+    btn.textContent = 'Verified on Chain!';
     btn.style.background = 'rgba(34,197,94,0.25)';
     btn.onclick = () => window.open(`https://polygonscan.com/tx/${txHash}`, '_blank');
 
-    showToast(`🌿 Offset recorded on Polygon! Certificate Minted.<br/><small style="font-size:0.7rem; color:var(--text-muted)">TX: ${txHash.substring(0, 12)}...</small>`);
+    showToast(`Offset recorded on Polygon! Certificate Minted.<br/><small style="font-size:0.7rem; color:var(--text-muted)">TX: ${txHash.substring(0, 12)}...</small>`);
 
     // Create a mini "NFT" badge
     const badge = document.createElement('div');
     badge.style = "position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:10000; background:var(--card-bg); border:2px solid var(--primary); padding:2rem; border-radius:16px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.5); animation: zoomIn 0.5s ease-out;";
     badge.innerHTML = `
-        <div style="font-size:4rem; margin-bottom:1rem;">🏅</div>
+        <div style="font-size:4rem; margin-bottom:1rem;"></div>
         <h2 style="color:var(--primary); margin-bottom:0.5rem;">Verified Carbon Credit</h2>
         <p style="font-size:0.9rem; margin-bottom:1rem;">Issued to: ${getCurrentUser().firstName}<br/>Partner: ${name}</p>
         <div style="font-family:monospace; font-size:0.7rem; background:rgba(0,0,0,0.2); padding:0.5rem; border-radius:8px; margin-bottom:1.5rem; word-break:break-all;">${txHash}</div>
@@ -242,7 +242,7 @@ async function partnerWithNGO(name, btn) {
 function showToast(msg) {
     const toast = document.createElement('div');
     toast.className = 'toast-notification';
-    toast.innerHTML = `<span style="font-size:1.2rem">🌿</span><span style="font-size:0.9rem;flex:1">${msg}</span>`;
+    toast.innerHTML = `<span style="font-size:0.9rem;flex:1">${msg}</span>`;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 4000);
 }

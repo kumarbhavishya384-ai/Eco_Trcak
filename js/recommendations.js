@@ -129,7 +129,7 @@ function renderRecsGrid(recs, state = 'active') {
         if (state === 'hero') {
             grid.innerHTML = `
                 <div class="hero-state" style="grid-column: 1 / -1; padding: 4rem; text-align: center; background: linear-gradient(135deg, rgba(34,197,94,0.05), rgba(6,182,212,0.05)); border-radius: 24px; border: 1px solid rgba(34,197,94,0.15);">
-                    <div style="font-size: 4rem; margin-bottom: 1.5rem;">\u{1F33F}🏅</div>
+                    <div style="font-size: 4rem; margin-bottom: 1.5rem;"></div>
                     <h2 style="color: #22c55e; margin-bottom: 1rem;">${t('hero_title')}</h2>
                     <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.6;">${t('hero_desc')} There are no recommendations because your footprint in all categories is remarkably low. Excellent work!</p>
                 </div>
@@ -137,7 +137,7 @@ function renderRecsGrid(recs, state = 'active') {
         } else {
             grid.innerHTML = `
                 <div class="empty-state" style="grid-column: 1 / -1; padding: 3rem; text-align: center; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1px dashed rgba(255,255,255,0.1);">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">\u{1F4A1}</div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem;"></div>
                     <h3 style="color: white; margin-bottom: 0.5rem;">${t('no_insights_title')}</h3>
                     <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto 1.5rem auto; font-size: 0.9rem;">${t('no_insights_desc')} Please use the calculator to log your daily activities.</p>
                     <button class="btn-primary" onclick="window.location.href='calculator.html'" style="padding: 0.75rem 1.5rem; background: var(--accent-primary); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Get Started Now</button>
@@ -185,7 +185,7 @@ async function renderAICoach() {
             throw new Error(data.message);
         }
     } catch (err) {
-        el.innerHTML = `<p style="color:var(--danger)">⚠️ ${t('coach_error', 'Failed to sync with EcoCoach AI.')} ${err.message}</p>`;
+        el.innerHTML = `<p style="color:var(--danger)"> ${t('coach_error', 'Failed to sync with EcoCoach AI.')} ${err.message}</p>`;
     }
 }
 

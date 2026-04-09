@@ -110,7 +110,7 @@ function exportHistory() {
     link.click();
     document.body.removeChild(link);
 
-    showGlobalToast("History exported as CSV 📄");
+    showGlobalToast("History exported as CSV");
 }
 
 // ── History Chart ─────────────────────────────────────
@@ -169,7 +169,7 @@ function renderHistoryTable(entries) {
         <td>${e.food?.toFixed(2)} kg</td>
         <td><strong>${e.total?.toFixed(2)} kg</strong></td>
         <td><span style="color:${tier.color}">${e.ecoScore}</span></td>
-        <td><button class="btn-delete-row" onclick="confirmDeleteEntry('${e.date}')">🗑 Delete</button></td>
+        <td><button class="btn-delete-row" onclick="confirmDeleteEntry('${e.date}')">Delete</button></td>
       </tr>
     `;
     }).join('');

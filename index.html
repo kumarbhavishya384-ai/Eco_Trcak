@@ -14,18 +14,18 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/landing.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2300d4aa%22/><path d=%22M30 70 L50 30 L70 70 M40 50 L60 50%22 stroke=%22white%22 stroke-width=%228%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
   <!-- EmailJS SDK with fallback -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
     if (typeof emailjs === 'undefined') {
       var s = document.createElement('script');
       s.src = 'https://unpkg.com/@emailjs/browser@4/dist/email.min.js';
-      s.onload = function() { emailjs.init('grdE8hvT9O25mIPm0'); console.log('EmailJS loaded via fallback CDN ✅'); };
+      s.onload = function() { emailjs.init('grdE8hvT9O25mIPm0'); console.log('EmailJS loaded via fallback CDN'); };
       document.head.appendChild(s);
     } else {
       emailjs.init('grdE8hvT9O25mIPm0');
-      console.log('EmailJS initialized ✅');
+      console.log('EmailJS initialized');
     }
   </script>
     <link rel="stylesheet" href="css/responsive.css" />
@@ -47,7 +47,6 @@
   <!-- Navbar -->
   <nav class="landing-nav">
     <div class="nav-brand">
-      <div class="brand-icon">🌿</div>
       <span class="brand-name">EcoTrack <span class="brand-ai">AI</span></span>
     </div>
     <div class="nav-links">
@@ -77,10 +76,10 @@
     </p>
     <div class="hero-cta-group reveal">
       <button class="btn-hero-primary" onclick="openModal('registerModal')">
-        <span>&#128640;</span> <span data-i18n-html="l_start">Start Your EcoJourney</span>
+        <span data-i18n-html="l_start">Start Your EcoJourney</span>
       </button>
       <button class="btn-hero-secondary" onclick="openModal('loginModal')">
-        <span>▶</span> <span data-i18n-html="l_demo">Watch Demo</span>
+        <span data-i18n-html="l_demo">Watch Demo</span>
       </button>
     </div>
 
@@ -132,37 +131,31 @@
     </div>
     <div class="features-grid">
       <div class="feature-card card-glow-blue">
-        <div class="feature-icon">s</div>
         <h3 data-i18n="l_f1t">Smart Calculator</h3>
         <p data-i18n="l_f1d">Measure emissions from transport, electricity, food & shopping with India-specific emission factors</p>
         <div class="feature-tag">4 Categories</div>
       </div>
       <div class="feature-card card-glow-green">
-        <div class="feature-icon">🤖</div>
         <h3 data-i18n="l_f2t">AI Predictions</h3>
         <p data-i18n="l_f2d">Machine learning models predict your future carbon footprint and identify high-impact areas</p>
         <div class="feature-tag">ML Powered</div>
       </div>
       <div class="feature-card card-glow-purple">
-        <div class="feature-icon">&#127942;</div>
         <h3 data-i18n="l_f3t">EcoScore System</h3>
         <p data-i18n="l_f3d">Real-time 0-800 EcoScore rating system with personalized tips to improve your score</p>
         <div class="feature-tag">Dynamic Score</div>
       </div>
       <div class="feature-card card-glow-orange">
-        <div class="feature-icon">&#128202;</div>
         <h3 data-i18n="l_f4t">Analytics Dashboard</h3>
         <p data-i18n="l_f4d">Beautiful charts, trend analysis, and comparisons with community averages</p>
         <div class="feature-tag">Real-time</div>
       </div>
       <div class="feature-card card-glow-teal">
-        <div class="feature-icon">🌲</div>
         <h3 data-i18n="l_f5t">Offset Calculator</h3>
         <p data-i18n="l_f5d">See exactly how many trees needed to offset your emissions and solar savings projections</p>
         <div class="feature-tag">Carbon Neutral</div>
       </div>
       <div class="feature-card card-glow-pink">
-        <div class="feature-icon">🎯</div>
         <h3 data-i18n="l_f6t">Campus Leaderboard</h3>
         <p data-i18n="l_f6d">Compete with friends and colleagues. NGO & CSR integration for corporate sustainability</p>
         <div class="feature-tag">Community</div>
@@ -184,7 +177,7 @@
           <p data-i18n="l_s1d">Sign up and set your baseline — location, household size, lifestyle type</p>
         </div>
       </div>
-      <div class="step-connector">→</div>
+      <div class="step-connector">-></div>
       <div class="step">
         <div class="step-num">02</div>
         <div class="step-content">
@@ -192,7 +185,7 @@
           <p data-i18n="l_s2d">Daily inputs for transport, energy use, food choices, and purchases</p>
         </div>
       </div>
-      <div class="step-connector">→</div>
+      <div class="step-connector">-></div>
       <div class="step">
         <div class="step-num">03</div>
         <div class="step-content">
@@ -200,7 +193,7 @@
           <p data-i18n="l_s3d">AI analyzes your data and gives you an instant, actionable EcoScore</p>
         </div>
       </div>
-      <div class="step-connector">→</div>
+      <div class="step-connector">-></div>
       <div class="step">
         <div class="step-num">04</div>
         <div class="step-content">
@@ -220,25 +213,21 @@
     <div class="ecoscore-grid">
       <div class="score-tier tier-red">
         <div class="tier-range">0 – 100</div>
-        <div class="tier-icon">🔴</div>
         <div class="tier-label" data-i18n="l_e1t">High Pollution</div>
         <div class="tier-desc" data-i18n="l_e1d">Urgent action needed — your footprint is critically high</div>
       </div>
       <div class="score-tier tier-orange">
         <div class="tier-range">100 – 300</div>
-        <div class="tier-icon">🟠</div>
         <div class="tier-label" data-i18n="l_e2t">Moderate</div>
         <div class="tier-desc" data-i18n="l_e2d">Room for significant improvement with targeted changes</div>
       </div>
       <div class="score-tier tier-yellow">
         <div class="tier-range">300 – 600</div>
-        <div class="tier-icon">🟡</div>
         <div class="tier-label" data-i18n="l_e3t">Good</div>
         <div class="tier-desc" data-i18n="l_e3d">You're on the right track — keep pushing forward!</div>
       </div>
       <div class="score-tier tier-green active-tier">
         <div class="tier-range">600 – 800</div>
-        <div class="tier-icon">🟢</div>
         <div class="tier-label" data-i18n="l_e4t">Eco Friendly</div>
         <div class="tier-desc" data-i18n="l_e4d">Excellent! You're a true environmental champion</div>
       </div>
@@ -251,31 +240,30 @@
       <h2 data-i18n-html="l_cta1">Ready to Make a <span class="gradient-text">Difference?</span></h2>
       <p data-i18n="l_cta2">Join thousands of eco-warriors tracking and reducing their carbon footprint every day</p>
       <button class="btn-hero-primary" onclick="openModal('registerModal')">
-        <span data-i18n="l_ctab">🌍 Join EcoTrack AI Now — It's Free</span>
+        <span data-i18n="l_ctab">Join EcoTrack AI Now — It's Free</span>
       </button>
     </div>
   </section>
 
   <footer class="landing-footer">
     <div class="footer-brand">
-      <span>🌿</span> EcoTrack AI — Carbon Footprint Intelligence Platform
+      EcoTrack AI — Carbon Footprint Intelligence Platform
     </div>
-    <p data-i18n="l_ft">Built with ❤️ for a greener tomorrow | Carbon Formula: Emission = Activity × Emission Factor</p>
+    <p data-i18n="l_ft">Built for a greener tomorrow | Carbon Formula: Emission = Activity × Emission Factor</p>
   </footer>
 
   <!-- LOGIN MODAL -->
   <div class="modal-overlay" id="loginModal" onclick="closeModalOutside(event, 'loginModal')">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+      <button class="modal-close" onclick="closeModal('loginModal')">Close</button>
       <div class="modal-header">
-        <div class="modal-logo">🌿</div>
         <h2>ECOTRACK AI LOGIN</h2>
         <p>Sign in to your EcoTrack account (V2 Update)</p>
         <div
           style="margin-top: 1rem; border: 1px dashed rgba(255,255,255,0.2); padding: 0.75rem; border-radius: 12px; background: rgba(0, 212, 170, 0.05);">
           <button type="button" onclick="switchModal('loginModal','forgotPasswordModal')"
             style="background:var(--primary); border:none; color:#000; font-size:0.85rem; padding: 0.5rem 1rem; border-radius: 8px; font-weight:800; cursor:pointer; width: 100%;">
-            🔑 RENEW / FORGOT PASSWORD
+            RENEW / FORGOT PASSWORD
           </button>
           <p style="font-size: 0.65rem; color: var(--text-muted); text-align: center; margin-top: 0.4rem;">If you don't
             see this, Press Ctrl + F5</p>
@@ -299,7 +287,7 @@
           <button type="button" class="btn-ghost"
             style="width: 100%; border-color: var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
             onclick="showGlobalToast('Please use your staff credentials provided by IT.')">
-            <span>🛡️</span> Access Employee Admin Portal
+            Access Employee Admin Portal
           </button>
         </div>
 
@@ -312,13 +300,12 @@
   <!-- REGISTER MODAL -->
   <div class="modal-overlay" id="registerModal" onclick="closeModalOutside(event, 'registerModal')">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+      <button class="modal-close" onclick="closeModal('registerModal')">Close</button>
       <div class="modal-header">
-        <div class="modal-logo">🌿</div>
         <h2>Join EcoTrack AI</h2>
         <p>Start your sustainability journey today</p>
         <div class="modal-social-proof">
-          <span>&#128200;</span> Join 12,847 eco-warriors
+          Join 12,847 eco-warriors
         </div>
       </div>
       <form class="modal-form" onsubmit="handleRegister(event)">
@@ -343,7 +330,7 @@
           </div>
         </div>
         <div class="form-group" id="otpGroup" style="display:none">
-          <label>Verify OTP (sent to your email 📧)</label>
+          <label>Verify OTP (sent to your email)</label>
           <input type="text" id="regOTP" placeholder="Enter 6-digit code" maxlength="6" />
         </div>
         <div class="form-group">
@@ -362,7 +349,7 @@
           </div>
         </div>
         <div id="regError" class="form-error" style="display:none"></div>
-        <button type="submit" class="btn-form-submit">Create My Account &#128640;</button>
+        <button type="submit" class="btn-form-submit">Create My Account</button>
 
         <div
           style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed rgba(255,255,255,0.1); text-align: center;">
@@ -370,7 +357,7 @@
           <button type="button" class="btn-ghost"
             style="width: 100%; border-color: var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
             onclick="switchModal('registerModal','loginModal')">
-            <span>🛡️</span> Switch to Admin Login
+            Switch to Admin Login
           </button>
         </div>
 
@@ -383,9 +370,8 @@
   <!-- FORGOT PASSWORD MODAL -->
   <div class="modal-overlay" id="forgotPasswordModal" onclick="closeModalOutside(event, 'forgotPasswordModal')">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('forgotPasswordModal')">✕</button>
+      <button class="modal-close" onclick="closeModal('forgotPasswordModal')">Close</button>
       <div class="modal-header">
-        <div class="modal-logo">🔑</div>
         <h2>Reset Password</h2>
         <p>Enter your email to receive a reset code</p>
       </div>
@@ -397,7 +383,7 @@
         <div id="resetStatus" class="form-error"
           style="display:none; color: var(--primary); background: rgba(0, 212, 170, 0.1); border-color: rgba(0, 212, 170, 0.2);">
         </div>
-        <button type="submit" class="btn-form-submit">Send Reset Code 📧</button>
+        <button type="submit" class="btn-form-submit">Send Reset Code</button>
 
         <p class="form-switch" style="margin-top: 1.5rem;"><a href="#"
             onclick="switchModal('forgotPasswordModal','resetPasswordModal')">Already have a code? Reset Password</a>
@@ -411,9 +397,8 @@
   <!-- ACTUAL RESET MODAL -->
   <div class="modal-overlay" id="resetPasswordModal" onclick="closeModalOutside(event, 'resetPasswordModal')">
     <div class="modal-card">
-      <button class="modal-close" onclick="closeModal('resetPasswordModal')">✕</button>
+      <button class="modal-close" onclick="closeModal('resetPasswordModal')">Close</button>
       <div class="modal-header">
-        <div class="modal-logo">🛡️</div>
         <h2>Set New Password</h2>
         <p>Enter your verification code</p>
       </div>

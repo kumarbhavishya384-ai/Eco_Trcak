@@ -2,7 +2,7 @@
   <img src="assets/logo.png" alt="EcoTrack AI Logo" width="150">
 </p>
 
-<h1 align="center">🌿 EcoTrack AI</h1>
+<h1 align="center">EcoTrack AI</h1>
 
 <p align="center">
   <strong>AI-Powered Carbon Footprint Intelligence Platform</strong>
@@ -34,19 +34,19 @@ Track your impact, save the planet, and join thousands of EcoWarriors!
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- **⚡ Smart Calculator**: Precisely measure emissions across Transport, Energy Use, Food, and Shopping with localized emission factors.
-- **🤖 AI Predictions**: Leverage Machine Learning to forecast your future carbon footprint and identify major emission sources.
-- **🏆 Dynamic EcoScore System**: A real-time 0-800 scale rating that evaluates your environmental impact.
-- **📊 Interactive Analytics Dashboard**: Visualize trends, compare your progress with community averages, and track reductions.
-- **🌲 Carbon Offset Calculator**: Calculate exact figures for how many trees are needed to offset your remaining emissions.
-- **🎯 Campus Leaderboard**: Compete with friends, colleagues, or campuses to drive corporate sustainability and NGO integration.
-- **📱 PWA Ready**: Installable as a Progressive Web App for native mobile access.
+- **Smart Calculator**: Precisely measure emissions across Transport, Energy Use, Food, and Shopping with localized emission factors.
+- **AI Predictions**: Leverage Machine Learning to forecast your future carbon footprint and identify major emission sources.
+- **Dynamic EcoScore System**: A real-time 0-800 scale rating that evaluates your environmental impact.
+- **Interactive Analytics Dashboard**: Visualize trends, compare your progress with community averages, and track reductions.
+- **Carbon Offset Calculator**: Calculate exact figures for how many trees are needed to offset your remaining emissions.
+- **Campus Leaderboard**: Compete with friends, colleagues, or campuses to drive corporate sustainability and NGO integration.
+- **PWA Ready**: Installable as a Progressive Web App for native mobile access.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### **Frontend**
 * **HTML5 / CSS3**: Modern styling, responsive layout, glassmorphism UI, and dynamic animations.
@@ -181,6 +181,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 **Project Link**: [https://github.com/Bhavishaya789/EcoTrack_AI](https://github.com/Bhavishaya789/EcoTrack_AI)
 
 <p align="center">
-  <i>Built with ❤️ for a greener tomorrow.</i><br>
+  <i>Built with Passion for a greener tomorrow.</i><br>
   <i>Carbon Formula: Emission = Activity × Emission Factor</i>
 </p>
